@@ -25,6 +25,7 @@ class LightSkinTopView(tk.Canvas):
         self.update()
 
         self._draw()
+        skin.onChange += lambda *a, **kwa: self.updateVisuals()  # remove any parameters
 
     def on_resize(self, event):
         # determine the ratio of old width/height to new width/height
@@ -37,7 +38,17 @@ class LightSkinTopView(tk.Canvas):
         # rescale all the objects tagged with the "all" tag
         self.scale("all", 0, 0, wscale, hscale)
 
-
+    def updateVisuals(self):
+        for i, o in enumerate(self._sensors):
+            c = self._SensorColor
+            if i == self.skin.selectedSensor:
+                c = self._SensorColorS
+            self.itemconfigure(o, fill=c)
+        for i, o in enumerate(self._leds):
+            c = self._LEDColor
+            if i == self.skin.selectedLED:
+                c = self._LEDColorS
+            self.itemconfigure(o, fill=c)
 
     def _draw(self):
         self.delete("all")
@@ -50,8 +61,9 @@ class LightSkinTopView(tk.Canvas):
         self._leds = []
         self._sensors = []
         for _s in self.skin.sensors:
-            s = (_s[0]*self._elScale, _s[1]*self._elScale)
-            o = self.create_rectangle(s[0]-self._elRadius, s[1]-self._elRadius, s[0]+self._elRadius, s[1]+self._elRadius, fill=self._SensorColor, width=0)
+            s = (_s[0] * self._elScale, _s[1] * self._elScale)
+            o = self.create_rectangle(s[0] - self._elRadius, s[1] - self._elRadius, s[0] + self._elRadius,
+                                      s[1] + self._elRadius, fill=self._SensorColor, width=0)
             self._sensors.append(o)
             if min_pos_x is None:
                 min_pos_x = s[0]
@@ -68,8 +80,9 @@ class LightSkinTopView(tk.Canvas):
                 max_pos_y = s[1]
 
         for _s in self.skin.LEDs:
-            s = (_s[0]*self._elScale, _s[1]*self._elScale)
-            o = self.create_oval(s[0]-self._elRadius, s[1]-self._elRadius, s[0]+self._elRadius, s[1]+self._elRadius, fill=self._LEDColor, width=0)
+            s = (_s[0] * self._elScale, _s[1] * self._elScale)
+            o = self.create_oval(s[0] - self._elRadius, s[1] - self._elRadius, s[0] + self._elRadius,
+                                 s[1] + self._elRadius, fill=self._LEDColor, width=0)
             self._sensors.append(o)
             if min_pos_x > s[0]:
                 min_pos_x = s[0]
@@ -80,13 +93,12 @@ class LightSkinTopView(tk.Canvas):
             if max_pos_y < s[1]:
                 max_pos_y = s[1]
 
-
         # calculate scaling necessary to apply
 
         self.move("all", self._border - min_pos_x, self._border - min_pos_y)
 
-        wscale = self.width /  float(max_pos_x - min_pos_x + 2*self._border)
-        hscale = self.height / float(max_pos_y - min_pos_y + 2*self._border)
+        wscale = self.width / float(max_pos_x - min_pos_x + 2 * self._border)
+        hscale = self.height / float(max_pos_y - min_pos_y + 2 * self._border)
         scale = min(wscale, hscale)
         self.scale("all", 0, 0, scale, scale)
         pass
