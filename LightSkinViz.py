@@ -40,7 +40,6 @@ class LightSkinTopView(tk.Canvas):
 
     def on_click(self, event):
         el = self.find_closest(event.x, event.y)[0]
-        print(el)
         try:
             i = self._sensors.index(el)
             self.skin.setSelectedSensor(i)
@@ -59,12 +58,10 @@ class LightSkinTopView(tk.Canvas):
             if i == self.skin.selectedSensor:
                 c = self._SensorColorS
             self.itemconfigure(o, fill=c)
-            print('Updating s ' + str(i) + ' ' +str(o))
         for i, o in enumerate(self._leds):
             c = self._LEDColor
             if i == self.skin.selectedLED:
                 c = self._LEDColorS
-            print('Updating l ' + str(i) + ' ' +str(o))
             self.itemconfigure(o, fill=c)
 
     def _draw(self):

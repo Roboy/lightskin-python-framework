@@ -38,6 +38,8 @@ print(ls.sensors)
 print(ls.LEDs)
 print(flush=True)
 
+
+# Build Window with widgets etc...
 window = tk.Tk()
 window.title('Light Skin Simulation')
 window.minsize(400, 300)
