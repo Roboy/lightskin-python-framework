@@ -13,7 +13,7 @@ import os, sys, traceback
 import tkinter as tk
 
 from LightSkin import LightSkin
-from LightSkinViz import *
+import LightSkinViz as Viz
 
 ls = LightSkin()
 
@@ -42,7 +42,7 @@ window = tk.Tk()
 window.title('Light Skin Simulation')
 window.minsize(400, 300)
 
-topView = LightSkinTopView(window, ls)
+topView = Viz.LightSkinTopView(window, ls, highlightbackground='#aaa', highlightthickness=1)
 topView.pack()
 
 window.mainloop()
