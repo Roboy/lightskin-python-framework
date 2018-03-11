@@ -14,8 +14,6 @@ class LightSkinTopView(tk.Canvas):
     _elScale = 100
     _border = 100
 
-    skin: LightSkin = None
-
     def __init__(self, parent, skin: LightSkin, **kwargs):
         tk.Canvas.__init__(self, parent, **kwargs)
         self.skin = skin
@@ -63,6 +61,7 @@ class LightSkinTopView(tk.Canvas):
             if i == self.skin.selectedLED:
                 c = self._LEDColorS
             self.itemconfigure(o, fill=c)
+        self.update()
 
     def _draw(self):
         self.delete("all")
@@ -117,4 +116,52 @@ class LightSkinTopView(tk.Canvas):
         self.scale("all", 0, 0, scale, scale)
 
         self.tag_bind("all", '<ButtonPress-1>', self.on_click)
+        pass
+
+
+class LightSkinGridView(tk.Frame):
+    _Color = '#eee'
+    _LEDColorS = '#5da'
+    _SensorColorS = '#fa8'
+    _elRadius = 50
+    _elScale = 100
+    _border = 100
+
+    def __init__(self, parent, skin: LightSkin, **kwargs):
+        tk.Frame.__init__(self, parent, **kwargs)
+        self.skin = skin
+
+        self._build()
+        skin.onChange += lambda *a, **kwa: self.updateVisuals()  # remove any parameters
+
+    def on_click(self, event):
+        pass
+
+
+    def updateVisuals(self):
+        for i, b in enumerate(self._sensors):
+            c = self._Color
+            if i == self.skin.selectedSensor:
+                c = self._SensorColorS
+            b.configure(bg=c)
+        for i, b in enumerate(self._leds):
+            c = self._Color
+            if i == self.skin.selectedLED:
+                c = self._LEDColorS
+            b.configure(bg=c)
+        pass
+
+    def _build(self):
+        self._sensors = []
+        self._leds = []
+
+        for i, s in enumerate(self.skin.sensors):
+            b = tk.Button(self, text="S%i" % i, command=(lambda i=i: self.skin.setSelectedSensor(i)), bg=self._Color)
+            b.grid(row=i+1, column=0)
+            self._sensors.append(b)
+        for i, s in enumerate(self.skin.LEDs):
+            b = tk.Button(self, text="L%i" % i, command=(lambda i=i: self.skin.setSelectedLED(i)), bg=self._Color)
+            b.grid(row=0, column=i+1)
+            self._leds.append(b)
+
         pass

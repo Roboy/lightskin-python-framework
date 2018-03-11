@@ -47,6 +47,10 @@ window.minsize(400, 300)
 topView = Viz.LightSkinTopView(window, ls, highlightbackground='#aaa', highlightthickness=1)
 topView.pack()
 
+gridView = Viz.LightSkinGridView(window, ls, width=400, height=400, highlightbackground='#aaa', highlightthickness=1)
+gridView.pack()
+
+
 window.mainloop()
 
 # Main program logic follows:
