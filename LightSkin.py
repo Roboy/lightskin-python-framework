@@ -2,8 +2,10 @@
 
 
 class LightSkin:
+    """ Container describing the setup and status of a LightSkin """
 
     def __init__(self):
+        """ Create a container """
         self.sensors = []
         self.LEDs = []
         self.image = None

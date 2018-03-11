@@ -12,10 +12,10 @@ import os, sys, traceback
 
 import tkinter as tk
 
-from LightSkin import *
+from LightSkin import LightSkin
 from LightSkinViz import *
 
-ls = LightSkin();
+ls = LightSkin()
 
 # LOAD Sensor and LED coordinates from CSV
 
@@ -33,6 +33,7 @@ with open('leds.csv', 'r') as csvfile:
 #
 
 
+
 print(ls.sensors)
 print(ls.LEDs)
 print(flush=True)
@@ -41,7 +42,8 @@ window = tk.Tk()
 window.title('Light Skin Simulation')
 window.minsize(400, 300)
 
-topView = LightSkinTopView();
+topView = LightSkinTopView(window, ls)
+topView.pack()
 
 window.mainloop()
 
