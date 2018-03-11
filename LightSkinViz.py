@@ -40,11 +40,11 @@ class LightSkinTopView(tk.Canvas):
         el = self.find_closest(event.x, event.y)[0]
         try:
             i = self._sensors.index(el)
-            self.skin.setSelectedSensor(i)
+            self.skin.selectedSensor = i
         except ValueError:
             try:
                 i = self._leds.index(el)
-                self.skin.setSelectedLED(i)
+                self.skin.selectedLED = i
             except ValueError:
                 print("Nothing found")
                 pass
@@ -156,11 +156,15 @@ class LightSkinGridView(tk.Frame):
         self._leds = []
 
         for i, s in enumerate(self.skin.sensors):
-            b = tk.Button(self, text="S%i" % i, command=(lambda i=i: self.skin.setSelectedSensor(i)), bg=self._Color)
+            def cmd(i=i):
+                self.skin.selectedSensor = i
+            b = tk.Button(self, text="S%i" % i, bg=self._Color, command=cmd)
             b.grid(row=i+1, column=0)
             self._sensors.append(b)
         for i, s in enumerate(self.skin.LEDs):
-            b = tk.Button(self, text="L%i" % i, command=(lambda i=i: self.skin.setSelectedLED(i)), bg=self._Color)
+            def cmd(i=i):
+                self.skin.selectedLED = i
+            b = tk.Button(self, text="L%i" % i, bg=self._Color, command=cmd)
             b.grid(row=0, column=i+1)
             self._leds.append(b)
 
