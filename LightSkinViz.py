@@ -7,9 +7,9 @@ from LightSkin import LightSkin
 
 class LightSkinTopView(tk.Canvas):
     _LEDColor = '#444'
-    _LEDColorS = '#5f7'
+    _LEDColorS = '#5da'
     _SensorColor = '#955'
-    _SensorColorS = '#775'
+    _SensorColorS = '#fa8'
     _elRadius = 50
     _elScale = 100
     _border = 100
@@ -38,16 +38,33 @@ class LightSkinTopView(tk.Canvas):
         # rescale all the objects tagged with the "all" tag
         self.scale("all", 0, 0, wscale, hscale)
 
+    def on_click(self, event):
+        el = self.find_closest(event.x, event.y)[0]
+        print(el)
+        try:
+            i = self._sensors.index(el)
+            self.skin.setSelectedSensor(i)
+        except ValueError:
+            try:
+                i = self._leds.index(el)
+                self.skin.setSelectedLED(i)
+            except ValueError:
+                print("Nothing found")
+                pass
+
+
     def updateVisuals(self):
         for i, o in enumerate(self._sensors):
             c = self._SensorColor
             if i == self.skin.selectedSensor:
                 c = self._SensorColorS
             self.itemconfigure(o, fill=c)
+            print('Updating s ' + str(i) + ' ' +str(o))
         for i, o in enumerate(self._leds):
             c = self._LEDColor
             if i == self.skin.selectedLED:
                 c = self._LEDColorS
+            print('Updating l ' + str(i) + ' ' +str(o))
             self.itemconfigure(o, fill=c)
 
     def _draw(self):
@@ -83,7 +100,7 @@ class LightSkinTopView(tk.Canvas):
             s = (_s[0] * self._elScale, _s[1] * self._elScale)
             o = self.create_oval(s[0] - self._elRadius, s[1] - self._elRadius, s[0] + self._elRadius,
                                  s[1] + self._elRadius, fill=self._LEDColor, width=0)
-            self._sensors.append(o)
+            self._leds.append(o)
             if min_pos_x > s[0]:
                 min_pos_x = s[0]
             if min_pos_y > s[1]:
@@ -101,4 +118,6 @@ class LightSkinTopView(tk.Canvas):
         hscale = self.height / float(max_pos_y - min_pos_y + 2 * self._border)
         scale = min(wscale, hscale)
         self.scale("all", 0, 0, scale, scale)
+
+        self.tag_bind("all", '<ButtonPress-1>', self.on_click)
         pass
