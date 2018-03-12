@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 from typing import List, Tuple, Callable
-from abc import ABC
+from abc import ABC, abstractmethod
 
 
 class LightSkin:
@@ -15,6 +15,7 @@ class LightSkin:
         self._selectedSensor: int = -1
         self._selectedLED: int = -1
         self.onChange: EventHook[[str, int, int]] = EventHook()
+        self.forwardModel: ForwardModel = None
 
     @property
     def selectedSensor(self) -> int:
@@ -38,11 +39,23 @@ class LightSkin:
 
 
 class ForwardModel(ABC):
+
+    def __init__(self, ls: LightSkin):
+        self.ls: LightSkin = ls
+
+    @abstractmethod
+    def measureAtPoint(self, x: float, y: float, led: int = -1) -> float:
+        pass
+
+    def getSensorValue(self, sensor: int, led: int = -1) -> float:
+        s = self.ls.sensors[sensor]
+        return self.measureAtPoint(s[0], s[1], led)
+
     pass
 
 
 # source https://stackoverflow.com/a/1094423
-class EventHook():
+class EventHook:
 
     def __init__(self):
         self.__handlers: List[Callable] = []
