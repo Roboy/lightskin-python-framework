@@ -3,6 +3,8 @@
 import tkinter as tk
 from typing import List
 
+import math
+
 from LightSkin import LightSkin
 
 
@@ -157,8 +159,8 @@ class LightSkinGridView(tk.Frame):
                 if j == self.skin.selectedSensor:
                     c = self._SensorColorS
                 val = self.skin.forwardModel.getSensorValue(j, i)
-                v = int(val * 255)
-                valcol = "#%02x%02x%02x" % (v,v,v)
+                v = int(math.sqrt(val) * 255)
+                valcol = "#%02x%02x%02x" % (v, v, v)
                 f.configure(highlightbackground=c, bg=valcol)
         pass
 
