@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import tkinter as tk
+from typing import List
 
 from LightSkin import LightSkin
 
@@ -48,7 +49,6 @@ class LightSkinTopView(tk.Canvas):
             except ValueError:
                 print("Nothing found")
                 pass
-
 
     def updateVisuals(self):
         for i, o in enumerate(self._sensors):
@@ -133,10 +133,10 @@ class LightSkinGridView(tk.Frame):
 
         self._build()
         skin.onChange += lambda *a, **kwa: self.updateVisuals()  # remove any parameters
+        self.updateVisuals()
 
     def on_click(self, event):
         pass
-
 
     def updateVisuals(self):
         for i, b in enumerate(self._sensors):
@@ -149,23 +149,44 @@ class LightSkinGridView(tk.Frame):
             if i == self.skin.selectedLED:
                 c = self._LEDColorS
             b.configure(bg=c)
+        for i, l in enumerate(self._measurements):
+            for j, f in enumerate(l):
+                c = self._Color
+                if i == self.skin.selectedLED:
+                    c = self._LEDColorS
+                if j == self.skin.selectedSensor:
+                    c = self._SensorColorS
+                val = self.skin.forwardModel.getSensorValue(j, i)
+                v = int(val * 255)
+                valcol = "#%02x%02x%02x" % (v,v,v)
+                f.configure(highlightbackground=c, bg=valcol)
         pass
 
     def _build(self):
-        self._sensors = []
-        self._leds = []
+        self._sensors: List[tk.Button] = []
+        self._leds: List[tk.Button] = []
+        self._measurements: List[List[tk.Frame]] = []
 
         for i, s in enumerate(self.skin.sensors):
             def cmd(i=i):
                 self.skin.selectedSensor = i
+
             b = tk.Button(self, text="S%i" % i, bg=self._Color, command=cmd)
-            b.grid(row=i+1, column=0)
+            b.grid(column=0, row=i + 1)
             self._sensors.append(b)
         for i, s in enumerate(self.skin.LEDs):
             def cmd(i=i):
                 self.skin.selectedLED = i
+
             b = tk.Button(self, text="L%i" % i, bg=self._Color, command=cmd)
-            b.grid(row=0, column=i+1)
+            b.grid(column=i + 1, row=0)
             self._leds.append(b)
+
+        for i in range(len(self.skin.LEDs)):
+            self._measurements.append([])
+            for j in range(len(self.skin.sensors)):
+                f = tk.Frame(self, bg='#fff', highlightbackground=self._Color, highlightthickness=1)
+                f.grid(column=i + 1, row=j + 1, sticky='NESW')
+                self._measurements[i].append(f)
 
         pass

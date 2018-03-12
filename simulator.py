@@ -15,7 +15,10 @@ import tkinter as tk
 from LightSkin import LightSkin
 import LightSkinViz as Viz
 
+from SimpleProportionalForwardModel import SimpleProportionalForwardModel
+
 ls = LightSkin()
+ls.forwardModel = SimpleProportionalForwardModel(ls)
 
 # LOAD Sensor and LED coordinates from CSV
 
