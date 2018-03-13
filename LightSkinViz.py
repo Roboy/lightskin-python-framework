@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 import tkinter as tk
-from typing import List
+from typing import List, Callable
 
 import math
 
@@ -129,9 +129,10 @@ class LightSkinGridView(tk.Frame):
     _elScale = 100
     _border = 100
 
-    def __init__(self, parent, skin: LightSkin, **kwargs):
+    def __init__(self, parent, skin: LightSkin, display_function: Callable[[float], float] = math.sqrt, **kwargs):
         tk.Frame.__init__(self, parent, **kwargs)
         self.skin = skin
+        self.displayFunction = display_function
 
         self._build()
         skin.onChange += lambda *a, **kwa: self.updateVisuals()  # remove any parameters
@@ -159,7 +160,7 @@ class LightSkinGridView(tk.Frame):
                 if j == self.skin.selectedSensor:
                     c = self._SensorColorS
                 val = self.skin.forwardModel.getSensorValue(j, i)
-                v = int(math.sqrt(val) * 255)
+                v = int(self.displayFunction(val) * 255)
                 valcol = "#%02x%02x%02x" % (v, v, v)
                 f.configure(highlightbackground=c, bg=valcol)
         pass
@@ -187,7 +188,11 @@ class LightSkinGridView(tk.Frame):
         for i in range(len(self.skin.LEDs)):
             self._measurements.append([])
             for j in range(len(self.skin.sensors)):
+                def cmd(e, i=i, j=j):
+                    self.skin.selectedLED = i
+                    self.skin.selectedSensor = j
                 f = tk.Frame(self, bg='#fff', highlightbackground=self._Color, highlightthickness=1)
+                f.bind('<ButtonPress-1>', cmd)
                 f.grid(column=i + 1, row=j + 1, sticky='NESW')
                 self._measurements[i].append(f)
 
