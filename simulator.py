@@ -2,7 +2,6 @@
 
 import time
 from datetime import datetime
-import requests
 import importlib, types
 import queue
 import signal
