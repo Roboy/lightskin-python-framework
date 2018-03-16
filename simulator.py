@@ -46,7 +46,9 @@ window = tk.Tk()
 window.title('Light Skin Simulation')
 window.minsize(400, 300)
 
-topView = Viz.LightSkinTopView(window, ls, highlightbackground='#aaa', highlightthickness=1)
+topView = Viz.LightSkinTopView(window, ls, highlightbackground='#aaa', highlightthickness=1,
+                               gridWidth=50, gridHeight=50,
+                               measure_function=ls.forwardModel.measureAtPoint)
 topView.pack()
 
 gridView = Viz.LightSkinGridView(window, ls, width=400, height=400, highlightbackground='#aaa', highlightthickness=1)

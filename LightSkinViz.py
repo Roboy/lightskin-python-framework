@@ -17,9 +17,13 @@ class LightSkinTopView(tk.Canvas):
     _elScale = 100
     _border = 100
 
-    def __init__(self, parent, skin: LightSkin, **kwargs):
+    def __init__(self, parent, skin: LightSkin, gridWidth: int, gridHeight: int, measure_function: Callable[[float, float], float], display_function: Callable[[float], float] = math.sqrt, **kwargs):
         tk.Canvas.__init__(self, parent, **kwargs)
+        self.measureFunction = measure_function
+        self.displayFunction = display_function
         self.skin = skin
+        self.gridWidth = gridWidth
+        self.gridHeight = gridHeight
         self.bind("<Configure>", self.on_resize)
         self.height = self.winfo_reqheight()
         self.width = self.winfo_reqwidth()
@@ -63,15 +67,27 @@ class LightSkinTopView(tk.Canvas):
             if i == self.skin.selectedLED:
                 c = self._LEDColorS
             self.itemconfigure(o, fill=c)
+
+        rect_w = float(self._max_pos_x - self._min_pos_x) / self.gridWidth
+        rect_h = float(self._max_pos_y - self._min_pos_y) / self.gridHeight
+        for i, c in enumerate(self._grid):
+            for j, o in enumerate(c):
+                x = (self._min_pos_x + (float(i)+0.5)*rect_w) / self._elScale
+                y = (self._min_pos_y + (float(j)+0.5)*rect_h) / self._elScale
+                #print('Measuring at %f, %f' % (x, y))
+                val = self.measureFunction(x, y)
+                v = int(self.displayFunction(val) * 255)
+                valcol = "#%02x%02x%02x" % (v, v, v)
+                self.itemconfigure(o, fill=valcol)
         self.update()
 
     def _draw(self):
         self.delete("all")
 
-        min_pos_x = None
-        min_pos_y = None
-        max_pos_x = None
-        max_pos_y = None
+        self._min_pos_x = None
+        self._min_pos_y = None
+        self._max_pos_x = None
+        self._max_pos_y = None
 
         self._leds = []
         self._sensors = []
@@ -80,40 +96,53 @@ class LightSkinTopView(tk.Canvas):
             o = self.create_rectangle(s[0] - self._elRadius, s[1] - self._elRadius, s[0] + self._elRadius,
                                       s[1] + self._elRadius, fill=self._SensorColor, width=0)
             self._sensors.append(o)
-            if min_pos_x is None:
-                min_pos_x = s[0]
-                min_pos_y = s[1]
-                max_pos_x = s[0]
-                max_pos_y = s[1]
-            if min_pos_x > s[0]:
-                min_pos_x = s[0]
-            if min_pos_y > s[1]:
-                min_pos_y = s[1]
-            if max_pos_x < s[0]:
-                max_pos_x = s[0]
-            if max_pos_y < s[1]:
-                max_pos_y = s[1]
+            if self._min_pos_x is None:
+                self._min_pos_x = s[0]
+                self._min_pos_y = s[1]
+                self._max_pos_x = s[0]
+                self._max_pos_y = s[1]
+            if self._min_pos_x > s[0]:
+                self._min_pos_x = s[0]
+            if self._min_pos_y > s[1]:
+                self._min_pos_y = s[1]
+            if self._max_pos_x < s[0]:
+                self._max_pos_x = s[0]
+            if self._max_pos_y < s[1]:
+                self._max_pos_y = s[1]
 
         for _s in self.skin.LEDs:
             s = (_s[0] * self._elScale, _s[1] * self._elScale)
             o = self.create_oval(s[0] - self._elRadius, s[1] - self._elRadius, s[0] + self._elRadius,
                                  s[1] + self._elRadius, fill=self._LEDColor, width=0)
             self._leds.append(o)
-            if min_pos_x > s[0]:
-                min_pos_x = s[0]
-            if min_pos_y > s[1]:
-                min_pos_y = s[1]
-            if max_pos_x < s[0]:
-                max_pos_x = s[0]
-            if max_pos_y < s[1]:
-                max_pos_y = s[1]
+            if self._min_pos_x > s[0]:
+                self._min_pos_x = s[0]
+            if self._min_pos_y > s[1]:
+                self._min_pos_y = s[1]
+            if self._max_pos_x < s[0]:
+                self._max_pos_x = s[0]
+            if self._max_pos_y < s[1]:
+                self._max_pos_y = s[1]
+
+        self._grid = []
+        rect_w = float(self._max_pos_x - self._min_pos_x) / self.gridWidth
+        rect_h = float(self._max_pos_y - self._min_pos_y) / self.gridHeight
+        for i in range(self.gridWidth):
+            self._grid.append([])
+            for j in range(self.gridHeight):
+                x = self._min_pos_x + rect_w * i
+                y = self._min_pos_y + rect_h * j
+                el = self.create_rectangle(x, y, x+rect_w, y+rect_h, tags=['grid'], width=0)
+                self._grid[i].append(el)
+        self.tag_lower(['grid']) # move all grid elements to back
+
 
         # calculate scaling necessary to apply
 
-        self.move("all", self._border - min_pos_x, self._border - min_pos_y)
+        self.move("all", self._border - self._min_pos_x, self._border - self._min_pos_y)
 
-        wscale = self.width / float(max_pos_x - min_pos_x + 2 * self._border)
-        hscale = self.height / float(max_pos_y - min_pos_y + 2 * self._border)
+        wscale = self.width / float(self._max_pos_x - self._min_pos_x + 2 * self._border)
+        hscale = self.height / float(self._max_pos_y - self._min_pos_y + 2 * self._border)
         scale = min(wscale, hscale)
         self.scale("all", 0, 0, scale, scale)
 
