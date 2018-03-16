@@ -48,6 +48,7 @@ window.minsize(400, 300)
 
 topView = Viz.LightSkinTopView(window, ls, highlightbackground='#aaa', highlightthickness=1,
                                gridWidth=50, gridHeight=50,
+                               #display_function=lambda x: x,
                                measure_function=ls.forwardModel.measureAtPoint)
 topView.pack()
 
