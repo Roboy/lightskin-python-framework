@@ -3,6 +3,8 @@
 from typing import List, Tuple, Callable
 from abc import ABC, abstractmethod
 
+import math
+
 
 class LightSkin:
     """ Container describing the setup and status of a LightSkin """
@@ -51,6 +53,70 @@ class ForwardModel(ABC):
         s = self.ls.sensors[sensor]
         return self.measureAtPoint(s[0], s[1], led)
 
+    pass
+
+
+class BackwardModel(ABC):
+
+    def __init__(self, ls: LightSkin, gridWidth: int, gridHeight: int):
+        self.gridWidth = gridWidth
+        self.gridHeight = gridHeight
+        self.ls: LightSkin = ls
+
+        self._initMinMax()
+
+        self.grid: List[List[float]] = []
+        # init grid
+        for i in range(gridWidth):
+            self.grid.append([])
+            for j in range(gridHeight):
+                self.grid[i].append(0.0)
+
+    def _initMinMax(self):
+        self._min_pos_x: float = None
+        self._min_pos_y: float = None
+        self._max_pos_x: float = None
+        self._max_pos_y: float = None
+
+        for s in self.ls.sensors:
+            if self._min_pos_x is None:
+                self._min_pos_x = s[0]
+                self._min_pos_y = s[1]
+                self._max_pos_x = s[0]
+                self._max_pos_y = s[1]
+            if self._min_pos_x > s[0]:
+                self._min_pos_x = s[0]
+            if self._min_pos_y > s[1]:
+                self._min_pos_y = s[1]
+            if self._max_pos_x < s[0]:
+                self._max_pos_x = s[0]
+            if self._max_pos_y < s[1]:
+                self._max_pos_y = s[1]
+
+        for s in self.ls.LEDs:
+            if self._min_pos_x > s[0]:
+                self._min_pos_x = s[0]
+            if self._min_pos_y > s[1]:
+                self._min_pos_y = s[1]
+            if self._max_pos_x < s[0]:
+                self._max_pos_x = s[0]
+            if self._max_pos_y < s[1]:
+                self._max_pos_y = s[1]
+
+        self._rect_w: float = float(self._max_pos_x - self._min_pos_x) / self.gridWidth
+        self._rect_h: float = float(self._max_pos_y - self._min_pos_y) / self.gridHeight
+
+    @abstractmethod
+    def calculate(self, x: float, y: float, led: int = -1) -> float:
+        pass
+
+    def measureAtPoint(self, x: float, y: float) -> float:
+        i = int((x-self._min_pos_x) / self._rect_w)
+        j = int((y-self._min_pos_y) / self._rect_h)
+
+        if 0 <= i < self.gridWidth and 0 <= j < self.gridHeight:
+            return self.grid[i][j]
+        return math.nan
     pass
 
 
