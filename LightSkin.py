@@ -18,6 +18,7 @@ class LightSkin:
         self._selectedLED: int = -1
         self.onChange: EventHook[[str, int, int]] = EventHook()
         self.forwardModel: ForwardModel = None
+        self.backwardModel: BackwardModel = None
 
     @property
     def selectedSensor(self) -> int:
@@ -107,7 +108,9 @@ class BackwardModel(ABC):
         self._rect_h: float = float(self._max_pos_y - self._min_pos_y) / self.gridHeight
 
     @abstractmethod
-    def calculate(self, x: float, y: float, led: int = -1) -> float:
+    def calculate(self) -> bool:
+        """Apply the backward model and calculate the expected values for the grid elements using the sensor values
+        retrieved from the skins forward model """
         pass
 
     def measureAtPoint(self, x: float, y: float) -> float:
