@@ -79,7 +79,6 @@ class LightSkinTopView(tk.Canvas):
                 v = int(self.displayFunction(val) * 255)
                 valcol = "#%02x%02x%02x" % (v, v, v)
                 self.itemconfigure(o, fill=valcol)
-        self.update()
 
     def _draw(self):
         self.delete("all")
@@ -192,7 +191,6 @@ class LightSkinGridView(tk.Frame):
                 v = int(self.displayFunction(val) * 255)
                 valcol = "#%02x%02x%02x" % (v, v, v)
                 f.configure(highlightbackground=c, bg=valcol)
-        pass
 
     def _build(self):
         self._sensors: List[tk.Button] = []
