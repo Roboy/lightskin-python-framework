@@ -9,7 +9,7 @@ from LightSkin import LightSkin
 
 
 class LightSkinTopView(tk.Canvas):
-    _LEDColor = '#444'
+    _LEDColor = '#475'
     _LEDColorS = '#5da'
     _SensorColor = '#955'
     _SensorColorS = '#fa8'
