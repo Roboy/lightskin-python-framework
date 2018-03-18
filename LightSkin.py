@@ -69,7 +69,7 @@ class ValueMap(ABC):
         i = max(0, min(self.gridWidth-1, i))
         j = max(0, min(self.gridHeight-1, j))
 
-        return self.grid[i][j]
+        return max(0.0, min(1.0, self.grid[i][j]))
 
     pass
 
