@@ -84,10 +84,10 @@ class LightSkinTopView(tk.Canvas):
     def _draw(self):
         self.delete("all")
 
-        self._min_pos_x = None
-        self._min_pos_y = None
-        self._max_pos_x = None
-        self._max_pos_y = None
+        self._min_pos_x: float = math.inf
+        self._min_pos_y: float = math.inf
+        self._max_pos_x: float = -math.inf
+        self._max_pos_y: float = -math.inf
 
         self._leds = []
         self._sensors = []
@@ -96,33 +96,20 @@ class LightSkinTopView(tk.Canvas):
             o = self.create_rectangle(s[0] - self._elRadius, s[1] - self._elRadius, s[0] + self._elRadius,
                                       s[1] + self._elRadius, fill=self._SensorColor, width=0, tags=['sensor'])
             self._sensors.append(o)
-            if self._min_pos_x is None:
-                self._min_pos_x = s[0]
-                self._min_pos_y = s[1]
-                self._max_pos_x = s[0]
-                self._max_pos_y = s[1]
-            if self._min_pos_x > s[0]:
-                self._min_pos_x = s[0]
-            if self._min_pos_y > s[1]:
-                self._min_pos_y = s[1]
-            if self._max_pos_x < s[0]:
-                self._max_pos_x = s[0]
-            if self._max_pos_y < s[1]:
-                self._max_pos_y = s[1]
+            self._min_pos_x = min(self._min_pos_x, s[0])
+            self._max_pos_x = max(self._max_pos_x, s[0])
+            self._min_pos_y = min(self._min_pos_y, s[1])
+            self._max_pos_y = max(self._max_pos_y, s[1])
 
         for _s in self.skin.LEDs:
             s = (_s[0] * self._elScale, _s[1] * self._elScale)
             o = self.create_oval(s[0] - self._elRadius, s[1] - self._elRadius, s[0] + self._elRadius,
                                  s[1] + self._elRadius, fill=self._LEDColor, width=0, tags=['led'])
             self._leds.append(o)
-            if self._min_pos_x > s[0]:
-                self._min_pos_x = s[0]
-            if self._min_pos_y > s[1]:
-                self._min_pos_y = s[1]
-            if self._max_pos_x < s[0]:
-                self._max_pos_x = s[0]
-            if self._max_pos_y < s[1]:
-                self._max_pos_y = s[1]
+            self._min_pos_x = min(self._min_pos_x, s[0])
+            self._max_pos_x = max(self._max_pos_x, s[0])
+            self._min_pos_y = min(self._min_pos_y, s[1])
+            self._max_pos_y = max(self._max_pos_y, s[1])
 
         self._grid = []
         rect_w = float(self._max_pos_x - self._min_pos_x) / self.gridWidth

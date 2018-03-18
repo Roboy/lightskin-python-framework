@@ -54,12 +54,8 @@ class ValueMap(ABC):
             self.gridWidth = gridWidth
             self.gridHeight = gridHeight
 
-            self.grid: List[List[float]] = []
             # init grid
-            for i in range(gridWidth):
-                self.grid.append([])
-                for j in range(gridHeight):
-                    self.grid[i].append(0.0)
+            self.grid: List[List[float]] = [[0.0] * gridHeight] * gridWidth
 
         self._min_pos_x: float = 0.0
         self._min_pos_y: float = 0.0
@@ -86,35 +82,22 @@ class LSValueMap(ValueMap):
         self._initMinMax()
 
     def _initMinMax(self):
-        self._min_pos_x: float = None
-        self._min_pos_y: float = None
-        self._max_pos_x: float = None
-        self._max_pos_y: float = None
+        self._min_pos_x: float = math.inf
+        self._min_pos_y: float = math.inf
+        self._max_pos_x: float = -math.inf
+        self._max_pos_y: float = -math.inf
 
         for s in self.ls.sensors:
-            if self._min_pos_x is None:
-                self._min_pos_x = s[0]
-                self._min_pos_y = s[1]
-                self._max_pos_x = s[0]
-                self._max_pos_y = s[1]
-            if self._min_pos_x > s[0]:
-                self._min_pos_x = s[0]
-            if self._min_pos_y > s[1]:
-                self._min_pos_y = s[1]
-            if self._max_pos_x < s[0]:
-                self._max_pos_x = s[0]
-            if self._max_pos_y < s[1]:
-                self._max_pos_y = s[1]
+            self._min_pos_x = min(self._min_pos_x, s[0])
+            self._max_pos_x = max(self._max_pos_x, s[0])
+            self._min_pos_y = min(self._min_pos_y, s[1])
+            self._max_pos_y = max(self._max_pos_y, s[1])
 
         for s in self.ls.LEDs:
-            if self._min_pos_x > s[0]:
-                self._min_pos_x = s[0]
-            if self._min_pos_y > s[1]:
-                self._min_pos_y = s[1]
-            if self._max_pos_x < s[0]:
-                self._max_pos_x = s[0]
-            if self._max_pos_y < s[1]:
-                self._max_pos_y = s[1]
+            self._min_pos_x = min(self._min_pos_x, s[0])
+            self._max_pos_x = max(self._max_pos_x, s[0])
+            self._min_pos_y = min(self._min_pos_y, s[1])
+            self._max_pos_y = max(self._max_pos_y, s[1])
 
         self._rect_w: float = float(self._max_pos_x - self._min_pos_x) / self.gridWidth
         self._rect_h: float = float(self._max_pos_y - self._min_pos_y) / self.gridHeight
