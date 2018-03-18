@@ -16,6 +16,7 @@ import LightSkinViz as Viz
 
 from SimpleProportionalForwardModel import SimpleProportionalForwardModel
 
+
 # Source: https://code.activestate.com/recipes/410687-transposing-a-list-of-lists-with-different-lengths/
 def transposed(lists):
     if not lists:
@@ -59,24 +60,29 @@ print(flush=True)
 # Build Window with widgets etc...
 window = tk.Tk()
 window.title('Light Skin Simulation')
-window.minsize(400, 300)
+window.minsize(700, 300)
 
-topViewTransl = Viz.LightSkinTopView(window, ls, highlightbackground='#aaa', highlightthickness=1,
+topViewsFrame = tk.Frame(window)
+topViewsFrame.pack(side=tk.TOP)
+
+topViewTransl = Viz.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
+                                     width=300, height=300,
                                      gridWidth=ls.translucencyMap.gridWidth, gridHeight=ls.translucencyMap.gridHeight,
                                      # display_function=lambda x: x,
                                      measure_function=ls.translucencyMap.measureAtPoint
                                      )
-topViewTransl.pack()
+topViewTransl.pack(side=tk.LEFT)
 
-topView = Viz.LightSkinTopView(window, ls, highlightbackground='#aaa', highlightthickness=1,
+topView = Viz.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
+                               width=300, height=300,
                                gridWidth=50, gridHeight=50,
                                # display_function=lambda x: x,
                                measure_function=ls.forwardModel.measureAtPoint
                                )
-topView.pack()
+topView.pack(side=tk.TOP)
 
 gridView = Viz.LightSkinGridView(window, ls, width=400, height=400, highlightbackground='#aaa', highlightthickness=1)
-gridView.pack()
+gridView.pack(side=tk.BOTTOM)
 
 window.mainloop()
 
