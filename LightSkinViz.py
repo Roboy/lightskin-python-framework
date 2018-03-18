@@ -53,7 +53,7 @@ class LightSkinTopView(tk.Canvas):
                 i = self._leds.index(el)
                 self.skin.selectedLED = i
             except ValueError:
-                print("Nothing found")
+                print("Click target not found")
                 pass
 
     def updateVisuals(self):
@@ -93,7 +93,7 @@ class LightSkinTopView(tk.Canvas):
         for _s in self.skin.sensors:
             s = (_s[0] * self._elScale, _s[1] * self._elScale)
             o = self.create_rectangle(s[0] - self._elRadius, s[1] - self._elRadius, s[0] + self._elRadius,
-                                      s[1] + self._elRadius, fill=self._SensorColor, width=0)
+                                      s[1] + self._elRadius, fill=self._SensorColor, width=0, tags=['sensor'])
             self._sensors.append(o)
             if self._min_pos_x is None:
                 self._min_pos_x = s[0]
@@ -112,7 +112,7 @@ class LightSkinTopView(tk.Canvas):
         for _s in self.skin.LEDs:
             s = (_s[0] * self._elScale, _s[1] * self._elScale)
             o = self.create_oval(s[0] - self._elRadius, s[1] - self._elRadius, s[0] + self._elRadius,
-                                 s[1] + self._elRadius, fill=self._LEDColor, width=0)
+                                 s[1] + self._elRadius, fill=self._LEDColor, width=0, tags=['led'])
             self._leds.append(o)
             if self._min_pos_x > s[0]:
                 self._min_pos_x = s[0]
@@ -145,7 +145,8 @@ class LightSkinTopView(tk.Canvas):
         scale = min(wscale, hscale)
         self.scale("all", 0, 0, scale, scale)
 
-        self.tag_bind("all", '<ButtonPress-1>', self.on_click)
+        self.tag_bind('sensor', '<ButtonPress-1>', self.on_click)
+        self.tag_bind('led', '<ButtonPress-1>', self.on_click)
         pass
 
 
