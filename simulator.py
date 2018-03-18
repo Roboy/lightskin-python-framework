@@ -17,6 +17,7 @@ from LightSkin import LightSkin, LSValueMap
 import LightSkinViz as Viz
 
 from SimpleProportionalForwardModel import SimpleProportionalForwardModel
+from SimpleProportionalBackProjection import SimpleProportionalBackProjection
 
 
 # Source: https://code.activestate.com/recipes/410687-transposing-a-list-of-lists-with-different-lengths/
@@ -29,7 +30,6 @@ def transposed(lists):
 # Main Code
 
 ls = LightSkin()
-ls.forwardModel = SimpleProportionalForwardModel(ls)
 
 # LOAD Sensor and LED coordinates from CSV
 
@@ -55,14 +55,22 @@ with open('translucency.csv', 'r') as csvfile:
 translucency = LSValueMap(ls, grid=transposed(gridVals))
 ls.translucencyMap = translucency
 
-print(ls.sensors)
-print(ls.LEDs)
-print(flush=True)
+
+ls.forwardModel = SimpleProportionalForwardModel(ls)
+ls.backwardModel = SimpleProportionalBackProjection(ls, 20, 20)
+
+
+ls.backwardModel.calculate()
+
+
+# print(ls.sensors)
+# print(ls.LEDs)
+# print(flush=True)
 
 # Build Window with widgets etc...
 window = tk.Tk()
 window.title('Light Skin Simulation')
-window.minsize(700, 300)
+window.minsize(900, 300)
 
 topViewsFrame = tk.Frame(window)
 topViewsFrame.pack(side=tk.TOP)
@@ -81,7 +89,19 @@ topView = Viz.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', hi
                                # display_function=math.sqrt,
                                measure_function=ls.forwardModel.measureAtPoint
                                )
-topView.pack(side=tk.TOP)
+topView.pack(side=tk.LEFT)
+
+
+
+topViewReconstructed = Viz.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
+                               width=300, height=300,
+                               gridWidth=50, gridHeight=50,
+                               # display_function=math.sqrt,
+                               measure_function=ls.backwardModel.measureAtPoint
+                               )
+topViewReconstructed.pack(side=tk.LEFT)
+
+
 
 gridView = Viz.LightSkinGridView(window, ls, width=400, height=400, highlightbackground='#aaa', highlightthickness=1,
                                  display_function=math.sqrt
