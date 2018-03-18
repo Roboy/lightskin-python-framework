@@ -35,7 +35,8 @@ class SimpleProportionalBackProjection(BackwardModel):
             dyStep = dy / dist * self.sampleDistance
             steps = dy / dyStep if dxStep == 0 else dx / dxStep
 
-            sampleFactor = factor ** (-steps)
+            sampleFactor = factor ** (1/steps)
+            print('Sample factor: %f %i => %f' % (factor, steps, sampleFactor))
 
             # print("Sampling for LED %i with %i steps" % (led, steps))
             for i in range(int(steps)):
