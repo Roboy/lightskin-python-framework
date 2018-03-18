@@ -20,6 +20,7 @@ class SimpleProportionalForwardModel(ForwardModel):
             dxStep = dx / dist * self.sampleDistance
             dyStep = dy / dist * self.sampleDistance
             steps = dy/dyStep if dxStep == 0 else dx/dxStep
+            #print("Sampling for LED %i with %i steps" % (led, steps))
             for i in range(int(steps)):
                 translucencyMul *= self.ls.translucencyMap.measureAtPoint(LED[0]+i*dxStep, LED[1]+i*dyStep)\
                                    ** self.sampleDistance
@@ -28,5 +29,5 @@ class SimpleProportionalForwardModel(ForwardModel):
         val = 4 / dist
         val *= translucencyMul
 
-        #print("Calculated value for LED %i (%i, %i) to (%i, %i) Distance: %i" % (led, LED[0], LED[1], x, y, dist))
+        #print("Calculated value for LED %i (%i, %i) to (%i, %i) Distance: %i; val: %f" % (led, LED[0], LED[1], x, y, dist, val))
         return max(0.0, min(1.0, val))

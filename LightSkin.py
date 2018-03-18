@@ -66,9 +66,10 @@ class ValueMap(ABC):
         i = int((x - self._min_pos_x) / self._rect_w)
         j = int((y - self._min_pos_y) / self._rect_h)
 
-        if 0 <= i < self.gridWidth and 0 <= j < self.gridHeight:
-            return self.grid[i][j]
-        return math.nan
+        i = max(0, min(self.gridWidth-1, i))
+        j = max(0, min(self.gridHeight-1, j))
+
+        return self.grid[i][j]
 
     pass
 
