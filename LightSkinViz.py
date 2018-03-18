@@ -31,6 +31,7 @@ class LightSkinTopView(tk.Canvas):
 
         self._draw()
         skin.onChange += lambda *a, **kwa: self.updateVisuals()  # remove any parameters
+        self.updateVisuals()
 
     def on_resize(self, event):
         # determine the ratio of old width/height to new width/height

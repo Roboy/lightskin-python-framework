@@ -44,16 +44,22 @@ class LightSkin:
 
 
 class ValueMap(ABC):
-    def __init__(self, gridWidth: int, gridHeight: int):
-        self.gridWidth = gridWidth
-        self.gridHeight = gridHeight
+    def __init__(self, gridWidth: int=None, gridHeight: int=None, grid: List[List[float]]=None):
 
-        self.grid: List[List[float]] = []
-        # init grid
-        for i in range(gridWidth):
-            self.grid.append([])
-            for j in range(gridHeight):
-                self.grid[i].append(0.0)
+        if grid is not None:
+            self.grid = grid
+            self.gridWidth = len(grid)
+            self.gridHeight = len(grid[0])
+        else:
+            self.gridWidth = gridWidth
+            self.gridHeight = gridHeight
+
+            self.grid: List[List[float]] = []
+            # init grid
+            for i in range(gridWidth):
+                self.grid.append([])
+                for j in range(gridHeight):
+                    self.grid[i].append(0.0)
 
         self._min_pos_x: float = 0.0
         self._min_pos_y: float = 0.0
@@ -73,8 +79,8 @@ class ValueMap(ABC):
 
 class LSValueMap(ValueMap):
 
-    def __init__(self, ls: LightSkin, gridWidth: int, gridHeight: int):
-        super().__init__(gridWidth, gridHeight)
+    def __init__(self, ls: LightSkin, gridWidth: int=None, gridHeight: int=None, grid: List[List[float]]=None):
+        super().__init__(gridWidth, gridHeight, grid)
         self.ls: LightSkin = ls
 
         self._initMinMax()
