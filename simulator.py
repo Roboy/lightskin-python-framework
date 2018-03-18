@@ -11,6 +11,8 @@ import os, sys, traceback
 
 import tkinter as tk
 
+import math
+
 from LightSkin import LightSkin, LSValueMap
 import LightSkinViz as Viz
 
@@ -76,12 +78,14 @@ topViewTransl.pack(side=tk.LEFT)
 topView = Viz.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
                                width=300, height=300,
                                gridWidth=50, gridHeight=50,
-                               # display_function=lambda x: x,
+                               # display_function=math.sqrt,
                                measure_function=ls.forwardModel.measureAtPoint
                                )
 topView.pack(side=tk.TOP)
 
-gridView = Viz.LightSkinGridView(window, ls, width=400, height=400, highlightbackground='#aaa', highlightthickness=1)
+gridView = Viz.LightSkinGridView(window, ls, width=400, height=400, highlightbackground='#aaa', highlightthickness=1,
+                                 # display_function=math.sqrt
+                                 )
 gridView.pack(side=tk.BOTTOM)
 
 window.mainloop()
