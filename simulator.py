@@ -84,7 +84,7 @@ topView = Viz.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', hi
 topView.pack(side=tk.TOP)
 
 gridView = Viz.LightSkinGridView(window, ls, width=400, height=400, highlightbackground='#aaa', highlightthickness=1,
-                                 # display_function=math.sqrt
+                                 display_function=math.sqrt
                                  )
 gridView.pack(side=tk.BOTTOM)
 
