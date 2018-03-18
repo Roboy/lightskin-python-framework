@@ -13,12 +13,14 @@ class LightSkin:
         """ Create a container """
         self.sensors: List[Tuple[float, float]] = []
         self.LEDs: List[Tuple[float, float]] = []
-        self.image = None
+
+        self.translucencyMap: ValueMap = None
+        self.forwardModel: ForwardModel = None
+        self.backwardModel: BackwardModel = None
+
         self._selectedSensor: int = -1
         self._selectedLED: int = -1
         self.onChange: EventHook[[str, int, int]] = EventHook()
-        self.forwardModel: ForwardModel = None
-        self.backwardModel: BackwardModel = None
 
     @property
     def selectedSensor(self) -> int:
@@ -41,30 +43,10 @@ class LightSkin:
         self.onChange.fire('led', old, i)
 
 
-class ForwardModel(ABC):
-
-    def __init__(self, ls: LightSkin):
-        self.ls: LightSkin = ls
-
-    @abstractmethod
-    def measureAtPoint(self, x: float, y: float, led: int = -1) -> float:
-        pass
-
-    def getSensorValue(self, sensor: int, led: int = -1) -> float:
-        s = self.ls.sensors[sensor]
-        return self.measureAtPoint(s[0], s[1], led)
-
-    pass
-
-
-class BackwardModel(ABC):
-
-    def __init__(self, ls: LightSkin, gridWidth: int, gridHeight: int):
+class ValueMap(ABC):
+    def __init__(self, gridWidth: int, gridHeight: int):
         self.gridWidth = gridWidth
         self.gridHeight = gridHeight
-        self.ls: LightSkin = ls
-
-        self._initMinMax()
 
         self.grid: List[List[float]] = []
         # init grid
@@ -72,6 +54,30 @@ class BackwardModel(ABC):
             self.grid.append([])
             for j in range(gridHeight):
                 self.grid[i].append(0.0)
+
+        self._min_pos_x: float = 0.0
+        self._min_pos_y: float = 0.0
+        self._rect_w: float = 0.0
+        self._rect_h: float = 0.0
+
+    def measureAtPoint(self, x: float, y: float) -> float:
+        i = int((x - self._min_pos_x) / self._rect_w)
+        j = int((y - self._min_pos_y) / self._rect_h)
+
+        if 0 <= i < self.gridWidth and 0 <= j < self.gridHeight:
+            return self.grid[i][j]
+        return math.nan
+
+    pass
+
+
+class LSValueMap(ValueMap):
+
+    def __init__(self, ls: LightSkin, gridWidth: int, gridHeight: int):
+        super().__init__(gridWidth, gridHeight)
+        self.ls: LightSkin = ls
+
+        self._initMinMax()
 
     def _initMinMax(self):
         self._min_pos_x: float = None
@@ -107,19 +113,34 @@ class BackwardModel(ABC):
         self._rect_w: float = float(self._max_pos_x - self._min_pos_x) / self.gridWidth
         self._rect_h: float = float(self._max_pos_y - self._min_pos_y) / self.gridHeight
 
+
+class ForwardModel(ABC):
+
+    def __init__(self, ls: LightSkin):
+        self.ls: LightSkin = ls
+
+    @abstractmethod
+    def measureAtPoint(self, x: float, y: float, led: int = -1) -> float:
+        pass
+
+    def getSensorValue(self, sensor: int, led: int = -1) -> float:
+        s = self.ls.sensors[sensor]
+        return self.measureAtPoint(s[0], s[1], led)
+
+    pass
+
+
+class BackwardModel(LSValueMap):
+
+    def __init__(self, ls: LightSkin, gridWidth: int, gridHeight: int):
+        super().__init__(ls, gridWidth, gridHeight)
+
     @abstractmethod
     def calculate(self) -> bool:
         """Apply the backward model and calculate the expected values for the grid elements using the sensor values
         retrieved from the skins forward model """
         pass
 
-    def measureAtPoint(self, x: float, y: float) -> float:
-        i = int((x-self._min_pos_x) / self._rect_w)
-        j = int((y-self._min_pos_y) / self._rect_h)
-
-        if 0 <= i < self.gridWidth and 0 <= j < self.gridHeight:
-            return self.grid[i][j]
-        return math.nan
     pass
 
 
