@@ -17,7 +17,7 @@ class LightSkinTopView(tk.Canvas):
     _elScale = 100
     _border = 100
 
-    def __init__(self, parent, skin: LightSkin, gridWidth: int, gridHeight: int, measure_function: Callable[[float, float], float], display_function: Callable[[float], float] = math.sqrt, **kwargs):
+    def __init__(self, parent, skin: LightSkin, gridWidth: int, gridHeight: int, measure_function: Callable[[float, float], float] = lambda x, y: 0, display_function: Callable[[float], float] = math.sqrt, **kwargs):
         tk.Canvas.__init__(self, parent, **kwargs)
         self.measureFunction = measure_function
         self.displayFunction = display_function

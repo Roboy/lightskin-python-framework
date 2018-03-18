@@ -64,13 +64,15 @@ window.minsize(400, 300)
 topViewTransl = Viz.LightSkinTopView(window, ls, highlightbackground='#aaa', highlightthickness=1,
                                      gridWidth=ls.translucencyMap.gridWidth, gridHeight=ls.translucencyMap.gridHeight,
                                      # display_function=lambda x: x,
-                                     measure_function=ls.translucencyMap.measureAtPoint)
+                                     measure_function=ls.translucencyMap.measureAtPoint
+                                     )
 topViewTransl.pack()
 
 topView = Viz.LightSkinTopView(window, ls, highlightbackground='#aaa', highlightthickness=1,
                                gridWidth=50, gridHeight=50,
                                # display_function=lambda x: x,
-                               measure_function=ls.forwardModel.measureAtPoint)
+                               measure_function=ls.forwardModel.measureAtPoint
+                               )
 topView.pack()
 
 gridView = Viz.LightSkinGridView(window, ls, width=400, height=400, highlightbackground='#aaa', highlightthickness=1)
