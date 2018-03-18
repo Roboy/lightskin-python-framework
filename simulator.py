@@ -57,7 +57,7 @@ ls.translucencyMap = translucency
 
 
 ls.forwardModel = SimpleProportionalForwardModel(ls)
-ls.backwardModel = SimpleProportionalBackProjection(ls, 20, 20)
+ls.backwardModel = SimpleProportionalBackProjection(ls, 10, 10)
 
 
 ls.backwardModel.calculate()
@@ -95,7 +95,7 @@ topView.pack(side=tk.LEFT)
 
 topViewReconstructed = Viz.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
                                width=300, height=300,
-                               gridWidth=50, gridHeight=50,
+                               gridWidth=ls.backwardModel.gridWidth, gridHeight=ls.backwardModel.gridHeight,
                                # display_function=math.sqrt,
                                measure_function=ls.backwardModel.measureAtPoint
                                )

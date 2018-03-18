@@ -55,7 +55,9 @@ class ValueMap(ABC):
             self.gridHeight = gridHeight
 
             # init grid
-            self.grid: List[List[float]] = [[0.0] * gridHeight] * gridWidth
+            self.grid: List[List[float]] = []
+            for i in range(gridWidth):
+                self.grid.append([0.0] * gridHeight)
 
         self._min_pos_x: float = 0.0
         self._min_pos_y: float = 0.0

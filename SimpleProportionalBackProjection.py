@@ -8,7 +8,9 @@ class SimpleProportionalBackProjection(BackwardModel):
 
     def calculate(self) -> bool:
 
-        self.grid = [[1.0] * self.gridWidth] * self.gridHeight
+        self.grid = []
+        for i in range(self.gridWidth):
+            self.grid.append([1.0] * self.gridHeight)
 
         for i_l, l in enumerate(self.ls.LEDs):
             for i_s, s in enumerate(self.ls.sensors):
@@ -21,13 +23,15 @@ class SimpleProportionalBackProjection(BackwardModel):
 
 
     def _backProject(self, sensor: int, led: int, factor: float):
-        sensor = self.ls.sensors[sensor]
+        Sensor = self.ls.sensors[sensor]
         LED = self.ls.LEDs[led]
 
-        dx = float(sensor[0] - LED[0])
-        dy = float(sensor[1] - LED[1])
+        dx = float(Sensor[0] - LED[0])
+        dy = float(Sensor[1] - LED[1])
 
         dist = math.sqrt(dx ** 2 + dy ** 2)
+
+        #print('Backprojecting for grid of size (%i, %i)' % (self.gridWidth, self.gridHeight))
 
         if dist > 0:
             # project back into translucency map
@@ -36,7 +40,7 @@ class SimpleProportionalBackProjection(BackwardModel):
             steps = dy / dyStep if dxStep == 0 else dx / dxStep
 
             sampleFactor = factor ** (1/steps)
-            print('Sample factor: %f %i => %f' % (factor, steps, sampleFactor))
+            print('Sample factor for LED %i -> Sensor %i: %f %i => %f' % (led, sensor, factor, steps, sampleFactor))
 
             # print("Sampling for LED %i with %i steps" % (led, steps))
             for i in range(int(steps)):
@@ -50,6 +54,7 @@ class SimpleProportionalBackProjection(BackwardModel):
                 y_i = max(0, min(self.gridHeight - 1, y_i))
 
                 self.grid[x_i][y_i] *= sampleFactor
+                print('Influencing %i %i = %f' % (x_i, y_i, self.grid[x_i][y_i]))
 
 
     def _expectedSensorValue(self, sensor: int, led: int) -> float:
@@ -65,3 +70,15 @@ class SimpleProportionalBackProjection(BackwardModel):
         val = 4 / dist
 
         return max(0.0, min(1.0, val))
+
+
+    def measureAtPoint(self, x: float, y: float) -> float:
+        i = int((x - self._min_pos_x) / self._rect_w)
+        j = int((y - self._min_pos_y) / self._rect_h)
+
+        i = max(0, min(self.gridWidth-1, i))
+        j = max(0, min(self.gridHeight-1, j))
+
+        print("displaying at %i %i: %f" % (i, j, self.grid[i][j]))
+
+        return max(0.0, min(1.0, self.grid[i][j]))
