@@ -16,9 +16,9 @@ import math
 from LightSkin import LightSkin, LSValueMap
 import LightSkinViz as Viz
 
-#from SimpleProportionalForwardModel import SimpleProportionalForwardModel
+# from SimpleProportionalForwardModel import SimpleProportionalForwardModel
 from ArduinoConnectorForwardModel import ArduinoConnectorForwardModel
-#from SimpleProportionalBackProjection import SimpleProportionalBackProjection
+# from SimpleProportionalBackProjection import SimpleProportionalBackProjection
 from SimpleCalibratedBackProjection import SimpleCalibratedBackProjection
 
 
@@ -47,11 +47,10 @@ with open('leds.csv', 'r') as csvfile:
         s = (float(r[0]), float(r[1]))
         ls.LEDs.append(s)
 
+arduinoConnector = ArduinoConnectorForwardModel(ls)
 
-ls.forwardModel = ArduinoConnectorForwardModel(ls)
+ls.forwardModel = arduinoConnector
 ls.backwardModel = SimpleCalibratedBackProjection(ls, 10, 10)
-
-
 
 # print(ls.sensors)
 # print(ls.LEDs)
@@ -62,25 +61,28 @@ window = tk.Tk()
 window.title('Light Skin Simulation')
 window.minsize(900, 300)
 
-
-
 gridView = Viz.LightSkinGridView(window, ls, width=400, height=400, highlightbackground='#aaa', highlightthickness=1,
                                  display_function=math.sqrt
-
 
                                  )
 gridView.pack(side=tk.LEFT)
 
 topViewReconstructed = Viz.LightSkinTopView(window, ls, highlightbackground='#aaa', highlightthickness=1,
-                               width=500, height=500,
-                               gridWidth=ls.backwardModel.gridWidth, gridHeight=ls.backwardModel.gridHeight,
-                               # display_function=math.sqrt,
-                               measure_function=ls.backwardModel.measureAtPoint
-                               )
+                                            width=500, height=500,
+                                            gridWidth=ls.backwardModel.gridWidth,
+                                            gridHeight=ls.backwardModel.gridHeight,
+                                            # display_function=math.sqrt,
+                                            measure_function=ls.backwardModel.measureAtPoint
+                                            )
 topViewReconstructed.pack(side=tk.RIGHT)
 
 
+def onUpdate():
+    gridView.updateVisuals()
+    topViewReconstructed.updateVisuals()
 
+
+arduinoConnector.onUpdate += onUpdate()
 
 window.mainloop()
 
