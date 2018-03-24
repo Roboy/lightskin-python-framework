@@ -1,6 +1,8 @@
 import math
 
 import re
+from threading import Thread
+
 import serial
 from LightSkin import ForwardModel, LightSkin, EventHook
 
@@ -8,7 +10,7 @@ from LightSkin import ForwardModel, LightSkin, EventHook
 class ArduinoConnectorForwardModel(ForwardModel):
     sampleDistance = 0.125
 
-    def __init__(self, ls: LightSkin):
+    def __init__(self, ls: LightSkin, port: str, baudrate: int):
         super().__init__(ls)
 
         self.onUpdate: EventHook = EventHook()
@@ -18,15 +20,23 @@ class ArduinoConnectorForwardModel(ForwardModel):
             self._sensorValues.append([1.0] * len(self.ls.sensors))
 
         self.ser = serial.Serial(
-            port='COM3',
-            baudrate=115200,
+            port=port,
+            baudrate=baudrate,
             parity=serial.PARITY_NONE,
             stopbits=serial.STOPBITS_ONE,
             bytesize=serial.EIGHTBITS,
             timeout=10)
 
+        self._readerThreadRun = True
+        self._readerThread = Thread(target=self._readLoop())
+        self._readerThread.start()
+
+    def __del__(self):
+        self._readerThreadRun = False
+        self._readerThread.join()
+
     def _readLoop(self):
-        while True:
+        while self._readerThreadRun:
             line = self.ser.readline()
             match = re.match('Snapshot: ([0-9]+),([0-9]+)', line)
             if match is not None:

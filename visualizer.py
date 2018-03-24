@@ -47,7 +47,7 @@ with open('leds.csv', 'r') as csvfile:
         s = (float(r[0]), float(r[1]))
         ls.LEDs.append(s)
 
-arduinoConnector = ArduinoConnectorForwardModel(ls)
+arduinoConnector = ArduinoConnectorForwardModel(ls, 'COM3', 115200)
 
 ls.forwardModel = arduinoConnector
 ls.backwardModel = SimpleCalibratedBackProjection(ls, 10, 10)
