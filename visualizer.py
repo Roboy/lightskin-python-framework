@@ -82,7 +82,7 @@ def onUpdate():
     topViewReconstructed.updateVisuals()
 
 
-arduinoConnector.onUpdate += onUpdate()
+arduinoConnector.onUpdate += onUpdate
 
 window.mainloop()
 

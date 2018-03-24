@@ -54,6 +54,7 @@ class ArduinoConnectorForwardModel(ForwardModel):
                         for s in range(sensors):
                             self._sensorValues[l][s] = float(vals[s]) if s < len(vals) else 0.0
                     print("received data")
+                    self.onUpdate.fire()
         print('Read Loop finished')
 
     def measureAtPoint(self, x: float, y: float, led: int = -1) -> float:

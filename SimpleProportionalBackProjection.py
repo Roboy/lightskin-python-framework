@@ -79,6 +79,6 @@ class SimpleProportionalBackProjection(BackwardModel):
         i = max(0, min(self.gridWidth-1, i))
         j = max(0, min(self.gridHeight-1, j))
 
-        print("displaying at %i %i: %f" % (i, j, self.grid[i][j]))
+        #print("displaying at %i %i: %f" % (i, j, self.grid[i][j]))
 
         return max(0.0, min(1.0, self.grid[i][j]))
