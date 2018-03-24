@@ -40,7 +40,7 @@ class SimpleProportionalBackProjection(BackwardModel):
             steps = dy / dyStep if dxStep == 0 else dx / dxStep
 
             sampleFactor = factor ** (1/steps)
-            print('Sample factor for LED %i -> Sensor %i: %f %i => %f' % (led, sensor, factor, steps, sampleFactor))
+            #print('Sample factor for LED %i -> Sensor %i: %f %i => %f' % (led, sensor, factor, steps, sampleFactor))
 
             # print("Sampling for LED %i with %i steps" % (led, steps))
             for i in range(int(steps)):
@@ -54,7 +54,7 @@ class SimpleProportionalBackProjection(BackwardModel):
                 y_i = max(0, min(self.gridHeight - 1, y_i))
 
                 self.grid[x_i][y_i] *= sampleFactor
-                print('Influencing %i %i = %f' % (x_i, y_i, self.grid[x_i][y_i]))
+                #print('Influencing %i %i = %f' % (x_i, y_i, self.grid[x_i][y_i]))
 
 
     def _expectedSensorValue(self, sensor: int, led: int) -> float:

@@ -48,9 +48,11 @@ with open('leds.csv', 'r') as csvfile:
         ls.LEDs.append(s)
 
 arduinoConnector = ArduinoConnectorForwardModel(ls, 'COM3', 1000000)
+backwardModel = SimpleCalibratedBackProjection(ls, 10, 10)
+
 
 ls.forwardModel = arduinoConnector
-ls.backwardModel = SimpleCalibratedBackProjection(ls, 10, 10)
+ls.backwardModel = backwardModel
 
 # print(ls.sensors)
 # print(ls.LEDs)
@@ -78,6 +80,9 @@ topViewReconstructed.pack(side=tk.RIGHT)
 
 
 def onUpdate():
+    if not backwardModel.isCalibrated:
+        backwardModel.calibrate()
+    backwardModel.calculate()
     gridView.updateVisuals()
     topViewReconstructed.updateVisuals()
 

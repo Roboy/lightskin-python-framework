@@ -48,13 +48,16 @@ class ArduinoConnectorForwardModel(ForwardModel):
                     print("Received wring amount of sensor values: %i / %i; expected %i / %i" % (
                     leds, sensors, len(self.ls.LEDs), len(self.ls.sensors)))
                 else:
-                    for l in range(leds):
-                        line = self.ser.readline()
-                        vals = line.split(b',')
-                        for s in range(sensors):
-                            self._sensorValues[l][s] = float(vals[s]) if s < len(vals) else 0.0
-                    print("received data")
-                    self.onUpdate.fire()
+                    try:
+                        for l in range(leds):
+                            line = self.ser.readline()
+                            vals = line.split(b',')
+                            for s in range(sensors):
+                                self._sensorValues[l][s] = float(vals[s]) if s < len(vals) else 0.0
+                        print("received data")
+                        self.onUpdate.fire()
+                    except Exception as e:
+                        print(e)
         print('Read Loop finished')
 
     def measureAtPoint(self, x: float, y: float, led: int = -1) -> float:
