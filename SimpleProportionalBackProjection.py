@@ -5,6 +5,7 @@ from LightSkin import BackwardModel
 
 class SimpleProportionalBackProjection(BackwardModel):
     sampleDistance = 0.125
+    MIN_SENSITIVITY = 0.05
 
     def calculate(self) -> bool:
 
@@ -16,8 +17,9 @@ class SimpleProportionalBackProjection(BackwardModel):
             for i_s, s in enumerate(self.ls.sensors):
                 val = self.ls.forwardModel.getSensorValue(i_s, i_l)
                 expectedVal = self._expectedSensorValue(i_s, i_l)
-                translucencyFactor = val / expectedVal
-                self._backProject(i_s, i_l, translucencyFactor)
+                if expectedVal > self.MIN_SENSITIVITY:
+                    translucencyFactor = val / expectedVal
+                    self._backProject(i_s, i_l, translucencyFactor)
 
         return True
 
