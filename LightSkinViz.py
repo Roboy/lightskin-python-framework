@@ -1,11 +1,12 @@
 #!/usr/bin/python3
 
 import tkinter as tk
-from typing import List, Callable
+from typing import List, Callable, Tuple
 
 import math
 
 from LightSkin import LightSkin
+from TKinterToolTip import ToolTip
 
 
 class LightSkinTopView(tk.Canvas):
@@ -170,7 +171,8 @@ class LightSkinGridView(tk.Frame):
                 c = self._LEDColorS
             b.configure(bg=c)
         for i, l in enumerate(self._measurements):
-            for j, f in enumerate(l):
+            for j, ft in enumerate(l):
+                f, tt = ft
                 c = self._Color
                 if i == self.skin.selectedLED:
                     c = self._LEDColorS
@@ -180,11 +182,12 @@ class LightSkinGridView(tk.Frame):
                 v = int(self.displayFunction(val) * 255)
                 valcol = "#%02x%02x%02x" % (v, v, v)
                 f.configure(highlightbackground=c, bg=valcol)
+                tt.text = str(val)
 
     def _build(self):
         self._sensors: List[tk.Button] = []
         self._leds: List[tk.Button] = []
-        self._measurements: List[List[tk.Frame]] = []
+        self._measurements: List[List[Tuple[tk.Frame, ToolTip]]] = []
 
         for i, s in enumerate(self.skin.sensors):
             def cmd(i=i):
@@ -208,8 +211,9 @@ class LightSkinGridView(tk.Frame):
                     self.skin.selectedLED = i
                     self.skin.selectedSensor = j
                 f = tk.Frame(self, bg='#fff', highlightbackground=self._Color, highlightthickness=1)
+                toolTip = ToolTip.createToolTip(f, 'None')
                 f.bind('<ButtonPress-1>', cmd)
                 f.grid(column=i + 1, row=j + 1, sticky='NESW')
-                self._measurements[i].append(f)
+                self._measurements[i].append((f, toolTip))
 
         pass
