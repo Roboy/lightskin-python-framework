@@ -171,8 +171,7 @@ class LightSkinGridView(tk.Frame):
                 c = self._LEDColorS
             b.configure(bg=c)
         for i, l in enumerate(self._measurements):
-            for j, ft in enumerate(l):
-                f, tt = ft
+            for j, (f, tt) in enumerate(l):
                 c = self._Color
                 if i == self.skin.selectedLED:
                     c = self._LEDColorS
@@ -182,7 +181,7 @@ class LightSkinGridView(tk.Frame):
                 v = int(self.displayFunction(val) * 255)
                 valcol = "#%02x%02x%02x" % (v, v, v)
                 f.configure(highlightbackground=c, bg=valcol)
-                tt.text = str(val)
+                tt.text = "%.2f%%" % (val*100)
 
     def _build(self):
         self._sensors: List[tk.Button] = []

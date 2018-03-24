@@ -9,6 +9,7 @@ from LightSkin import ForwardModel, LightSkin, EventHook
 
 class ArduinoConnectorForwardModel(ForwardModel):
     sampleDistance = 0.125
+    MAX_VALUE = 1024
 
     def __init__(self, ls: LightSkin, port: str, baudrate: int):
         super().__init__(ls)
@@ -53,7 +54,8 @@ class ArduinoConnectorForwardModel(ForwardModel):
                             line = self.ser.readline()
                             vals = line.split(b',')
                             for s in range(sensors):
-                                self._sensorValues[l][s] = float(vals[s]) if s < len(vals) else 0.0
+                                val = float(vals[s]) / self.MAX_VALUE if s < len(vals) else 0.0
+                                self._sensorValues[l][s] = min(1.0, max(0.0, val))
                         print("received data")
                         self.onUpdate.fire()
                     except Exception as e:
