@@ -1,6 +1,6 @@
 import math
 
-from LightSkin import ForwardModel
+from LightSkin import ForwardModel, Calibration
 
 
 class SimpleProportionalForwardModel(ForwardModel):
@@ -30,4 +30,21 @@ class SimpleProportionalForwardModel(ForwardModel):
         val *= translucencyMul
 
         #print("Calculated value for LED %i (%i, %i) to (%i, %i) Distance: %i; val: %f" % (led, LED[0], LED[1], x, y, dist, val))
+        return max(0.0, min(1.0, val))
+
+
+class SimpleIdealProportionalCalibration(Calibration):
+
+    def expectedSensorValue(self, sensor: int, led: int) -> float:
+        sensor = self.ls.sensors[sensor]
+        LED = self.ls.LEDs[led]
+
+        dx = float(sensor[0] - LED[0])
+        dy = float(sensor[1] - LED[1])
+
+        dist = math.sqrt(dx ** 2 + dy ** 2)
+
+        dist = max(dist, 0.1)
+        val = 4 / dist
+
         return max(0.0, min(1.0, val))

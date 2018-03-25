@@ -122,10 +122,23 @@ class ForwardModel(ABC):
     pass
 
 
+class Calibration(ABC):
+    def __init__(self, ls: LightSkin):
+        self.ls: LightSkin = ls
+
+    def calibrate(self):
+        pass
+
+    @abstractmethod
+    def expectedSensorValue(self, sensor: int, led: int) -> float:
+        return 0.0
+
+
 class BackwardModel(LSValueMap):
 
-    def __init__(self, ls: LightSkin, gridWidth: int, gridHeight: int):
+    def __init__(self, ls: LightSkin, gridWidth: int, gridHeight: int, calibration: Calibration):
         super().__init__(ls, gridWidth, gridHeight)
+        self.calibration: Calibration = calibration
 
     @abstractmethod
     def calculate(self) -> bool:

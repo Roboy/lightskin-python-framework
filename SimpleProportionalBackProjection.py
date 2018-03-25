@@ -1,6 +1,6 @@
 import math
 
-from LightSkin import BackwardModel, LightSkin
+from LightSkin import BackwardModel, LightSkin, Calibration
 
 
 class SimpleProportionalBackProjection(BackwardModel):
@@ -8,8 +8,8 @@ class SimpleProportionalBackProjection(BackwardModel):
     MIN_SENSITIVITY = 0.02
     UNKNOWN_VAL = 1.0
 
-    def __init__(self, ls: LightSkin, gridWidth: int, gridHeight: int):
-        super().__init__(ls, gridWidth, gridHeight)
+    def __init__(self, ls: LightSkin, gridWidth: int, gridHeight: int, calibration: Calibration):
+        super().__init__(ls, gridWidth, gridHeight, calibration)
         self._tmpGrid = []
         self._tmpGridWeights = []
 
@@ -24,7 +24,7 @@ class SimpleProportionalBackProjection(BackwardModel):
         for i_l, l in enumerate(self.ls.LEDs):
             for i_s, s in enumerate(self.ls.sensors):
                 val = self.ls.forwardModel.getSensorValue(i_s, i_l)
-                expectedVal = self._expectedSensorValue(i_s, i_l)
+                expectedVal = self.calibration.expectedSensorValue(i_s, i_l)
                 if expectedVal > self.MIN_SENSITIVITY:
                     translucencyFactor = val / expectedVal
                     self._backProject(i_s, i_l, translucencyFactor)
@@ -82,21 +82,6 @@ class SimpleProportionalBackProjection(BackwardModel):
                 self._tmpGridWeights[x_i][y_i] += 1
                 #if 50 < x_i < 55 and 5 < y_i < 15:
                 #    print('Influencing %i %i = %f' % (x_i, y_i, self._tmpGrid[x_i][y_i]))
-
-
-    def _expectedSensorValue(self, sensor: int, led: int) -> float:
-        sensor = self.ls.sensors[sensor]
-        LED = self.ls.LEDs[led]
-
-        dx = float(sensor[0] - LED[0])
-        dy = float(sensor[1] - LED[1])
-
-        dist = math.sqrt(dx ** 2 + dy ** 2)
-
-        dist = max(dist, 0.1)
-        val = 4 / dist
-
-        return max(0.0, min(1.0, val))
 
 
     def measureAtPoint(self, x: float, y: float) -> float:

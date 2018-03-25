@@ -1,15 +1,14 @@
-import math
 from typing import List
 
-from LightSkin import BackwardModel, LightSkin
-from SimpleProportionalBackProjection import SimpleProportionalBackProjection
+from LightSkin import LightSkin, Calibration
 
 
-class SimpleCalibratedBackProjection(SimpleProportionalBackProjection):
+class SimpleCalibration(Calibration):
 
-    def __init__(self, ls: LightSkin, gridWidth: int, gridHeight: int):
-        super().__init__(ls, gridWidth, gridHeight)
+    def __init__(self, ls: LightSkin):
+        super().__init__(ls)
         self.isCalibrated = False
+        self._calibration: List[List[float]] = []
 
     def calibrate(self):
         self._calibration: List[List[float]] = []
@@ -20,5 +19,5 @@ class SimpleCalibratedBackProjection(SimpleProportionalBackProjection):
         self.isCalibrated = True
         pass
 
-    def _expectedSensorValue(self, sensor: int, led: int) -> float:
+    def expectedSensorValue(self, sensor: int, led: int) -> float:
         return self._calibration[led][sensor]

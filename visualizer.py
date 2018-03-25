@@ -18,8 +18,8 @@ import LightSkinViz as Viz
 
 # from SimpleProportionalForwardModel import SimpleProportionalForwardModel
 from ArduinoConnectorForwardModel import ArduinoConnectorForwardModel
-# from SimpleProportionalBackProjection import SimpleProportionalBackProjection
-from SimpleCalibratedBackProjection import SimpleCalibratedBackProjection
+from SimpleProportionalBackProjection import SimpleProportionalBackProjection
+from SimpleCalibration import SimpleCalibration
 
 
 # Source: https://code.activestate.com/recipes/410687-transposing-a-list-of-lists-with-different-lengths/
@@ -49,8 +49,10 @@ with open('leds.csv', 'r') as csvfile:
 
 recResolution = 10
 
+calibration = SimpleCalibration(ls)
+
 arduinoConnector = ArduinoConnectorForwardModel(ls, 'COM3', 1000000)
-backwardModel = SimpleCalibratedBackProjection(ls, recResolution, recResolution)
+backwardModel = SimpleProportionalBackProjection(ls, recResolution, recResolution, calibration)
 
 
 ls.forwardModel = arduinoConnector
@@ -82,8 +84,8 @@ topViewReconstructed.pack(side=tk.RIGHT)
 
 
 def onUpdate():
-    if not backwardModel.isCalibrated:
-        backwardModel.calibrate()
+    if not calibration.isCalibrated:
+        calibration.calibrate()
     backwardModel.calculate()
     gridView.updateVisuals()
     topViewReconstructed.updateVisuals()

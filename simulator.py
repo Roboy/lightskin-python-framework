@@ -16,7 +16,7 @@ import math
 from LightSkin import LightSkin, LSValueMap
 import LightSkinViz as Viz
 
-from SimpleProportionalForwardModel import SimpleProportionalForwardModel
+from SimpleProportionalForwardModel import SimpleProportionalForwardModel, SimpleIdealProportionalCalibration
 from SimpleProportionalBackProjection import SimpleProportionalBackProjection
 from SimpleDumbProportionalBackProjection import SimpleDumbProportionalBackProjection
 
@@ -60,7 +60,7 @@ ls.translucencyMap = translucency
 recSize = 10
 
 ls.forwardModel = SimpleProportionalForwardModel(ls)
-ls.backwardModel = SimpleProportionalBackProjection(ls, recSize, recSize)
+ls.backwardModel = SimpleProportionalBackProjection(ls, recSize, recSize, SimpleIdealProportionalCalibration(ls))
 #dumb = SimpleDumbProportionalBackProjection(ls, recSize, recSize)
 
 
