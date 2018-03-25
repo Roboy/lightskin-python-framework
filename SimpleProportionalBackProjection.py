@@ -36,6 +36,9 @@ class SimpleProportionalBackProjection(BackwardModel):
                 if w > 0:
                     val = line[i] / w
                 #val = val ** 10
+                # Weighting the value by the knowledge we have
+                # To reduce "noise" in low-knowledge-areas
+                val = self.UNKNOWN_VAL + (val - self.UNKNOWN_VAL) * (1 - 1/(w*self.sampleDistance+1))
                 line[i] = val
 
         self.grid = self._tmpGrid
