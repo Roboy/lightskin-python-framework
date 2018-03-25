@@ -29,14 +29,13 @@ class SimpleProportionalBackProjection(BackwardModel):
                     translucencyFactor = val / expectedVal
                     self._backProject(i_s, i_l, translucencyFactor)
 
-        for line, lineWeighs in zip(self._tmpGrid, self._tmpGridWeights):
+        for i_l, (line, lineWeighs) in enumerate(zip(self._tmpGrid, self._tmpGridWeights)):
             for i, w in enumerate(lineWeighs):
                 # we need to manipulate values
                 val = self.UNKNOWN_VAL
                 if w > 0:
                     val = line[i] / w
-                val = val ** 10
-                #print("Calculating Average %f %i %f" % (line[i], w, val))
+                #val = val ** 10
                 line[i] = val
 
         self.grid = self._tmpGrid
@@ -78,7 +77,8 @@ class SimpleProportionalBackProjection(BackwardModel):
 
                 self._tmpGrid[x_i][y_i] += sampleFactor
                 self._tmpGridWeights[x_i][y_i] += 1
-                print('Influencing %i %i = %f' % (x_i, y_i, self._tmpGrid[x_i][y_i]))
+                #if 50 < x_i < 55 and 5 < y_i < 15:
+                #    print('Influencing %i %i = %f' % (x_i, y_i, self._tmpGrid[x_i][y_i]))
 
 
     def _expectedSensorValue(self, sensor: int, led: int) -> float:

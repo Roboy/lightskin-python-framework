@@ -57,15 +57,15 @@ translucency = LSValueMap(ls, grid=transposed(gridVals))
 ls.translucencyMap = translucency
 
 
-recSize = 7
+recSize = 10
 
 ls.forwardModel = SimpleProportionalForwardModel(ls)
 ls.backwardModel = SimpleProportionalBackProjection(ls, recSize, recSize)
-dumb = SimpleDumbProportionalBackProjection(ls, recSize, recSize)
+#dumb = SimpleDumbProportionalBackProjection(ls, recSize, recSize)
 
 
 ls.backwardModel.calculate()
-dumb.calculate()
+#dumb.calculate()
 
 
 # print(ls.sensors)
@@ -99,23 +99,23 @@ topView.pack(side=tk.LEFT)
 
 
 topViewReconstructed = Viz.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
-                               width=500, height=500,
+                               width=300, height=300,
                                gridWidth=ls.backwardModel.gridWidth, gridHeight=ls.backwardModel.gridHeight,
-                               # display_function=math.sqrt,
+                               display_function=lambda x: x ** 10,
                                measure_function=ls.backwardModel.measureAtPoint
                                )
 topViewReconstructed.pack(side=tk.LEFT)
 
 
 
-topViewReconstructed2 = Viz.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
+'''topViewReconstructed2 = Viz.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
                                width=500, height=500,
                                gridWidth=dumb.gridWidth, gridHeight=dumb.gridHeight,
-                               # display_function=math.sqrt,
+                               display_function=lambda x: x ** 10,
                                measure_function=dumb.measureAtPoint
                                )
 topViewReconstructed2.pack(side=tk.LEFT)
-
+'''
 
 gridView = Viz.LightSkinGridView(window, ls, width=400, height=400, highlightbackground='#aaa', highlightthickness=1,
                                  display_function=math.sqrt
