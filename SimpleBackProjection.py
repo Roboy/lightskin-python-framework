@@ -3,7 +3,7 @@ import math
 from LightSkin import BackwardModel, LightSkin, Calibration
 
 
-class SimpleProportionalBackProjection(BackwardModel):
+class SimpleBackProjection(BackwardModel):
     sampleDistance = 0.125
     MIN_SENSITIVITY = 0.02
     UNKNOWN_VAL = 1.0

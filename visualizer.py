@@ -18,7 +18,7 @@ import LightSkinViz as Viz
 
 # from SimpleProportionalForwardModel import SimpleProportionalForwardModel
 from ArduinoConnectorForwardModel import ArduinoConnectorForwardModel
-from SimpleProportionalBackProjection import SimpleProportionalBackProjection
+from SimpleBackProjection import SimpleBackProjection
 from SimpleCalibration import SimpleCalibration
 
 
@@ -52,7 +52,7 @@ recResolution = 10
 calibration = SimpleCalibration(ls)
 
 arduinoConnector = ArduinoConnectorForwardModel(ls, 'COM3', 1000000)
-backwardModel = SimpleProportionalBackProjection(ls, recResolution, recResolution, calibration)
+backwardModel = SimpleBackProjection(ls, recResolution, recResolution, calibration)
 
 
 ls.forwardModel = arduinoConnector
