@@ -75,7 +75,7 @@ topViewReconstructed = Viz.LightSkinTopView(window, ls, highlightbackground='#aa
                                             width=500, height=500,
                                             gridWidth=ls.backwardModel.gridWidth,
                                             gridHeight=ls.backwardModel.gridHeight,
-                                            display_function=lambda x: x ** 20,
+                                            display_function=lambda x: x ** 100,
                                             measure_function=ls.backwardModel.measureAtPoint
                                             )
 topViewReconstructed.pack(side=tk.RIGHT)
