@@ -20,6 +20,9 @@ class ArduinoConnectorForwardModel(ForwardModel):
         for i in range(len(self.ls.LEDs)):
             self._sensorValues.append([1.0] * len(self.ls.sensors))
 
+        self._readerThread = Thread(target=self._readLoop, daemon=True)
+        self._readerThreadRun = False
+
         self.ser = serial.Serial(
             port=port,
             baudrate=baudrate,
@@ -27,15 +30,17 @@ class ArduinoConnectorForwardModel(ForwardModel):
             stopbits=serial.STOPBITS_ONE,
             bytesize=serial.EIGHTBITS,
             timeout=10)
-
         self._readerThreadRun = True
-        self._readerThread = Thread(target=self._readLoop, daemon=True)
         self._readerThread.start()
 
     def __del__(self):
-        self._readerThreadRun = False
-        self._readerThread.join()
-        self.ser.close()
+        if self._readerThreadRun:
+            self._readerThreadRun = False
+            self._readerThread.join()
+        try:
+            self.ser.close()
+        except Exception:
+            pass
 
     def _readLoop(self):
         print('Read Loop started')

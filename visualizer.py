@@ -47,8 +47,10 @@ with open('leds.csv', 'r') as csvfile:
         s = (float(r[0]), float(r[1]))
         ls.LEDs.append(s)
 
+recResolution = 10
+
 arduinoConnector = ArduinoConnectorForwardModel(ls, 'COM3', 1000000)
-backwardModel = SimpleCalibratedBackProjection(ls, 5, 5)
+backwardModel = SimpleCalibratedBackProjection(ls, recResolution, recResolution)
 
 
 ls.forwardModel = arduinoConnector
@@ -73,7 +75,7 @@ topViewReconstructed = Viz.LightSkinTopView(window, ls, highlightbackground='#aa
                                             width=500, height=500,
                                             gridWidth=ls.backwardModel.gridWidth,
                                             gridHeight=ls.backwardModel.gridHeight,
-                                            display_function=lambda x: x ** 10,
+                                            display_function=lambda x: x ** 20,
                                             measure_function=ls.backwardModel.measureAtPoint
                                             )
 topViewReconstructed.pack(side=tk.RIGHT)

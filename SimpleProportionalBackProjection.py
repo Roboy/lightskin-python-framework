@@ -5,7 +5,7 @@ from LightSkin import BackwardModel, LightSkin
 
 class SimpleProportionalBackProjection(BackwardModel):
     sampleDistance = 0.125
-    MIN_SENSITIVITY = 0.05
+    MIN_SENSITIVITY = 0.02
     UNKNOWN_VAL = 1.0
 
     def __init__(self, ls: LightSkin, gridWidth: int, gridHeight: int):
