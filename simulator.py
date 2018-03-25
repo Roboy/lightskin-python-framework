@@ -57,7 +57,7 @@ ls.translucencyMap = translucency
 
 
 ls.forwardModel = SimpleProportionalForwardModel(ls)
-ls.backwardModel = SimpleProportionalBackProjection(ls, 10, 10)
+ls.backwardModel = SimpleProportionalBackProjection(ls, 100, 100)
 
 
 ls.backwardModel.calculate()
