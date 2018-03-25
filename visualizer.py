@@ -23,6 +23,9 @@ from SimpleCalibration import SimpleCalibration
 
 
 # Source: https://code.activestate.com/recipes/410687-transposing-a-list-of-lists-with-different-lengths/
+from SimpleRepeatedBackProjection import SimpleRepeatedBackProjection
+
+
 def transposed(lists):
     if not lists:
         return []
@@ -47,12 +50,12 @@ with open('leds.csv', 'r') as csvfile:
         s = (float(r[0]), float(r[1]))
         ls.LEDs.append(s)
 
-recResolution = 10
+recResolution = 4
 
 calibration = SimpleCalibration(ls)
 
 arduinoConnector = ArduinoConnectorForwardModel(ls, 'COM3', 1000000)
-backwardModel = SimpleBackProjection(ls, recResolution, recResolution, calibration)
+backwardModel = SimpleRepeatedBackProjection(ls, recResolution, recResolution, calibration)
 
 
 ls.forwardModel = arduinoConnector
@@ -77,7 +80,7 @@ topViewReconstructed = Viz.LightSkinTopView(window, ls, highlightbackground='#aa
                                             width=500, height=500,
                                             gridWidth=ls.backwardModel.gridWidth,
                                             gridHeight=ls.backwardModel.gridHeight,
-                                            display_function=lambda x: x ** 100,
+                                            display_function=lambda x: x ** 10,
                                             measure_function=ls.backwardModel.measureAtPoint
                                             )
 topViewReconstructed.pack(side=tk.RIGHT)

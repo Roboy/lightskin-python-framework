@@ -17,7 +17,7 @@ class SimpleRepeatedBackProjection(SimpleBackProjection):
         for i in range(self.gridWidth):
             self._bufGrid.append([1.0] * self.gridHeight)
 
-        for i in range(50):
+        for i in range(20):
             self._calculate_iteration()
             print("Iteration %i" % i)
 
