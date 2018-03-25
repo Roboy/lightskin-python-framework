@@ -18,6 +18,7 @@ import LightSkinViz as Viz
 
 from SimpleProportionalForwardModel import SimpleProportionalForwardModel
 from SimpleProportionalBackProjection import SimpleProportionalBackProjection
+from SimpleDumbProportionalBackProjection import SimpleDumbProportionalBackProjection
 
 
 # Source: https://code.activestate.com/recipes/410687-transposing-a-list-of-lists-with-different-lengths/
@@ -56,11 +57,15 @@ translucency = LSValueMap(ls, grid=transposed(gridVals))
 ls.translucencyMap = translucency
 
 
+recSize = 7
+
 ls.forwardModel = SimpleProportionalForwardModel(ls)
-ls.backwardModel = SimpleProportionalBackProjection(ls, 100, 100)
+ls.backwardModel = SimpleProportionalBackProjection(ls, recSize, recSize)
+dumb = SimpleDumbProportionalBackProjection(ls, recSize, recSize)
 
 
 ls.backwardModel.calculate()
+dumb.calculate()
 
 
 # print(ls.sensors)
@@ -94,13 +99,22 @@ topView.pack(side=tk.LEFT)
 
 
 topViewReconstructed = Viz.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
-                               width=300, height=300,
+                               width=500, height=500,
                                gridWidth=ls.backwardModel.gridWidth, gridHeight=ls.backwardModel.gridHeight,
                                # display_function=math.sqrt,
                                measure_function=ls.backwardModel.measureAtPoint
                                )
 topViewReconstructed.pack(side=tk.LEFT)
 
+
+
+topViewReconstructed2 = Viz.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
+                               width=500, height=500,
+                               gridWidth=dumb.gridWidth, gridHeight=dumb.gridHeight,
+                               # display_function=math.sqrt,
+                               measure_function=dumb.measureAtPoint
+                               )
+topViewReconstructed2.pack(side=tk.LEFT)
 
 
 gridView = Viz.LightSkinGridView(window, ls, width=400, height=400, highlightbackground='#aaa', highlightthickness=1,
