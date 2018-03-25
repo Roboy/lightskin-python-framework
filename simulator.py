@@ -22,6 +22,9 @@ from SimpleDumbProportionalBackProjection import SimpleDumbProportionalBackProje
 
 
 # Source: https://code.activestate.com/recipes/410687-transposing-a-list-of-lists-with-different-lengths/
+from SimpleRepeatedBackProjection import SimpleRepeatedBackProjection
+
+
 def transposed(lists):
     if not lists:
         return []
@@ -61,11 +64,11 @@ recSize = 10
 
 ls.forwardModel = SimpleProportionalForwardModel(ls)
 ls.backwardModel = SimpleBackProjection(ls, recSize, recSize, SimpleIdealProportionalCalibration(ls))
-#dumb = SimpleDumbProportionalBackProjection(ls, recSize, recSize)
+repeated = SimpleRepeatedBackProjection(ls, recSize, recSize, SimpleIdealProportionalCalibration(ls))
 
 
 ls.backwardModel.calculate()
-#dumb.calculate()
+repeated.calculate()
 
 
 # print(ls.sensors)
@@ -108,14 +111,14 @@ topViewReconstructed.pack(side=tk.LEFT)
 
 
 
-'''topViewReconstructed2 = Viz.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
-                               width=500, height=500,
-                               gridWidth=dumb.gridWidth, gridHeight=dumb.gridHeight,
-                               display_function=lambda x: x ** 10,
-                               measure_function=dumb.measureAtPoint
+topViewReconstructed2 = Viz.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
+                               width=300, height=300,
+                               gridWidth=repeated.gridWidth, gridHeight=repeated.gridHeight,
+                               display_function=lambda x: x ** 2,
+                               measure_function=repeated.measureAtPoint
                                )
 topViewReconstructed2.pack(side=tk.LEFT)
-'''
+
 
 gridView = Viz.LightSkinGridView(window, ls, width=400, height=400, highlightbackground='#aaa', highlightthickness=1,
                                  display_function=math.sqrt
