@@ -125,6 +125,8 @@ gridView = Viz.LightSkinGridView(window, ls, width=400, height=400, highlightbac
                                  )
 gridView.pack(side=tk.BOTTOM)
 
+#topViewReconstructed.postscript(file='Testfile.ps')
+
 window.mainloop()
 
 # Main program logic follows:
