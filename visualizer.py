@@ -50,7 +50,7 @@ with open('leds.csv', 'r') as csvfile:
         s = (float(r[0]), float(r[1]))
         ls.LEDs.append(s)
 
-recResolution = 4
+recResolution = 10
 
 calibration = SimpleCalibration(ls)
 
