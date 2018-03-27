@@ -1,10 +1,11 @@
 import math
+from typing import List
 
 from LightSkin import LightSkin, Calibration, BackwardModel
 from SimpleBackProjection import SimpleBackProjection
 
 
-class SimpleRepeatedBackProjectionImproved(BackwardModel):
+class SimpleRepeatedLogarithmicBackProjection(BackwardModel):
     sampleDistance = 0.125
     MIN_SENSITIVITY = 0.02
     UNKNOWN_VAL = 1.0
@@ -13,21 +14,25 @@ class SimpleRepeatedBackProjectionImproved(BackwardModel):
         super().__init__(ls, gridWidth, gridHeight, calibration)
         self._tmpGrid = []
         self._tmpGridWeights = []
-        self._bufGrid = []
+        self._bufGrid: List[List[float]] = []
+        """ Contains the weights while they are being built in log space """
 
     def calculate(self):
 
         # reset internal buffer
         self._bufGrid = []
         for i in range(self.gridWidth):
-            self._bufGrid.append([1.0] * self.gridHeight)
+            self._bufGrid.append([0.0] * self.gridHeight)
 
         for i in range(20):
             self._calculate_iteration()
             print("Iteration %i" % i)
 
         # update actual map
-        self.grid = self._bufGrid
+        for i, line in enumerate(self._bufGrid):
+            for j, c in enumerate(line):
+                # Actual grid is not in logarithm space but in normal
+                self.grid[i][j] = math.exp(self._bufGrid[i][j])
 
         return True
 
