@@ -15,11 +15,8 @@ class SimpleBackProjection(BackwardModel):
 
     def calculate(self) -> bool:
 
-        self._tmpGrid = []
-        self._tmpGridWeights = []
-        for i in range(self.gridWidth):
-            self._tmpGrid.append([0.0] * self.gridHeight)
-            self._tmpGridWeights.append([0.0] * self.gridHeight)
+        self._tmpGrid = self.gridDefinition.makeFloatGridFilledWith(0.0)
+        self._tmpGridWeights = self.gridDefinition.makeFloatGridFilledWith(0.0)
 
         for i_l, l in enumerate(self.ls.LEDs):
             for i_s, s in enumerate(self.ls.sensors):
@@ -72,25 +69,11 @@ class SimpleBackProjection(BackwardModel):
                 # find corresponding grid element for this sample
                 x = LED[0] + i * dxStep
                 y = LED[1] + i * dyStep
-                x_i = int((x - self._min_pos_x) / self._rect_w)
-                y_i = int((y - self._min_pos_y) / self._rect_h)
 
-                x_i = max(0, min(self.gridWidth - 1, x_i))
-                y_i = max(0, min(self.gridHeight - 1, y_i))
+                i, j = self.gridDefinition.getCellAtPoint(x, y)
 
-                self._tmpGrid[x_i][y_i] += sampleFactor
-                self._tmpGridWeights[x_i][y_i] += 1
+                self._tmpGrid[i][j] += sampleFactor
+                self._tmpGridWeights[i][j] += 1
                 #if 50 < x_i < 55 and 5 < y_i < 15:
                 #    print('Influencing %i %i = %f' % (x_i, y_i, self._tmpGrid[x_i][y_i]))
 
-
-    def measureAtPoint(self, x: float, y: float) -> float:
-        i = int((x - self._min_pos_x) / self._rect_w)
-        j = int((y - self._min_pos_y) / self._rect_h)
-
-        i = max(0, min(self.gridWidth-1, i))
-        j = max(0, min(self.gridHeight-1, j))
-
-        #print("displaying at %i %i: %f" % (i, j, self.grid[i][j]))
-
-        return max(0.0, min(1.0, self.grid[i][j]))

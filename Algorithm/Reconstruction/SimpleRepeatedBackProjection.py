@@ -13,9 +13,7 @@ class SimpleRepeatedBackProjection(SimpleBackProjection):
     def calculate(self):
 
         # reset internal buffer
-        self._bufGrid = []
-        for i in range(self.gridWidth):
-            self._bufGrid.append([1.0] * self.gridHeight)
+        self._bufGrid = self.gridDefinition.makeFloatGridFilledWith(1.0)
 
         for i in range(20):
             self._calculate_iteration()
@@ -28,11 +26,8 @@ class SimpleRepeatedBackProjection(SimpleBackProjection):
 
     def _calculate_iteration(self):
 
-        self._tmpGrid = []
-        self._tmpGridWeights = []
-        for i in range(self.gridWidth):
-            self._tmpGrid.append([0.0] * self.gridHeight)
-            self._tmpGridWeights.append([0.0] * self.gridHeight)
+        self._tmpGrid = self.gridDefinition.makeFloatGridFilledWith(0.0)
+        self._tmpGridWeights = self.gridDefinition.makeFloatGridFilledWith(0.0)
 
         for i_l, l in enumerate(self.ls.LEDs):
             for i_s, s in enumerate(self.ls.sensors):
@@ -81,11 +76,7 @@ class SimpleRepeatedBackProjection(SimpleBackProjection):
         return max(0.0, min(1.0, translucencyMul))
 
     def _measureBufAtPoint(self, x: float, y: float) -> float:
-        i = int((x - self._min_pos_x) / self._rect_w)
-        j = int((y - self._min_pos_y) / self._rect_h)
-
-        i = max(0, min(self.gridWidth - 1, i))
-        j = max(0, min(self.gridHeight - 1, j))
+        i, j = self.gridDefinition.getCellAtPoint(x, y)
 
         # print("displaying at %i %i: %f" % (i, j, self.grid[i][j]))
 

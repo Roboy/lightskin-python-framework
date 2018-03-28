@@ -6,10 +6,11 @@ import tkinter as tk
 
 import math
 
-from LightSkin import LightSkin, LSValueMap
+from LightSkin import LightSkin, ValueMap
 from GUI import LightSkinViz as Viz
 
-from Algorithm.ForwardModels.SimpleProportionalForwardModel import SimpleProportionalForwardModel, SimpleIdealProportionalCalibration
+from Algorithm.ForwardModels.SimpleProportionalForwardModel import SimpleProportionalForwardModel, \
+    SimpleIdealProportionalCalibration
 from Algorithm.Reconstruction.SimpleBackProjection import SimpleBackProjection
 
 # Source: https://code.activestate.com/recipes/410687-transposing-a-list-of-lists-with-different-lengths/
@@ -47,9 +48,8 @@ with open('translucency.csv', 'r') as csvfile:
         vals = list(map(float, r))
         gridVals.append(vals)
 
-translucency = LSValueMap(ls, grid=transposed(gridVals))
+translucency = ValueMap(ls.getGridArea(), grid=transposed(gridVals))
 ls.translucencyMap = translucency
-
 
 recSize = 10
 
@@ -57,10 +57,8 @@ ls.forwardModel = SimpleProportionalForwardModel(ls)
 ls.backwardModel = SimpleBackProjection(ls, recSize, recSize, SimpleIdealProportionalCalibration(ls))
 repeated = SimpleRepeatedBackProjection(ls, recSize, recSize, SimpleIdealProportionalCalibration(ls))
 
-
 ls.backwardModel.calculate()
 repeated.calculate()
-
 
 # print(ls.sensors)
 # print(ls.LEDs)
@@ -76,9 +74,8 @@ topViewsFrame.pack(side=tk.TOP)
 
 topViewTransl = Viz.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
                                      width=300, height=300,
-                                     gridWidth=ls.translucencyMap.gridWidth, gridHeight=ls.translucencyMap.gridHeight,
-                                     # display_function=lambda x: x,
-                                     measure_function=ls.translucencyMap.measureAtPoint
+                                     measurable_grid=ls.translucencyMap,
+                                     # display_function=lambda x: x
                                      )
 topViewTransl.pack(side=tk.LEFT)
 
@@ -90,33 +87,26 @@ topView = Viz.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', hi
                                )
 topView.pack(side=tk.LEFT)
 
-
-
 topViewReconstructed = Viz.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
-                               width=300, height=300,
-                               gridWidth=ls.backwardModel.gridWidth, gridHeight=ls.backwardModel.gridHeight,
-                               display_function=lambda x: x ** 10,
-                               measure_function=ls.backwardModel.measureAtPoint
-                               )
+                                            width=300, height=300,
+                                            measurable_grid=ls.backwardModel,
+                                            display_function=lambda x: x ** 10,
+                                            )
 topViewReconstructed.pack(side=tk.LEFT)
 
-
-
 topViewReconstructed2 = Viz.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
-                               width=300, height=300,
-                               gridWidth=repeated.gridWidth, gridHeight=repeated.gridHeight,
-                               display_function=lambda x: x,
-                               measure_function=repeated.measureAtPoint
-                               )
+                                             width=300, height=300,
+                                             measurable_grid=repeated,
+                                             display_function=lambda x: x,
+                                             )
 topViewReconstructed2.pack(side=tk.LEFT)
-
 
 gridView = Viz.LightSkinGridView(window, ls, width=400, height=400, highlightbackground='#aaa', highlightthickness=1,
                                  display_function=math.sqrt
                                  )
 gridView.pack(side=tk.BOTTOM)
 
-#topViewReconstructed.postscript(file='Testfile.ps')
+# topViewReconstructed.postscript(file='Testfile.ps')
 
 window.mainloop()
 

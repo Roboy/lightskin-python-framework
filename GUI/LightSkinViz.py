@@ -5,6 +5,7 @@ from typing import List, Callable, Tuple
 
 import math
 
+from Helpers.Measurable import MeasurableGrid
 from LightSkin import LightSkin
 from GUI.TKinterToolTip import ToolTip
 
@@ -18,13 +19,30 @@ class LightSkinTopView(tk.Canvas):
     _elScale = 100
     _border = 100
 
-    def __init__(self, parent, skin: LightSkin, gridWidth: int, gridHeight: int, measure_function: Callable[[float, float], float] = lambda x, y: 0, display_function: Callable[[float], float] = lambda x: x, **kwargs):
+    def __init__(self, parent,
+                 skin: LightSkin,
+                 gridWidth: int = None,
+                 gridHeight: int = None,
+                 measurable_grid: MeasurableGrid = None,
+                 measure_function: Callable[[float, float], float] = lambda x, y: 0,
+                 display_function: Callable[[float], float] = lambda x: x,
+                 **kwargs):
         tk.Canvas.__init__(self, parent, **kwargs)
         self.measureFunction = measure_function
         self.displayFunction = display_function
         self.skin = skin
-        self.gridWidth = gridWidth
-        self.gridHeight = gridHeight
+
+        if measurable_grid is not None:
+            gdef = measurable_grid.getGridDefinition()
+            self.gridWidth = gdef.cellsX
+            self.gridHeight = gdef.cellsY
+            self.measureFunction = measurable_grid.measureAtPoint
+
+        if gridWidth is not None:
+            self.gridWidth = gridWidth
+        if gridHeight is not None:
+            self.gridHeight = gridHeight
+
         self.bind("<Configure>", self.on_resize)
         self.height = self.winfo_reqheight()
         self.width = self.winfo_reqwidth()

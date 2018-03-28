@@ -7,6 +7,7 @@ import math
 
 from Helpers.EventHook import EventHook
 from Helpers.Grids import ValueGridDefinition, ValueGridAreaDefinition
+from Helpers.Measurable import Measurable
 from Helpers.ValueMap import ValueMap
 
 
@@ -71,18 +72,21 @@ class LightSkin:
         return _min_pos_x, _min_pos_y, _max_pos_x, _max_pos_y
 
 
-class ForwardModel(ABC):
+class ForwardModel(Measurable):
 
     def __init__(self, ls: LightSkin):
         self.ls: LightSkin = ls
 
+    def measureAtPoint(self, x: float, y: float) -> float:
+        return self.measureLEDAtPoint(x, y)
+
     @abstractmethod
-    def measureAtPoint(self, x: float, y: float, led: int = -1) -> float:
-        pass
+    def measureLEDAtPoint(self, x: float, y: float, led: int = -1) -> float:
+        raise NotImplementedError("Method not yet implemented")
 
     def getSensorValue(self, sensor: int, led: int = -1) -> float:
         s = self.ls.sensors[sensor]
-        return self.measureAtPoint(s[0], s[1], led)
+        return self.measureLEDAtPoint(s[0], s[1], led)
 
     pass
 
@@ -96,13 +100,13 @@ class Calibration(ABC):
 
     @abstractmethod
     def expectedSensorValue(self, sensor: int, led: int) -> float:
-        return 0.0
+        raise NotImplementedError("Method not yet implemented")
 
 
 class BackwardModel(ValueMap):
 
     def __init__(self, ls: LightSkin, gridWidth: int, gridHeight: int, calibration: Calibration):
-        super().__init__(gridWidth, gridHeight)
+        super().__init__(ls.getGridArea(), gridWidth, gridHeight)
         self.ls: LightSkin = ls
         self.calibration: Calibration = calibration
 
@@ -110,6 +114,6 @@ class BackwardModel(ValueMap):
     def calculate(self) -> bool:
         """Apply the backward model and calculate the expected values for the grid elements using the sensor values
         retrieved from the skins forward model """
-        pass
+        raise NotImplementedError("Method not yet implemented")
 
     pass

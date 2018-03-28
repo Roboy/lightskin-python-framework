@@ -67,7 +67,7 @@ class ArduinoConnectorForwardModel(ForwardModel):
                         print(e)
         print('Read Loop finished')
 
-    def measureAtPoint(self, x: float, y: float, led: int = -1) -> float:
+    def measureLEDAtPoint(self, x: float, y: float, led: int = -1) -> float:
         # No measurement possible
         return 0.0
 

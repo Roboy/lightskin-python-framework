@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Optional, Tuple
+from typing import Optional, Tuple, List
 
 
 class ValueGridAreaDefinition(ABC):
@@ -37,3 +37,9 @@ class ValueGridDefinition(ValueGridAreaDefinition):
             return None
 
         return i, j
+
+    def makeFloatGridFilledWith(self, val: float) -> List[List[float]]:
+        ret: List[List[float]] = []
+        for i in range(self.cellsX):
+            ret.append([val] * self.cellsY)
+        return ret

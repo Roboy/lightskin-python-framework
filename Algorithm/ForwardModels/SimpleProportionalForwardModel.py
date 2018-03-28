@@ -6,7 +6,7 @@ from LightSkin import ForwardModel, Calibration
 class SimpleProportionalForwardModel(ForwardModel):
     sampleDistance = 0.125
 
-    def measureAtPoint(self, x: float, y: float, led: int = -1) -> float:
+    def measureLEDAtPoint(self, x: float, y: float, led: int = -1) -> float:
         LED = self.ls.LEDs[led if led >= 0 else self.ls.selectedLED]
 
         dx = float(x - LED[0])
