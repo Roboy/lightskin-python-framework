@@ -31,7 +31,7 @@ class SimpleRepeatedDistributeBackProjection(SimpleRepeatedBackProjection):
             self._tmpGrid[i][j] += f * w
             self._tmpGridWeights[i][j] += w
 
-        while not (0.9999 < restFactor < 1.0001) and len(redistributors) > 0:
+        while (abs(1-restFactor) > .00001) and len(redistributors) > 0:
             print('Still got stuff to distribute %f into %i' % (restFactor, len(redistributors)))
 
             cells = redistributors
