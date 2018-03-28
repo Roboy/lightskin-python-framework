@@ -54,7 +54,7 @@ ls.translucencyMap = translucency
 
 recSize = 10
 
-ls.forwardModel = SimpleProportionalForwardModel(ls)
+ls.forwardModel = SimpleProportionalForwardModel(ls, DirectSampledRayGridInfluenceModel())
 ls.backwardModel = SimpleBackProjection(ls, recSize,
                                         recSize,
                                         SimpleIdealProportionalCalibration(ls),

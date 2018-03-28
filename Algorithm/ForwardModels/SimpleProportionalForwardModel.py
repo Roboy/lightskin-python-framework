@@ -1,29 +1,29 @@
 import math
 
-from LightSkin import ForwardModel, Calibration
+from Algorithm.RayInfluenceModels.RayInfluenceModel import Ray, RayGridInfluenceModel
+from LightSkin import ForwardModel, Calibration, LightSkin
 
 
 class SimpleProportionalForwardModel(ForwardModel):
     sampleDistance = 0.125
 
+    def __init__(self, ls: LightSkin, ray_model: RayGridInfluenceModel):
+        super().__init__(ls)
+        self.rayModel = ray_model
+        self.rayModel.gridDefinition = self.ls.translucencyMap.gridDefinition
+
     def measureLEDAtPoint(self, x: float, y: float, led: int = -1) -> float:
-        LED = self.ls.LEDs[led if led >= 0 else self.ls.selectedLED]
+        (l_x, l_y) = self.ls.LEDs[led if led >= 0 else self.ls.selectedLED]
+        ray = Ray(l_x, l_y, x, y)
 
-        dx = float(x - LED[0])
-        dy = float(y - LED[1])
+        cells = self.rayModel.getInfluencesForRay(ray)
+        dist = ray.length
 
-        dist = math.sqrt(dx ** 2 + dy ** 2)
         translucencyMul = 1
 
-        if dist > 0:
-            # sample translucency map
-            dxStep = dx / dist * self.sampleDistance
-            dyStep = dy / dist * self.sampleDistance
-            steps = dy/dyStep if dxStep == 0 else dx/dxStep
-            #print("Sampling for LED %i with %i steps" % (led, steps))
-            for i in range(int(steps)):
-                translucencyMul *= self.ls.translucencyMap.measureAtPoint(LED[0]+i*dxStep, LED[1]+i*dyStep)\
-                                   ** self.sampleDistance
+        for (i, j), w in cells:
+            # weighted factorization
+            translucencyMul *= self.ls.translucencyMap.grid[i][j] ** w
 
         dist = max(dist, 0.1)
         val = 4 / dist
