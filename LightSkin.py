@@ -5,6 +5,7 @@ from abc import ABC, abstractmethod
 
 import math
 
+from Algorithm.RayInfluenceModels.RayInfluenceModel import Ray
 from Helpers.EventHook import EventHook
 from Helpers.Grids import ValueGridDefinition, ValueGridAreaDefinition
 from Helpers.Measurable import Measurable
@@ -50,6 +51,11 @@ class LightSkin:
     def getGridArea(self) -> ValueGridAreaDefinition:
         min_x, min_y, max_x, max_y = self._findMinMaxPos()
         return ValueGridAreaDefinition(min_x, min_y, max_x, max_y)
+
+    def getRayFromLEDToSensor(self, sensor: int, led: int) -> Ray:
+        l_x, l_y = self.LEDs[led]
+        s_x, s_y = self.sensors[sensor]
+        return Ray(l_x, l_y, s_x, s_y)
 
     def _findMinMaxPos(self):
         _min_pos_x: float = math.inf

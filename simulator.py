@@ -6,6 +6,7 @@ import tkinter as tk
 
 import math
 
+from Algorithm.RayInfluenceModels.DirectSampledRayGridInfluenceModel import DirectSampledRayGridInfluenceModel
 from LightSkin import LightSkin, ValueMap
 from GUI import LightSkinViz as Viz
 
@@ -54,8 +55,14 @@ ls.translucencyMap = translucency
 recSize = 10
 
 ls.forwardModel = SimpleProportionalForwardModel(ls)
-ls.backwardModel = SimpleBackProjection(ls, recSize, recSize, SimpleIdealProportionalCalibration(ls))
-repeated = SimpleRepeatedBackProjection(ls, recSize, recSize, SimpleIdealProportionalCalibration(ls))
+ls.backwardModel = SimpleBackProjection(ls, recSize,
+                                        recSize,
+                                        SimpleIdealProportionalCalibration(ls),
+                                        DirectSampledRayGridInfluenceModel())
+repeated = SimpleRepeatedBackProjection(ls, recSize,
+                                        recSize,
+                                        SimpleIdealProportionalCalibration(ls),
+                                        DirectSampledRayGridInfluenceModel())
 
 ls.backwardModel.calculate()
 repeated.calculate()

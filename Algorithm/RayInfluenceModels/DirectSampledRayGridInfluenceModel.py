@@ -1,8 +1,9 @@
+from functools import lru_cache
 from typing import Tuple, List
 
 import math
 
-from Algorithm.RayInfluenceModels.RayInfluenceModel import RayGridInfluenceModel
+from Algorithm.RayInfluenceModels.RayInfluenceModel import RayGridInfluenceModel, Ray
 
 
 class DirectSampledRayGridInfluenceModel(RayGridInfluenceModel):
@@ -13,12 +14,11 @@ class DirectSampledRayGridInfluenceModel(RayGridInfluenceModel):
 
     sampleDistance = 0.125
 
-    def getInfluencesForRay(self, start_x: float, start_y: float, end_x: float, end_y: float) \
-            -> List[Tuple[Tuple[int, int], float]]:
-        dx = float(end_x - start_x)
-        dy = float(end_y - start_y)
-
-        dist = math.sqrt(dx ** 2 + dy ** 2)
+    @lru_cache(maxsize=512)
+    def getInfluencesForRay(self, ray: Ray) -> List[Tuple[Tuple[int, int], float]]:
+        dx = ray.dx
+        dy = ray.dy
+        dist = ray.length
 
         dx_step = dx / dist * self.sampleDistance
         dy_step = dy / dist * self.sampleDistance
@@ -28,8 +28,8 @@ class DirectSampledRayGridInfluenceModel(RayGridInfluenceModel):
 
         for i in range(int(steps)):
             # find corresponding grid element for this sample
-            x = start_x + i * dx_step
-            y = start_y + i * dy_step
+            x = ray.start_x + i * dx_step
+            y = ray.start_y + i * dy_step
 
             coords = self.gridDefinition.getCellAtPoint(x, y)
             if coords not in values:

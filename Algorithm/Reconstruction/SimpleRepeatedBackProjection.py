@@ -1,13 +1,18 @@
 import math
 
+from Algorithm.RayInfluenceModels.RayInfluenceModel import RayGridInfluenceModel
 from LightSkin import LightSkin, Calibration
 from Algorithm.Reconstruction.SimpleBackProjection import SimpleBackProjection
 
 
 class SimpleRepeatedBackProjection(SimpleBackProjection):
 
-    def __init__(self, ls: LightSkin, gridWidth: int, gridHeight: int, calibration: Calibration):
-        super().__init__(ls, gridWidth, gridHeight, calibration)
+    def __init__(self, ls: LightSkin,
+                 gridWidth: int,
+                 gridHeight: int,
+                 calibration: Calibration,
+                 ray_model: RayGridInfluenceModel):
+        super().__init__(ls, gridWidth, gridHeight, calibration, ray_model)
         self._bufGrid = []
 
     def calculate(self):
