@@ -5,7 +5,6 @@ from LightSkin import BackwardModel, LightSkin, Calibration
 
 
 class SimpleBackProjection(BackwardModel):
-    sampleDistance = 0.125
     MIN_SENSITIVITY = 0.02
     UNKNOWN_VAL = 1.0
 
@@ -43,7 +42,7 @@ class SimpleBackProjection(BackwardModel):
                 # val = val ** 10
                 # Weighting the value by the knowledge we have
                 # To reduce "noise" in low-knowledge-areas
-                val = self.UNKNOWN_VAL + (val - self.UNKNOWN_VAL) * (1 - 1 / (w * self.sampleDistance + 1))
+                #val = self.UNKNOWN_VAL + (val - self.UNKNOWN_VAL) * (1 - 1 / (w * self.sampleDistance + 1))
                 line[i] = val
 
         self.grid = self._tmpGrid

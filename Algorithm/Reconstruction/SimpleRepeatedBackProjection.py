@@ -6,7 +6,7 @@ from Algorithm.Reconstruction.SimpleBackProjection import SimpleBackProjection
 
 
 class SimpleRepeatedBackProjection(SimpleBackProjection):
-    repititions = 50
+    repititions = 2
 
     def __init__(self, ls: LightSkin,
                  gridWidth: int,
@@ -53,7 +53,7 @@ class SimpleRepeatedBackProjection(SimpleBackProjection):
                 # val = val ** 10
                 # Weighting the value by the knowledge we have
                 # To reduce "noise" in low-knowledge-areas
-                val = self.UNKNOWN_VAL + (val - self.UNKNOWN_VAL) * (1 - 1 / (w * self.sampleDistance + 1))
+                #val = self.UNKNOWN_VAL + (val - self.UNKNOWN_VAL) * (1 - 1 / (w * self.sampleDistance + 1))
                 line[i] = val
                 self._bufGrid[i_l][i] = max(0.0, min(1.0, self._bufGrid[i_l][i] * val))
 

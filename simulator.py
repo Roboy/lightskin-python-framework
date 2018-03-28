@@ -7,6 +7,7 @@ import tkinter as tk
 import math
 
 from Algorithm.RayInfluenceModels.DirectSampledRayGridInfluenceModel import DirectSampledRayGridInfluenceModel
+from Algorithm.Reconstruction.SimpleRepeatedDistributeBackProjection import SimpleRepeatedDistributeBackProjection
 from LightSkin import LightSkin, ValueMap
 from GUI import LightSkinViz as Viz
 
@@ -63,9 +64,14 @@ repeated = SimpleRepeatedBackProjection(ls, recSize,
                                         recSize,
                                         SimpleIdealProportionalCalibration(ls),
                                         DirectSampledRayGridInfluenceModel())
+repeated2 = SimpleRepeatedDistributeBackProjection(ls, recSize,
+                                        recSize,
+                                        SimpleIdealProportionalCalibration(ls),
+                                        DirectSampledRayGridInfluenceModel())
 
 ls.backwardModel.calculate()
 repeated.calculate()
+repeated2.calculate()
 
 # print(ls.sensors)
 # print(ls.LEDs)
@@ -104,9 +110,18 @@ topViewReconstructed.pack(side=tk.LEFT)
 topViewReconstructed2 = Viz.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
                                              width=300, height=300,
                                              measurable_grid=repeated,
-                                             display_function=lambda x: x,
+                                             display_function=lambda x: x**4,
                                              )
 topViewReconstructed2.pack(side=tk.LEFT)
+
+
+
+topViewReconstructed3 = Viz.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
+                                             width=300, height=300,
+                                             measurable_grid=repeated2,
+                                             display_function=lambda x: x**4,
+                                             )
+topViewReconstructed3.pack(side=tk.LEFT)
 
 gridView = Viz.LightSkinGridView(window, ls, width=400, height=400, highlightbackground='#aaa', highlightthickness=1,
                                  display_function=math.sqrt
