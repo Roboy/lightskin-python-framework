@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-
+from functools import lru_cache
 from typing import List, Tuple, Callable, Optional
 from abc import ABC, abstractmethod
 
@@ -52,6 +52,7 @@ class LightSkin:
         min_x, min_y, max_x, max_y = self._findMinMaxPos()
         return ValueGridAreaDefinition(min_x, min_y, max_x, max_y)
 
+    @lru_cache(maxsize=None)
     def getRayFromLEDToSensor(self, sensor: int, led: int) -> Ray:
         l_x, l_y = self.LEDs[led]
         s_x, s_y = self.sensors[sensor]

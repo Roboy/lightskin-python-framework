@@ -36,15 +36,9 @@ class SimpleProportionalForwardModel(ForwardModel):
 class SimpleIdealProportionalCalibration(Calibration):
 
     def expectedSensorValue(self, sensor: int, led: int) -> float:
-        sensor = self.ls.sensors[sensor]
-        LED = self.ls.LEDs[led]
+        ray = self.ls.getRayFromLEDToSensor(sensor, led)
 
-        dx = float(sensor[0] - LED[0])
-        dy = float(sensor[1] - LED[1])
-
-        dist = math.sqrt(dx ** 2 + dy ** 2)
-
-        dist = max(dist, 0.1)
+        dist = max(ray.length, 0.1)
         val = 4 / dist
 
         return max(0.0, min(1.0, val))
