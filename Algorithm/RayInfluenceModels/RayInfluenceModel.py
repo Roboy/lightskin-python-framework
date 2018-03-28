@@ -1,22 +1,16 @@
 from abc import ABC, abstractmethod
 from typing import List, Tuple
 
+from Helpers.Grids import ValueGridDefinition
 from LightSkin import LightSkin
 
 
-class RayInfluenceGridModel(ABC):
+class RayGridInfluenceModel(ABC):
 
-    def __init__(self, ls: LightSkin):
-        self.ls: LightSkin = ls
-
-        self.gridWidth = 0
-        self.gridHeight = 0
-        self.gridStartX = 0
-        self.gridStartY = 0
-        self.gridCellWidth = 0
-        self.gridCellHeight = 0
+    def __init__(self, grid_definition: ValueGridDefinition):
+        self.gridDefinition: ValueGridDefinition = grid_definition
 
     @abstractmethod
-    def getInfluencesForRay(self, startX:float, startY:float, endX:float, endY:float)\
-            -> List[Tuple[float, Tuple[int, int]]]:
-        pass
+    def getInfluencesForRay(self, start_x: float, start_y: float, end_x: float, end_y: float) \
+            -> List[Tuple[Tuple[int, int], float]]:
+        raise NotImplementedError("Method not yet implemented")
