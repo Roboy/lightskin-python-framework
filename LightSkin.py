@@ -1,9 +1,11 @@
 #!/usr/bin/python3
 
-from typing import List, Tuple, Callable
+from typing import List, Tuple, Callable, Optional
 from abc import ABC, abstractmethod
 
 import math
+
+from Helpers.Grids import *
 
 
 class LightSkin:
@@ -42,75 +44,32 @@ class LightSkin:
         self._selectedLED = i
         self.onChange.fire('led', old, i)
 
+    def getGridArea(self) -> ValueGridAreaDefinition:
+        min_x, min_y, max_x, max_y = self._findMinMaxPos()
+        return ValueGridAreaDefinition(min_x, min_y, max_x, max_y)
 
-class ValueGridAreaDefinition(ABC):
-    def __init__(self, start_x: float = 0, start_y: float = 0, end_x: float = 0, end_y: float = 0):
-        self._startX: float = start_x
-        self._startY: float = start_y
-        self._endX: float = end_x
-        self._endY: float = end_y
+    def _findMinMaxPos(self):
+        _min_pos_x: float = math.inf
+        _min_pos_y: float = math.inf
+        _max_pos_x: float = -math.inf
+        _max_pos_y: float = -math.inf
 
-    def _recalc_size(self):
-        self._width = self._endX - self._startX
-        self._height = self._endY - self._startY
+        for s in self.sensors:
+            _min_pos_x = min(_min_pos_x, s[0])
+            _max_pos_x = max(_max_pos_x, s[0])
+            _min_pos_y = min(_min_pos_y, s[1])
+            _max_pos_y = max(_max_pos_y, s[1])
 
-    @property
-    def startX(self):
-        return self._startX
+        for s in self.LEDs:
+            _min_pos_x = min(_min_pos_x, s[0])
+            _max_pos_x = max(_max_pos_x, s[0])
+            _min_pos_y = min(_min_pos_y, s[1])
+            _max_pos_y = max(_max_pos_y, s[1])
 
-    @startX.setter
-    def startX(self, start_x: float):
-        self._startX = start_x
-        self._recalc_size()
-
-    @property
-    def startY(self):
-        return self._startY
-
-    @startY.setter
-    def startY(self, start_y: float):
-        self._startY = start_y
-        self._recalc_size()
-
-    @property
-    def endX(self):
-        return self._endX
-
-    @endX.setter
-    def endX(self, end_x: float):
-        self._endX = end_x
-        self._recalc_size()
-
-    @property
-    def endY(self):
-        return self._endY
-
-    @endY.setter
-    def endY(self, end_y: float):
-        self._endY = end_y
-        self._recalc_size()
-
-    @property
-    def width(self):
-        return self._width
-
-    @width.setter
-    def width(self, width: float):
-        self.endX = self.startX + width
-
-    @property
-    def height(self):
-        return self._height
-
-    @height.setter
-    def height(self, height: float):
-        self.endY = self.startY + height
+        return _min_pos_x, _min_pos_y, _max_pos_x, _max_pos_y
 
 
-class ValueGridDefinition(ValueGridAreaDefinition):
-    def __init__(self, start_x: float = 0, start_y: float = 0, width: float = 0, height: float = 0, cells_x: int = 0,
-                 cells_y: int = 0):
-        super().__init__(start_x, start_y, width, height)
+
 
 
 class ValueMap(ABC):
