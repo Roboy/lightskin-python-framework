@@ -1,28 +1,19 @@
 #!/usr/bin/python3
 
-import time
-from datetime import datetime
-import importlib, types
-import queue
-import signal
 import csv
-from threading import Thread
-import os, sys, traceback
 
 import tkinter as tk
 
 import math
 
 from LightSkin import LightSkin, LSValueMap
-import LightSkinViz as Viz
+from GUI import LightSkinViz as Viz
 
-from SimpleProportionalForwardModel import SimpleProportionalForwardModel, SimpleIdealProportionalCalibration
-from SimpleBackProjection import SimpleBackProjection
-from SimpleDumbProportionalBackProjection import SimpleDumbProportionalBackProjection
-
+from Algorithm.ForwardModels.SimpleProportionalForwardModel import SimpleProportionalForwardModel, SimpleIdealProportionalCalibration
+from Algorithm.Reconstruction.SimpleBackProjection import SimpleBackProjection
 
 # Source: https://code.activestate.com/recipes/410687-transposing-a-list-of-lists-with-different-lengths/
-from SimpleRepeatedBackProjection import SimpleRepeatedBackProjection
+from Algorithm.Reconstruction.SimpleRepeatedBackProjection import SimpleRepeatedBackProjection
 
 
 def transposed(lists):

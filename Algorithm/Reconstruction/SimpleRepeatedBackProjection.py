@@ -1,7 +1,7 @@
 import math
 
 from LightSkin import LightSkin, Calibration
-from SimpleBackProjection import SimpleBackProjection
+from Algorithm.Reconstruction.SimpleBackProjection import SimpleBackProjection
 
 
 class SimpleRepeatedBackProjection(SimpleBackProjection):

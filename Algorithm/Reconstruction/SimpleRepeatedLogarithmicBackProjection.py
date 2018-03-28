@@ -2,7 +2,6 @@ import math
 from typing import List
 
 from LightSkin import LightSkin, Calibration, BackwardModel
-from SimpleBackProjection import SimpleBackProjection
 
 
 class SimpleRepeatedLogarithmicBackProjection(BackwardModel):

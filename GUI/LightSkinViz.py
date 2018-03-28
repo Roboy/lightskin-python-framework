@@ -6,7 +6,7 @@ from typing import List, Callable, Tuple
 import math
 
 from LightSkin import LightSkin
-from TKinterToolTip import ToolTip
+from GUI.TKinterToolTip import ToolTip
 
 
 class LightSkinTopView(tk.Canvas):
