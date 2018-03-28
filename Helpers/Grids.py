@@ -22,8 +22,8 @@ class ValueGridDefinition(ValueGridAreaDefinition):
         self.cellHeight: float = self.height / self.cellsY
 
     @classmethod
-    def createFromGridDefinition(cls, grid: ValueGridAreaDefinition, cells_x: int,
-                                 cells_y: int) -> ValueGridAreaDefinition:
+    def fromGridDefinition(cls, grid: ValueGridAreaDefinition, cells_x: int,
+                           cells_y: int) -> 'ValueGridDefinition':
         return cls(grid.startX, grid.startY, grid.endX, grid.endY, cells_x, cells_y)
 
     def getCellAtPoint(self, x: float, y: float, borders=True) -> Optional[Tuple[int, int]]:
