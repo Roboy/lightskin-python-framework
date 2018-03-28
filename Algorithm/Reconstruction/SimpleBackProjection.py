@@ -54,7 +54,6 @@ class SimpleBackProjection(BackwardModel):
         ray = self.ls.getRayFromLEDToSensor(sensor, led)
 
         cells = self.rayModel.getInfluencesForRay(ray)
-        dist = ray.length
 
         dfactor = factor ** (1 / ray.length)
 

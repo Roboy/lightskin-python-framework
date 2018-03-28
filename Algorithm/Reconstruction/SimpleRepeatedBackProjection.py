@@ -6,6 +6,7 @@ from Algorithm.Reconstruction.SimpleBackProjection import SimpleBackProjection
 
 
 class SimpleRepeatedBackProjection(SimpleBackProjection):
+    repititions = 50
 
     def __init__(self, ls: LightSkin,
                  gridWidth: int,
@@ -20,7 +21,7 @@ class SimpleRepeatedBackProjection(SimpleBackProjection):
         # reset internal buffer
         self._bufGrid = self.gridDefinition.makeFloatGridFilledWith(1.0)
 
-        for i in range(20):
+        for i in range(self.repititions):
             self._calculate_iteration()
             print("Iteration %i" % i)
 
@@ -59,30 +60,12 @@ class SimpleRepeatedBackProjection(SimpleBackProjection):
         return True
 
     def __currentTranslucencyFactor(self, sensor: int, led: int) -> float:
-        LED = self.ls.LEDs[led]
-        Sensor = self.ls.sensors[sensor]
+        ray = self.ls.getRayFromLEDToSensor(sensor, led)
+        cells = self.rayModel.getInfluencesForRay(ray)
 
-        dx = float(Sensor[0] - LED[0])
-        dy = float(Sensor[1] - LED[1])
-
-        dist = math.sqrt(dx ** 2 + dy ** 2)
         translucencyMul = 1
-
-        if dist > 0:
-            # sample translucency map
-            dxStep = dx / dist * self.sampleDistance
-            dyStep = dy / dist * self.sampleDistance
-            steps = dy / dyStep if dxStep == 0 else dx / dxStep
-            # print("Sampling for LED %i with %i steps" % (led, steps))
-            for i in range(int(steps)):
-                translucencyMul *= self._measureBufAtPoint(LED[0] + i * dxStep, LED[1] + i * dyStep) \
-                                   ** self.sampleDistance
+        for (i, j), w in cells:
+            # weighted factorization
+            translucencyMul *= self._bufGrid[i][j] ** w
 
         return max(0.0, min(1.0, translucencyMul))
-
-    def _measureBufAtPoint(self, x: float, y: float) -> float:
-        i, j = self.gridDefinition.getCellAtPoint(x, y)
-
-        # print("displaying at %i %i: %f" % (i, j, self.grid[i][j]))
-
-        return max(0.0, min(1.0, self._bufGrid[i][j]))
