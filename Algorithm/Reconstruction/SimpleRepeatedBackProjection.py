@@ -6,7 +6,7 @@ from Algorithm.Reconstruction.SimpleBackProjection import SimpleBackProjection
 
 
 class SimpleRepeatedBackProjection(SimpleBackProjection):
-    repititions = 2
+    repititions = 20
 
     def __init__(self, ls: LightSkin,
                  gridWidth: int,

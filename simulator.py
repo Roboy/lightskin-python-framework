@@ -110,7 +110,7 @@ topViewReconstructed.pack(side=tk.LEFT)
 topViewReconstructed2 = Viz.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
                                              width=300, height=300,
                                              measurable_grid=repeated,
-                                             display_function=lambda x: x**4,
+                                             display_function=lambda x: x**2,
                                              )
 topViewReconstructed2.pack(side=tk.LEFT)
 
@@ -119,7 +119,7 @@ topViewReconstructed2.pack(side=tk.LEFT)
 topViewReconstructed3 = Viz.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
                                              width=300, height=300,
                                              measurable_grid=repeated2,
-                                             display_function=lambda x: x**4,
+                                             display_function=lambda x: x**2,
                                              )
 topViewReconstructed3.pack(side=tk.LEFT)
 

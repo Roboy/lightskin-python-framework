@@ -9,46 +9,50 @@ class SimpleRepeatedDistributeBackProjection(SimpleRepeatedBackProjection):
         ray = self.ls.getRayFromLEDToSensor(sensor, led)
 
         cells = self.rayModel.getInfluencesForRay(ray)
+        """ cells that are open for the next round """
 
-        dfactor = factor ** (1 / ray.length)
-
-        alreadyDistributedFactor = dfactor
-        restFactor = 1.0
+        rest_factor = factor
         """ Factor that still needs to be distributed """
-        redistributors: List[Tuple[Tuple[int, int], float]] = []
+        dfactor = 1.0
+        """ Factor per distance in the current iteration; factor currently applied to all cells that are left """
+        cells_left: List[Tuple[Tuple[int, int], float]] = []
         """ Cells that can still take more factor """
+        cells_finished: List[Tuple[Tuple[int, int], float, float]] = []
+        """ Cells for which the resulting factor has already been calculated """
 
-        for (i, j), w in cells:
-            f = dfactor
-            if self._bufGrid[i][j] * dfactor > 1:  # max out at 1; cell can't take anymore
-                f = 1 / self._bufGrid[i][j]  # actually just propose a factor that makes this 1
-                restFactor *= (dfactor / f) ** w  # 'add up' the rest factor that still needs to be distributed
-                print("didnt fit %f" % restFactor)
-            else:
-                # add cell to list of cells that could potentially still take more factor
-                redistributors.append(((i, j), w))
-            # weighted factorization
-            self._tmpGrid[i][j] += f * w
-            self._tmpGridWeights[i][j] += w
+        #print('Distributing %f into %i' % (rest_factor, len(cells)))
+        while (abs(1 - rest_factor) > .000001) and len(cells) > 0:
+            # While there is still factor to be distributed and we still have cells that can take factor
 
-        while (abs(1-restFactor) > .00001) and len(redistributors) > 0:
-            print('Still got stuff to distribute %f into %i' % (restFactor, len(redistributors)))
-
-            cells = redistributors
-            redistributors = []
-            weightSum = sum(map(lambda el: el[1], cells))
-
-            dfactor = restFactor ** (1 / weightSum)
-            alreadyDistributedFactor *= dfactor
-            restFactor = 1.0
+            weight_sum = sum(map(lambda el: el[1], cells))
+            total_factor = rest_factor * (dfactor ** weight_sum)
+            """ total factor left =
+                rest_factor needed to be applied + factor currently applied on all cells that are still open
+            """
+            dfactor = total_factor ** (1 / weight_sum)
+            rest_factor = 1.0
 
             for (i, j), w in cells:
-                f = dfactor
-                if self._bufGrid[i][j] * alreadyDistributedFactor > 1:  # max out at 1; cell can't take anymore
-                    f = 1 / self._bufGrid[i][j]  # actually just propose a factor that makes this 1
-                    restFactor *= (dfactor / f) ** w  # 'add up' the rest factor that still needs to be distributed
+                if self._bufGrid[i][j] * dfactor > 1:  # max out at 1; cell can't take anymore
+                    #print('Doesnt fit cell %f %f' % (self._bufGrid[i][j] * dfactor, dfactor))
+                    f = 1 / self._bufGrid[i][j]
+                    # f is the maximum the cell can still take
+                    rest_factor *= (dfactor / f) ** w
+                    # 'add up' to the rest factor that still needs to be distributed
+                    cells_finished.append(((i, j), w, f))
+                    # The resulting factor for this cell has been determined; no more work needed
                 else:
                     # add cell to list of cells that could potentially still take more factor
-                    redistributors.append(((i, j), w))
-                # weighted factorization
-                self._tmpGrid[i][j] += f * w
+                    cells_left.append(((i, j), w))
+
+            cells = cells_left
+            cells_left = []
+            #print('Still got stuff to distribute %f into %i' % (rest_factor, len(cells)))
+
+        # all remaining cells get the current dfactor
+        for (i, j), w in cells:
+            cells_finished.append(((i, j), w, dfactor))
+
+        for (i, j), w, f in cells_finished:
+            self._tmpGrid[i][j] += f * w
+            self._tmpGridWeights[i][j] += w
