@@ -5,6 +5,7 @@ import csv
 import tkinter as tk
 
 from Algorithm.RayInfluenceModels.DirectSampledRayGridInfluenceModel import DirectSampledRayGridInfluenceModel
+from Algorithm.Reconstruction.SimpleRepeatedDistributeBackProjection import SimpleRepeatedDistributeBackProjection
 from LightSkin import LightSkin
 from GUI import LightSkinViz as Viz
 
@@ -46,7 +47,7 @@ recResolution = 10
 calibration = SimpleCalibration(ls)
 
 arduinoConnector = ArduinoConnectorForwardModel(ls, 'COM3', 1000000)
-backwardModel = SimpleRepeatedBackProjection(ls,
+backwardModel = SimpleRepeatedDistributeBackProjection(ls,
                                              recResolution, recResolution,
                                              calibration,
                                              DirectSampledRayGridInfluenceModel())
