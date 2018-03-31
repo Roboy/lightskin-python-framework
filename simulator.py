@@ -8,6 +8,7 @@ import math
 
 from Algorithm.RayInfluenceModels.DirectSampledRayGridInfluenceModel import DirectSampledRayGridInfluenceModel
 from Algorithm.Reconstruction.SimpleRepeatedDistributeBackProjection import SimpleRepeatedDistributeBackProjection
+from Algorithm.Reconstruction.SimpleRepeatedLogarithmicBackProjection import SimpleRepeatedLogarithmicBackProjection
 from LightSkin import LightSkin, ValueMap
 from GUI import LightSkinViz as Viz
 
@@ -63,11 +64,11 @@ ls.backwardModel = SimpleBackProjection(ls, recSize,
 repeated = SimpleRepeatedBackProjection(ls, recSize,
                                         recSize,
                                         SimpleIdealProportionalCalibration(ls),
-                                        DirectSampledRayGridInfluenceModel())
-repeated2 = SimpleRepeatedDistributeBackProjection(ls, recSize,
+                                        DirectSampledRayGridInfluenceModel(), 50)
+repeated2 = SimpleRepeatedLogarithmicBackProjection(ls, recSize,
                                         recSize,
                                         SimpleIdealProportionalCalibration(ls),
-                                        DirectSampledRayGridInfluenceModel())
+                                        DirectSampledRayGridInfluenceModel(), 50)
 
 ls.backwardModel.calculate()
 repeated.calculate()
