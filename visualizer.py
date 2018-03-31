@@ -4,6 +4,8 @@ import csv
 
 import tkinter as tk
 
+from Algorithm.RayInfluenceModels.DirectSampledRayGridInfluenceModel import DirectSampledRayGridInfluenceModel
+from Algorithm.Reconstruction.SimpleRepeatedDistributeBackProjection import SimpleRepeatedDistributeBackProjection
 from LightSkin import LightSkin
 from GUI import LightSkinViz as Viz
 
@@ -45,7 +47,10 @@ recResolution = 10
 calibration = SimpleCalibration(ls)
 
 arduinoConnector = ArduinoConnectorForwardModel(ls, 'COM3', 1000000)
-backwardModel = SimpleRepeatedBackProjection(ls, recResolution, recResolution, calibration)
+backwardModel = SimpleRepeatedDistributeBackProjection(ls,
+                                             recResolution, recResolution,
+                                             calibration,
+                                             DirectSampledRayGridInfluenceModel())
 
 
 ls.forwardModel = arduinoConnector
@@ -62,16 +67,13 @@ window.minsize(900, 300)
 
 gridView = Viz.LightSkinGridView(window, ls, width=400, height=400, highlightbackground='#aaa', highlightthickness=1,
                                  display_function=lambda x: min(1.0, x*2) ** 0.25
-
                                  )
 gridView.pack(side=tk.LEFT)
 
 topViewReconstructed = Viz.LightSkinTopView(window, ls, highlightbackground='#aaa', highlightthickness=1,
                                             width=500, height=500,
-                                            gridWidth=ls.backwardModel.gridWidth,
-                                            gridHeight=ls.backwardModel.gridHeight,
-                                            display_function=lambda x: x ** 10,
-                                            measure_function=ls.backwardModel.measureAtPoint
+                                            measurable_grid=ls.backwardModel,
+                                            display_function=lambda x: x ** 20
                                             )
 topViewReconstructed.pack(side=tk.RIGHT)
 
