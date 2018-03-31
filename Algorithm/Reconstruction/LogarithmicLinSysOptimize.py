@@ -27,8 +27,16 @@ class LogarithmicLinSysOptimize(BackwardModel):
 
         self._lgs_A: sparse.csr_matrix = None
         self._lgs_b: List[float] = []
+        self._lgs_sol: List[float] = []
 
     def calculate(self):
+        self._build_system()
+        self._solve_system()
+        self._apply_solution()
+
+
+    def _build_system(self):
+        """ Builds the system of linear equations from rays and sensor data """
         # Number of rows in the matrix; every ray (LEDs x Sensors) is one equation
         m = len(self.ls.LEDs) * len(self.ls.sensors)
         # Number of columns: the variables we are searching
@@ -65,19 +73,21 @@ class LogarithmicLinSysOptimize(BackwardModel):
 
         self._lgs_A = sparse.vstack(rows)
 
-        # Start solving
-
+    def _solve_system(self):
+        """ solves the system of linear equations """
         result = optimize.lsq_linear(self._lgs_A, self._lgs_b, (-np.inf, 0), verbose=0)
-
-        # Set solution as grid values
 
         if not result.success:
             print("No good solution found!")
 
-        solution = result.x
-        for i, v in enumerate(solution):
+        self._lgs_sol = result.x
+
+    def _apply_solution(self):
+        """ applies the solution of the system to the grid """
+
+        for i, v in enumerate(self._lgs_sol):
             y, x = divmod(i, self.gridDefinition.cellsX)
             value = math.exp(v)
-            #if x == 0 and y == 0:
+            # if x == 0 and y == 0:
             #   print("setting val %i %i to %f (%f)" % (x, y, value, v))
             self.grid[x][y] = value
