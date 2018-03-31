@@ -9,6 +9,7 @@ import math
 
 from Algorithm.RayInfluenceModels.DirectSampledRayGridInfluenceModel import DirectSampledRayGridInfluenceModel
 from Algorithm.Reconstruction.LogarithmicLinSysOptimize import LogarithmicLinSysOptimize
+from Algorithm.Reconstruction.LogarithmicLinSysOptimize2 import LogarithmicLinSysOptimize2
 from Algorithm.Reconstruction.SimpleRepeatedDistributeBackProjection import SimpleRepeatedDistributeBackProjection
 from Algorithm.Reconstruction.SimpleRepeatedLogarithmicBackProjection import SimpleRepeatedLogarithmicBackProjection
 from LightSkin import LightSkin, ValueMap
@@ -73,7 +74,7 @@ repeated2 = SimpleRepeatedDistributeBackProjection(ls, recSize,
                                         SimpleIdealProportionalCalibration(ls),
                                         DirectSampledRayGridInfluenceModel(), repetitions)
 
-linsys = LogarithmicLinSysOptimize(ls, recSize,
+linsys = LogarithmicLinSysOptimize2(ls, recSize,
                                         recSize,
                                         SimpleIdealProportionalCalibration(ls),
                                         DirectSampledRayGridInfluenceModel())

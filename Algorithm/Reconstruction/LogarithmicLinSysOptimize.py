@@ -35,7 +35,7 @@ class LogarithmicLinSysOptimize(BackwardModel):
         self._apply_solution()
 
 
-    def _build_system(self):
+    def _build_system(self, positive=False):
         """ Builds the system of linear equations from rays and sensor data """
         # Number of rows in the matrix; every ray (LEDs x Sensors) is one equation
         m = len(self.ls.LEDs) * len(self.ls.sensors)
@@ -63,7 +63,7 @@ class LogarithmicLinSysOptimize(BackwardModel):
                     data: List[float] = [0.0] * len(cells)
                     col_ind: List[int] = [0] * len(cells)
                     for i, ((x, y), w) in enumerate(cells):
-                        data[i] = w
+                        data[i] = -w if positive else w
                         col_ind[i] = y * self.gridDefinition.cellsX + x
                         # if x == 0 and y == 0:
                         #     print("in matr w %i weight for %i (%i %i) %f" % (n, col_ind[i], x, y, w))
@@ -82,12 +82,12 @@ class LogarithmicLinSysOptimize(BackwardModel):
 
         self._lgs_sol = result.x
 
-    def _apply_solution(self):
+    def _apply_solution(self, positive=False):
         """ applies the solution of the system to the grid """
 
         for i, v in enumerate(self._lgs_sol):
             y, x = divmod(i, self.gridDefinition.cellsX)
-            value = math.exp(v)
+            value = math.exp(-v if positive else v)
             # if x == 0 and y == 0:
             #   print("setting val %i %i to %f (%f)" % (x, y, value, v))
             self.grid[x][y] = value
