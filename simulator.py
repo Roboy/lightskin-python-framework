@@ -68,7 +68,7 @@ repeated = SimpleRepeatedBackProjection(ls, recSize,
 repeated2 = SimpleRepeatedLogarithmicBackProjection(ls, recSize,
                                         recSize,
                                         SimpleIdealProportionalCalibration(ls),
-                                        DirectSampledRayGridInfluenceModel(), 50)
+                                        DirectSampledRayGridInfluenceModel(), 20)
 
 ls.backwardModel.calculate()
 repeated.calculate()

@@ -1,11 +1,12 @@
 import math
-from typing import List
+from typing import List, Tuple
 
 from Algorithm.RayInfluenceModels.RayInfluenceModel import RayGridInfluenceModel
 from LightSkin import LightSkin, Calibration, BackwardModel
 
 
 class SimpleRepeatedLogarithmicBackProjection(BackwardModel):
+    """ Almost equal to the SimpleRepeatedDistributeBackProjection but transferred to logarithmic space """
     MIN_SENSITIVITY = 0.02
     UNKNOWN_VAL = 0.0
 
@@ -87,13 +88,48 @@ class SimpleRepeatedLogarithmicBackProjection(BackwardModel):
         ray = self.ls.getRayFromLEDToSensor(sensor, led)
 
         cells = self.rayModel.getInfluencesForRay(ray)
+        """ cells that are open for the next round """
 
-        d_transl = translucency / ray.length
+        rest_translucency = translucency
+        """ Translucency delta that still needs to be distributed """
+        d_transl = .0
+        """ translucency per distance in the current iteration;
+            translucency delta currently applied to all cells that are left """
+        cells_left: List[Tuple[Tuple[int, int], float]] = []
+        """ Cells that can still take more translucency """
+        cells_finished: List[Tuple[Tuple[int, int], float, float]] = []
+        """ Cells for which the resulting translucency delta has already been calculated """
 
-        # print("Projecting ray %i %i : %f" % (sensor, led, translucency))
+        while (abs(rest_translucency) > .00001) and len(cells) > 0:
+            # While there is still transl. to be distributed and we still have cells that can take transl
+
+            weight_sum = sum(map(lambda el: el[1], cells))
+            total_transl = rest_translucency + (d_transl * weight_sum)
+            """ total translucency left =
+                rest_translucency needed to be applied + translucency currently applied on all cells that are still open
+            """
+            d_transl = total_transl / weight_sum
+            rest_translucency = .0
+
+            for (i, j), w in cells:
+                if self._bufGrid[i][j] + d_transl > 0:  # max out at 0; cell can't take anymore
+                    t = -self._bufGrid[i][j]
+                    # t thus us the max the cell can still take
+                    rest_translucency += (d_transl - t) * w
+                    # 'add up' the remaining transl that still needs to be distributed
+                    cells_finished.append(((i, j), w, t))
+                    # The resulting transl. delta for this cell has been determined; no more work needed
+                else:
+                    # add cell to list of cells that could potentially still take more transl
+                    cells_left.append(((i, j), w))
+
+            cells = cells_left
+            cells_left = []
+
+        # all remaining cells get the current d_transl
         for (i, j), w in cells:
-            # weighted factorization
-            self._tmpGrid[i][j] += d_transl * w
-            self._tmpGridWeights[i][j] += w
+            cells_finished.append(((i, j), w, d_transl))
 
-            # print("Influencing cell %i %i : %f" % (i, j, self._tmpGrid[i][j]))
+        for (i, j), w, f in cells_finished:
+            self._tmpGrid[i][j] += f * w
+            self._tmpGridWeights[i][j] += w
