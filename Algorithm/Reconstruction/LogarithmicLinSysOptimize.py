@@ -1,6 +1,8 @@
 import math
 from typing import List, Tuple
 import scipy.sparse as sparse
+import scipy.optimize as optimize
+import numpy as np
 
 from Algorithm.RayInfluenceModels.RayInfluenceModel import RayGridInfluenceModel
 from LightSkin import LightSkin, Calibration, BackwardModel
@@ -24,7 +26,7 @@ class LogarithmicLinSysOptimize(BackwardModel):
         self.rayModel.gridDefinition = self.gridDefinition
         """ Contains the weights while they are being built in log space """
 
-        self.sparse_matrix: sparse.csr_matrix = None
+        self._lgs_A: sparse.csr_matrix = None
 
     def calculate(self):
         # Number of rows in the matrix; every ray (LEDs x Sensors) is one equation
@@ -33,7 +35,7 @@ class LogarithmicLinSysOptimize(BackwardModel):
         # Number of columns: the variables we are searching
         n = self.gridDefinition.cellsX * self.gridDefinition.cellsY
 
-        b = [0.0] * m
+        self._lgs_b = [0.0] * m
         rows: List[sparse.csr_matrix] = []
 
         # Build matrix row by row and b vector
@@ -45,7 +47,7 @@ class LogarithmicLinSysOptimize(BackwardModel):
                     translucency = math.log(val / expected_val)
 
                     # Expected result into b-vector
-                    b[i_l * sensornum + i_s] = translucency
+                    self._lgs_b[i_l * sensornum + i_s] = translucency
 
                     # build sparse row
                     ray = self.ls.getRayFromLEDToSensor(i_s, i_l)
@@ -56,9 +58,20 @@ class LogarithmicLinSysOptimize(BackwardModel):
                     for i, ((x, y), w) in enumerate(cells):
                         data[i] = w
                         col_ind[i] = y * self.gridDefinition.cellsX + x
-                        #print("in matr w %i weight for %i (%i %i) %f" % (n, col_ind[i], x, y, w))
+                        # print("in matr w %i weight for %i (%i %i) %f" % (n, col_ind[i], x, y, w))
 
                     row = sparse.csr_matrix((data, ([0] * len(cells), col_ind)), shape=(1, n))
                     rows.append(row)
 
-        self.sparse_matrix = sparse.vstack(rows)
+        self._lgs_A = sparse.vstack(rows)
+
+        # Start solving
+
+        result = optimize.lsq_linear(self._lgs_A, self._lgs_b, (-np.inf, 0), verbose=2)
+
+        if result.success:
+            solution = result.x
+            for i, v in enumerate(solution):
+                y, x = divmod(i, self.gridDefinition.cellsX)
+                self.grid[x][y] = math.exp(v)
+
