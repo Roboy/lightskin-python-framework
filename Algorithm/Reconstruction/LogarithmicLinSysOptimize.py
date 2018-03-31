@@ -26,15 +26,15 @@ class LogarithmicLinSysOptimize(BackwardModel):
         """ Contains the weights while they are being built in log space """
 
         self._lgs_A: sparse.csr_matrix = None
+        self._lgs_b: List[float] = []
 
     def calculate(self):
         # Number of rows in the matrix; every ray (LEDs x Sensors) is one equation
-        sensornum = len(self.ls.sensors)
-        m = len(self.ls.LEDs) * sensornum
+        m = len(self.ls.LEDs) * len(self.ls.sensors)
         # Number of columns: the variables we are searching
         n = self.gridDefinition.cellsX * self.gridDefinition.cellsY
 
-        self._lgs_b = [0.0] * m
+        self._lgs_b = []
         rows: List[sparse.csr_matrix] = []
 
         # Build matrix row by row and b vector
@@ -43,10 +43,10 @@ class LogarithmicLinSysOptimize(BackwardModel):
                 expected_val = self.calibration.expectedSensorValue(i_s, i_l)
                 if expected_val > self.MIN_SENSITIVITY:
                     val = self.ls.forwardModel.getSensorValue(i_s, i_l)
-                    translucency = math.log(val / expected_val)
+                    translucency = math.log(val / expected_val) if expected_val > self.MIN_SENSITIVITY else 0.0
 
                     # Expected result into b-vector
-                    self._lgs_b[i_l * sensornum + i_s] = translucency
+                    self._lgs_b.append(translucency)
 
                     # build sparse row
                     ray = self.ls.getRayFromLEDToSensor(i_s, i_l)
@@ -57,8 +57,8 @@ class LogarithmicLinSysOptimize(BackwardModel):
                     for i, ((x, y), w) in enumerate(cells):
                         data[i] = w
                         col_ind[i] = y * self.gridDefinition.cellsX + x
-                        if x == 0 and y == 0:
-                            print("in matr w %i weight for %i (%i %i) %f" % (n, col_ind[i], x, y, w))
+                        # if x == 0 and y == 0:
+                        #     print("in matr w %i weight for %i (%i %i) %f" % (n, col_ind[i], x, y, w))
 
                     row = sparse.csr_matrix((data, ([0] * len(cells), col_ind)), shape=(1, n))
                     rows.append(row)
@@ -79,5 +79,5 @@ class LogarithmicLinSysOptimize(BackwardModel):
             y, x = divmod(i, self.gridDefinition.cellsX)
             value = math.exp(v)
             #if x == 0 and y == 0:
-            print("setting val %i %i to %f (%f)" % (x, y, value, v))
+            #   print("setting val %i %i to %f (%f)" % (x, y, value, v))
             self.grid[x][y] = value
