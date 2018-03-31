@@ -12,17 +12,17 @@ class SimpleRepeatedBackProjection(SimpleBackProjection):
                  gridHeight: int,
                  calibration: Calibration,
                  ray_model: RayGridInfluenceModel,
-                 repititions: int = 20):
+                 repetitions: int = 20):
         super().__init__(ls, gridWidth, gridHeight, calibration, ray_model)
         self._bufGrid = []
-        self.repititions: int = repititions
+        self.repetitions: int = repetitions
 
     def calculate(self):
 
         # reset internal buffer
         self._bufGrid = self.gridDefinition.makeFloatGridFilledWith(1.0)
 
-        for i in range(self.repititions):
+        for i in range(self.repetitions):
             self._calculate_iteration()
             print("Iteration %i" % i)
 
