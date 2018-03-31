@@ -1,5 +1,5 @@
 from functools import lru_cache
-from typing import Tuple, List
+from typing import Tuple, List, Dict
 
 import math
 
@@ -24,7 +24,7 @@ class DirectSampledRayGridInfluenceModel(RayGridInfluenceModel):
         dy_step = dy / dist * self.sampleDistance
         steps = dy / dy_step if dx_step == 0 else dx / dx_step
 
-        values = {}
+        values: Dict[Tuple[int, int], float] = {}
 
         for i in range(int(steps)):
             # find corresponding grid element for this sample

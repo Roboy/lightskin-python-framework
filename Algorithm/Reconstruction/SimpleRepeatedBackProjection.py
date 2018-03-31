@@ -6,15 +6,16 @@ from Algorithm.Reconstruction.SimpleBackProjection import SimpleBackProjection
 
 
 class SimpleRepeatedBackProjection(SimpleBackProjection):
-    repititions = 20
 
     def __init__(self, ls: LightSkin,
                  gridWidth: int,
                  gridHeight: int,
                  calibration: Calibration,
-                 ray_model: RayGridInfluenceModel):
+                 ray_model: RayGridInfluenceModel,
+                 repititions: int = 20):
         super().__init__(ls, gridWidth, gridHeight, calibration, ray_model)
         self._bufGrid = []
+        self.repititions: int = repititions
 
     def calculate(self):
 
