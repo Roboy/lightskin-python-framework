@@ -5,6 +5,8 @@ import csv
 import tkinter as tk
 
 from Algorithm.RayInfluenceModels.DirectSampledRayGridInfluenceModel import DirectSampledRayGridInfluenceModel
+from Algorithm.Reconstruction.LogarithmicLinSysOptimize import LogarithmicLinSysOptimize
+from Algorithm.Reconstruction.SimpleRepeatedBackProjection import SimpleRepeatedBackProjection
 from Algorithm.Reconstruction.SimpleRepeatedDistributeBackProjection import SimpleRepeatedDistributeBackProjection
 from LightSkin import LightSkin
 from GUI import LightSkinViz as Viz
@@ -14,10 +16,9 @@ from Algorithm.ForwardModels.ArduinoConnectorForwardModel import ArduinoConnecto
 from Algorithm.SimpleCalibration import SimpleCalibration
 
 
+
+
 # Source: https://code.activestate.com/recipes/410687-transposing-a-list-of-lists-with-different-lengths/
-from Algorithm.Reconstruction.SimpleRepeatedBackProjection import SimpleRepeatedBackProjection
-
-
 def transposed(lists):
     if not lists:
         return []
@@ -47,7 +48,7 @@ recResolution = 10
 calibration = SimpleCalibration(ls)
 
 arduinoConnector = ArduinoConnectorForwardModel(ls, 'COM3', 1000000)
-backwardModel = SimpleRepeatedDistributeBackProjection(ls,
+backwardModel = LogarithmicLinSysOptimize(ls,
                                              recResolution, recResolution,
                                              calibration,
                                              DirectSampledRayGridInfluenceModel())
