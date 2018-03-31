@@ -20,10 +20,10 @@ class SimpleRepeatedLogarithmicBackProjection(BackwardModel):
         self._tmpGrid = []
         self._tmpGridWeights = []
         self._bufGrid: List[List[float]] = []
+        """ Contains the weights while they are being built in log space """
         self.rayModel: RayGridInfluenceModel = ray_model
         self.rayModel.gridDefinition = self.gridDefinition
         self.repetitions: int = repetitions
-        """ Contains the weights while they are being built in log space """
 
     def calculate(self):
 

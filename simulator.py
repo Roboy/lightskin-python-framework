@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import csv
+import time
 
 import tkinter as tk
 
@@ -55,24 +56,33 @@ translucency = ValueMap(ls.getGridArea(), grid=transposed(gridVals))
 ls.translucencyMap = translucency
 
 recSize = 10
+repetitions = 50
 
 ls.forwardModel = SimpleProportionalForwardModel(ls, DirectSampledRayGridInfluenceModel())
 ls.backwardModel = SimpleBackProjection(ls, recSize,
                                         recSize,
                                         SimpleIdealProportionalCalibration(ls),
                                         DirectSampledRayGridInfluenceModel())
-repeated = SimpleRepeatedBackProjection(ls, recSize,
+repeated = SimpleRepeatedLogarithmicBackProjection(ls, recSize,
                                         recSize,
                                         SimpleIdealProportionalCalibration(ls),
-                                        DirectSampledRayGridInfluenceModel(), 50)
-repeated2 = SimpleRepeatedLogarithmicBackProjection(ls, recSize,
+                                        DirectSampledRayGridInfluenceModel(), repetitions)
+repeated2 = SimpleRepeatedDistributeBackProjection(ls, recSize,
                                         recSize,
                                         SimpleIdealProportionalCalibration(ls),
-                                        DirectSampledRayGridInfluenceModel(), 20)
+                                        DirectSampledRayGridInfluenceModel(), repetitions)
 
 ls.backwardModel.calculate()
+
+start_time = time.time()
 repeated.calculate()
+t = time.time() - start_time
+print("Total time needed for calculation: %f " % t)
+
+start_time = time.time()
 repeated2.calculate()
+t = time.time() - start_time
+print("Total time needed for calculation: %f " % t)
 
 # print(ls.sensors)
 # print(ls.LEDs)
