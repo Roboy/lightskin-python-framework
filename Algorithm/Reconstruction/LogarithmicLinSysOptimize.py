@@ -11,7 +11,6 @@ from LightSkin import LightSkin, Calibration, BackwardModel
 class LogarithmicLinSysOptimize(BackwardModel):
     """ Converts the problem into a set of linear equations and solves them using standard libraries """
     MIN_SENSITIVITY = 0.02
-    UNKNOWN_VAL = 0.0
 
     def __init__(self, ls: LightSkin,
                  gridWidth: int,
@@ -58,7 +57,8 @@ class LogarithmicLinSysOptimize(BackwardModel):
                     for i, ((x, y), w) in enumerate(cells):
                         data[i] = w
                         col_ind[i] = y * self.gridDefinition.cellsX + x
-                        # print("in matr w %i weight for %i (%i %i) %f" % (n, col_ind[i], x, y, w))
+                        if x == 0 and y == 0:
+                            print("in matr w %i weight for %i (%i %i) %f" % (n, col_ind[i], x, y, w))
 
                     row = sparse.csr_matrix((data, ([0] * len(cells), col_ind)), shape=(1, n))
                     rows.append(row)
@@ -67,11 +67,17 @@ class LogarithmicLinSysOptimize(BackwardModel):
 
         # Start solving
 
-        result = optimize.lsq_linear(self._lgs_A, self._lgs_b, (-np.inf, 0), verbose=2)
+        result = optimize.lsq_linear(self._lgs_A, self._lgs_b, (-np.inf, 0), verbose=0)
 
-        if result.success:
-            solution = result.x
-            for i, v in enumerate(solution):
-                y, x = divmod(i, self.gridDefinition.cellsX)
-                self.grid[x][y] = math.exp(v)
+        # Set solution as grid values
 
+        if not result.success:
+            print("No good solution found!")
+
+        solution = result.x
+        for i, v in enumerate(solution):
+            y, x = divmod(i, self.gridDefinition.cellsX)
+            value = math.exp(v)
+            #if x == 0 and y == 0:
+            print("setting val %i %i to %f (%f)" % (x, y, value, v))
+            self.grid[x][y] = value

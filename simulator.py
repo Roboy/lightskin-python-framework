@@ -57,7 +57,7 @@ translucency = ValueMap(ls.getGridArea(), grid=transposed(gridVals))
 ls.translucencyMap = translucency
 
 recSize = 10
-repetitions = 50
+repetitions = 20
 
 ls.forwardModel = SimpleProportionalForwardModel(ls, DirectSampledRayGridInfluenceModel())
 ls.backwardModel = SimpleBackProjection(ls, recSize,
@@ -81,12 +81,12 @@ linsys = LogarithmicLinSysOptimize(ls, recSize,
 ls.backwardModel.calculate()
 
 start_time = time.time()
-#repeated.calculate()
+repeated.calculate()
 t = time.time() - start_time
 print("Total time needed for calculation: %f " % t)
 
 start_time = time.time()
-#repeated2.calculate()
+repeated2.calculate()
 t = time.time() - start_time
 print("Total time needed for calculation: %f " % t)
 
@@ -106,6 +106,8 @@ window.minsize(900, 300)
 
 topViewsFrame = tk.Frame(window)
 topViewsFrame.pack(side=tk.TOP)
+topViews2Frame = tk.Frame(window)
+topViews2Frame.pack(side=tk.TOP)
 
 topViewTransl = Viz.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
                                      width=300, height=300,
@@ -129,7 +131,7 @@ topViewReconstructed = Viz.LightSkinTopView(topViewsFrame, ls, highlightbackgrou
                                             )
 topViewReconstructed.pack(side=tk.LEFT)
 
-topViewReconstructed2 = Viz.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
+topViewReconstructed2 = Viz.LightSkinTopView(topViews2Frame, ls, highlightbackground='#aaa', highlightthickness=1,
                                              width=300, height=300,
                                              measurable_grid=repeated,
                                              display_function=lambda x: x**2,
@@ -138,7 +140,7 @@ topViewReconstructed2.pack(side=tk.LEFT)
 
 
 
-topViewReconstructed3 = Viz.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
+topViewReconstructed3 = Viz.LightSkinTopView(topViews2Frame, ls, highlightbackground='#aaa', highlightthickness=1,
                                              width=300, height=300,
                                              measurable_grid=repeated2,
                                              display_function=lambda x: x**2,
@@ -146,7 +148,7 @@ topViewReconstructed3 = Viz.LightSkinTopView(topViewsFrame, ls, highlightbackgro
 topViewReconstructed3.pack(side=tk.LEFT)
 
 
-topViewReconstructed4 = Viz.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
+topViewReconstructed4 = Viz.LightSkinTopView(topViews2Frame, ls, highlightbackground='#aaa', highlightthickness=1,
                                              width=300, height=300,
                                              measurable_grid=linsys,
                                              display_function=lambda x: x**2,
