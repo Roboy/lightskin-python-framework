@@ -53,9 +53,10 @@ class LogarithmicLinSysOptimize(BackwardModel):
 
                     data: List[float] = [0.0] * len(cells)
                     col_ind: List[int] = [0] * len(cells)
-                    for i, ((i_l, i_s), w) in enumerate(cells):
+                    for i, ((x, y), w) in enumerate(cells):
                         data[i] = w
-                        col_ind[i] = i_l * sensornum + i_s
+                        col_ind[i] = y * self.gridDefinition.cellsX + x
+                        #print("in matr w %i weight for %i (%i %i) %f" % (n, col_ind[i], x, y, w))
 
                     row = sparse.csr_matrix((data, ([0] * len(cells), col_ind)), shape=(1, n))
                     rows.append(row)

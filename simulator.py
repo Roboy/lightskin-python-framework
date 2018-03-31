@@ -8,6 +8,7 @@ import tkinter as tk
 import math
 
 from Algorithm.RayInfluenceModels.DirectSampledRayGridInfluenceModel import DirectSampledRayGridInfluenceModel
+from Algorithm.Reconstruction.LogarithmicLinSysOptimize import LogarithmicLinSysOptimize
 from Algorithm.Reconstruction.SimpleRepeatedDistributeBackProjection import SimpleRepeatedDistributeBackProjection
 from Algorithm.Reconstruction.SimpleRepeatedLogarithmicBackProjection import SimpleRepeatedLogarithmicBackProjection
 from LightSkin import LightSkin, ValueMap
@@ -72,15 +73,25 @@ repeated2 = SimpleRepeatedDistributeBackProjection(ls, recSize,
                                         SimpleIdealProportionalCalibration(ls),
                                         DirectSampledRayGridInfluenceModel(), repetitions)
 
+linsys = LogarithmicLinSysOptimize(ls, recSize,
+                                        recSize,
+                                        SimpleIdealProportionalCalibration(ls),
+                                        DirectSampledRayGridInfluenceModel())
+
 ls.backwardModel.calculate()
 
 start_time = time.time()
-repeated.calculate()
+#repeated.calculate()
 t = time.time() - start_time
 print("Total time needed for calculation: %f " % t)
 
 start_time = time.time()
-repeated2.calculate()
+#repeated2.calculate()
+t = time.time() - start_time
+print("Total time needed for calculation: %f " % t)
+
+start_time = time.time()
+linsys.calculate()
 t = time.time() - start_time
 print("Total time needed for calculation: %f " % t)
 
@@ -133,6 +144,14 @@ topViewReconstructed3 = Viz.LightSkinTopView(topViewsFrame, ls, highlightbackgro
                                              display_function=lambda x: x**2,
                                              )
 topViewReconstructed3.pack(side=tk.LEFT)
+
+
+topViewReconstructed4 = Viz.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
+                                             width=300, height=300,
+                                             measurable_grid=linsys,
+                                             display_function=lambda x: x**2,
+                                             )
+topViewReconstructed4.pack(side=tk.LEFT)
 
 gridView = Viz.LightSkinGridView(window, ls, width=400, height=400, highlightbackground='#aaa', highlightthickness=1,
                                  display_function=math.sqrt
