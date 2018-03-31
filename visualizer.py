@@ -6,6 +6,7 @@ import tkinter as tk
 
 from Algorithm.RayInfluenceModels.DirectSampledRayGridInfluenceModel import DirectSampledRayGridInfluenceModel
 from Algorithm.Reconstruction.LogarithmicLinSysOptimize import LogarithmicLinSysOptimize
+from Algorithm.Reconstruction.LogarithmicLinSysOptimize2 import LogarithmicLinSysOptimize2
 from Algorithm.Reconstruction.SimpleRepeatedBackProjection import SimpleRepeatedBackProjection
 from Algorithm.Reconstruction.SimpleRepeatedDistributeBackProjection import SimpleRepeatedDistributeBackProjection
 from LightSkin import LightSkin
@@ -48,7 +49,7 @@ recResolution = 10
 calibration = SimpleCalibration(ls)
 
 arduinoConnector = ArduinoConnectorForwardModel(ls, 'COM3', 1000000)
-backwardModel = LogarithmicLinSysOptimize(ls,
+backwardModel = LogarithmicLinSysOptimize2(ls,
                                              recResolution, recResolution,
                                              calibration,
                                              DirectSampledRayGridInfluenceModel())
