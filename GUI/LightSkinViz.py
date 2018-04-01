@@ -49,7 +49,7 @@ class LightSkinTopView(tk.Canvas):
         self.update()
 
         self._draw()
-        skin.onChange += lambda *a, **kwa: self.updateVisuals()  # remove any parameters
+        skin.onChange += lambda *a, **kwa: self.after_idle(self.updateVisuals)  # send to main thread
         self.updateVisuals()
 
     def on_resize(self, event):
@@ -171,7 +171,7 @@ class LightSkinGridView(tk.Frame):
         self.displayFunction = display_function
 
         self._build()
-        skin.onChange += lambda *a, **kwa: self.updateVisuals()  # remove any parameters
+        skin.onChange += lambda *a, **kwa: self.after_idle(self.updateVisuals)  # send to main thread
         self.updateVisuals()
 
     def on_click(self, event):

@@ -17,8 +17,6 @@ from Algorithm.ForwardModels.ArduinoConnectorForwardModel import ArduinoConnecto
 from Algorithm.SimpleCalibration import SimpleCalibration
 
 
-
-
 # Source: https://code.activestate.com/recipes/410687-transposing-a-list-of-lists-with-different-lengths/
 def transposed(lists):
     if not lists:
@@ -50,10 +48,9 @@ calibration = SimpleCalibration(ls)
 
 arduinoConnector = ArduinoConnectorForwardModel(ls, 'COM3', 1000000)
 backwardModel = LogarithmicLinSysOptimize2(ls,
-                                             recResolution, recResolution,
-                                             calibration,
-                                             DirectSampledRayGridInfluenceModel())
-
+                                           recResolution, recResolution,
+                                           calibration,
+                                           DirectSampledRayGridInfluenceModel())
 
 ls.forwardModel = arduinoConnector
 ls.backwardModel = backwardModel
@@ -68,7 +65,7 @@ window.title('Light Skin Simulation')
 window.minsize(900, 300)
 
 gridView = Viz.LightSkinGridView(window, ls, width=400, height=400, highlightbackground='#aaa', highlightthickness=1,
-                                 display_function=lambda x: min(1.0, x*2) ** 0.25
+                                 display_function=lambda x: min(1.0, x * 2) ** 0.25
                                  )
 gridView.pack(side=tk.LEFT)
 
@@ -84,8 +81,7 @@ def onUpdate():
     if not calibration.isCalibrated:
         calibration.calibrate()
     backwardModel.calculate()
-    gridView.updateVisuals()
-    topViewReconstructed.updateVisuals()
+    ls.onChange.fire('values')
 
 
 arduinoConnector.onUpdate += onUpdate
