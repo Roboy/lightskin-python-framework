@@ -42,7 +42,7 @@ with open('leds.csv', 'r') as csvfile:
         s = (float(r[0]), float(r[1]))
         ls.LEDs.append(s)
 
-recResolution = 10
+recResolution = 15
 
 calibration = SimpleCalibration(ls)
 
@@ -65,14 +65,14 @@ window.title('Light Skin Simulation')
 window.minsize(900, 300)
 
 gridView = Viz.LightSkinGridView(window, ls, width=400, height=400, highlightbackground='#aaa', highlightthickness=1,
-                                 display_function=lambda x: min(1.0, x * 2) ** 0.25
+                                 display_function=lambda x: min(1.0, x * 2) ** 0.3
                                  )
 gridView.pack(side=tk.LEFT)
 
 topViewReconstructed = Viz.LightSkinTopView(window, ls, highlightbackground='#aaa', highlightthickness=1,
                                             width=500, height=500,
                                             measurable_grid=ls.backwardModel,
-                                            display_function=lambda x: x ** 2
+                                            display_function=lambda x: x ** 4
                                             )
 topViewReconstructed.pack(side=tk.RIGHT)
 
