@@ -33,13 +33,13 @@ class LogarithmicLinSysOptimize(BackwardModel):
 
     def calculate(self):
         try:
-            t1 = time.time()
+            t1 = time.perf_counter()
             self._build_system()
-            t2 = time.time()
+            t2 = time.perf_counter()
             self._solve_system()
-            t3 = time.time()
+            t3 = time.perf_counter()
             self._apply_solution()
-            t4 = time.time()
+            t4 = time.perf_counter()
             print("Times needed for reconstruction: %f %f %f" % (t2 - t1, t3 - t2, t4 - t3))
         except Exception as e:
             print("Exception when trying to reconstruct data")
