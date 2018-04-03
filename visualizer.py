@@ -67,7 +67,7 @@ window.title('Light Skin Simulation')
 window.minsize(900, 300)
 
 gridView = Views.LightSkinGridView(window, ls, width=400, height=400, highlightbackground='#aaa', highlightthickness=1,
-                                   display_function=Views.Colorscales.MPColorMap('plasma')
+                                   display_function=Views.Colorscales.MPColorMap('inferno', lambda x: x**0.3)
                                    )
 gridView.pack(side=tk.LEFT)
 

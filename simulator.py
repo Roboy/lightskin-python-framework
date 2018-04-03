@@ -124,7 +124,7 @@ topViewTransl.pack(side=tk.LEFT)
 topView = Views.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
                                  width=300, height=300,
                                  gridWidth=50, gridHeight=50,
-                                 display_function=Views.Colorscales.MPColorMap('plasma'),
+                                 display_function=Views.Colorscales.MPColorMap('plasma', lambda x: x**0.5),
                                  measure_function=ls.forwardModel.measureAtPoint
                                  )
 topView.pack(side=tk.LEFT)
