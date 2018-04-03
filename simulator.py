@@ -100,6 +100,10 @@ print("Total time needed for calculation: %f " % t)
 # print(ls.LEDs)
 # print(flush=True)
 
+
+pressure_colormap = 'nipy_spectral'
+
+
 # Build Window with widgets etc...
 window = tk.Tk()
 window.title('Light Skin Simulation')
@@ -113,14 +117,14 @@ topViews2Frame.pack(side=tk.TOP)
 topViewTransl = views.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
                                      width=300, height=300,
                                      measurable_grid=ls.translucencyMap,
-                                     # display_function=lambda x: x
+                                     display_function=views.Colorscales.MPColorMap(pressure_colormap)
                                      )
 topViewTransl.pack(side=tk.LEFT)
 
 topView = views.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
                                width=300, height=300,
                                gridWidth=50, gridHeight=50,
-                               # display_function=math.sqrt,
+                               display_function=views.Colorscales.MPColorMap('plasma'),
                                measure_function=ls.forwardModel.measureAtPoint
                                )
 topView.pack(side=tk.LEFT)
@@ -128,14 +132,14 @@ topView.pack(side=tk.LEFT)
 topViewReconstructed = views.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
                                             width=300, height=300,
                                             measurable_grid=ls.backwardModel,
-                                            display_function=views.Colorscales.Grayscale(lambda x: x ** 10),
+                                            display_function=views.Colorscales.MPColorMap(pressure_colormap),
                                             )
 topViewReconstructed.pack(side=tk.LEFT)
 
 topViewReconstructed2 = views.LightSkinTopView(topViews2Frame, ls, highlightbackground='#aaa', highlightthickness=1,
                                              width=300, height=300,
                                              measurable_grid=repeated,
-                                             display_function=views.Colorscales.Grayscale(lambda x: x**2),
+                                             display_function=views.Colorscales.MPColorMap(pressure_colormap),
                                              )
 topViewReconstructed2.pack(side=tk.LEFT)
 
@@ -144,7 +148,7 @@ topViewReconstructed2.pack(side=tk.LEFT)
 topViewReconstructed3 = views.LightSkinTopView(topViews2Frame, ls, highlightbackground='#aaa', highlightthickness=1,
                                              width=300, height=300,
                                              measurable_grid=repeated2,
-                                             display_function=views.Colorscales.Grayscale(lambda x: x**2),
+                                             display_function=views.Colorscales.MPColorMap(pressure_colormap),
                                              )
 topViewReconstructed3.pack(side=tk.LEFT)
 
@@ -152,7 +156,7 @@ topViewReconstructed3.pack(side=tk.LEFT)
 topViewReconstructed4 = views.LightSkinTopView(topViews2Frame, ls, highlightbackground='#aaa', highlightthickness=1,
                                              width=300, height=300,
                                              measurable_grid=linsys,
-                                             display_function=views.Colorscales.Grayscale(lambda x: x**2),
+                                             display_function=views.Colorscales.MPColorMap(pressure_colormap),
                                              )
 topViewReconstructed4.pack(side=tk.LEFT)
 
