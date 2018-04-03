@@ -66,10 +66,11 @@ class LogarithmicLinSysOptimize(BackwardModel):
                 expected_val = self.calibration.expectedSensorValue(i_s, i_l)
                 if expected_val > self.MIN_SENSITIVITY:
                     val = self.ls.forwardModel.getSensorValue(i_s, i_l)
-                    translucency = math.log(val / expected_val) if expected_val > self.MIN_SENSITIVITY else 0.0
+                    translucency = math.log(val / expected_val)\
+                        if expected_val > self.MIN_SENSITIVITY else 0.0
                     translucency = min(translucency, -0.0)  # make sure we are in a valid area
                     if positive:
-                        translucency = -translucency
+                        translucency = abs(translucency)
 
                     # Expected result into b-vector
                     self._lgs_b.append(translucency)
