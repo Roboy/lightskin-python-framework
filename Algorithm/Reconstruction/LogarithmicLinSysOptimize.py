@@ -90,7 +90,7 @@ class LogarithmicLinSysOptimize(BackwardModel):
                             # if x == 0 and y == 0:
                             #     print("in matr w %i weight for %i (%i %i) %f" % (n, col_ind[i], x, y, w))
 
-                        row = sparse.csr_matrix((data, ([0] * len(cells), col_ind)), shape=(1, n))
+                        row = sparse.csr_matrix((data, col_ind, [0, len(data)]), shape=(1, n))
                         rows.append(row)
 
         if force_full_build:
