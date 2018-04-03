@@ -10,6 +10,9 @@ class SimpleCalibration(Calibration):
         self.isCalibrated = False
         self._calibration: List[List[float]] = []
 
+    def __hash__(self):
+        return hash((super().__hash__(), self._calibration))
+
     def calibrate(self):
         self._calibration: List[List[float]] = []
         for i in range(len(self.ls.LEDs)):
