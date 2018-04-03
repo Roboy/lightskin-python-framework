@@ -13,7 +13,7 @@ from Algorithm.Reconstruction.LogarithmicLinSysOptimize2 import LogarithmicLinSy
 from Algorithm.Reconstruction.SimpleRepeatedDistributeBackProjection import SimpleRepeatedDistributeBackProjection
 from Algorithm.Reconstruction.SimpleRepeatedLogarithmicBackProjection import SimpleRepeatedLogarithmicBackProjection
 from LightSkin import LightSkin, ValueMap
-from GUI import LightSkinViz as Viz
+import GUI.Views as views
 
 from Algorithm.ForwardModels.SimpleProportionalForwardModel import SimpleProportionalForwardModel, \
     SimpleIdealProportionalCalibration
@@ -110,14 +110,14 @@ topViewsFrame.pack(side=tk.TOP)
 topViews2Frame = tk.Frame(window)
 topViews2Frame.pack(side=tk.TOP)
 
-topViewTransl = Viz.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
+topViewTransl = views.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
                                      width=300, height=300,
                                      measurable_grid=ls.translucencyMap,
                                      # display_function=lambda x: x
                                      )
 topViewTransl.pack(side=tk.LEFT)
 
-topView = Viz.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
+topView = views.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
                                width=300, height=300,
                                gridWidth=50, gridHeight=50,
                                # display_function=math.sqrt,
@@ -125,14 +125,14 @@ topView = Viz.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', hi
                                )
 topView.pack(side=tk.LEFT)
 
-topViewReconstructed = Viz.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
+topViewReconstructed = views.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
                                             width=300, height=300,
                                             measurable_grid=ls.backwardModel,
                                             display_function=lambda x: x ** 10,
                                             )
 topViewReconstructed.pack(side=tk.LEFT)
 
-topViewReconstructed2 = Viz.LightSkinTopView(topViews2Frame, ls, highlightbackground='#aaa', highlightthickness=1,
+topViewReconstructed2 = views.LightSkinTopView(topViews2Frame, ls, highlightbackground='#aaa', highlightthickness=1,
                                              width=300, height=300,
                                              measurable_grid=repeated,
                                              display_function=lambda x: x**2,
@@ -141,7 +141,7 @@ topViewReconstructed2.pack(side=tk.LEFT)
 
 
 
-topViewReconstructed3 = Viz.LightSkinTopView(topViews2Frame, ls, highlightbackground='#aaa', highlightthickness=1,
+topViewReconstructed3 = views.LightSkinTopView(topViews2Frame, ls, highlightbackground='#aaa', highlightthickness=1,
                                              width=300, height=300,
                                              measurable_grid=repeated2,
                                              display_function=lambda x: x**2,
@@ -149,14 +149,14 @@ topViewReconstructed3 = Viz.LightSkinTopView(topViews2Frame, ls, highlightbackgr
 topViewReconstructed3.pack(side=tk.LEFT)
 
 
-topViewReconstructed4 = Viz.LightSkinTopView(topViews2Frame, ls, highlightbackground='#aaa', highlightthickness=1,
+topViewReconstructed4 = views.LightSkinTopView(topViews2Frame, ls, highlightbackground='#aaa', highlightthickness=1,
                                              width=300, height=300,
                                              measurable_grid=linsys,
                                              display_function=lambda x: x**2,
                                              )
 topViewReconstructed4.pack(side=tk.LEFT)
 
-gridView = Viz.LightSkinGridView(window, ls, width=400, height=400, highlightbackground='#aaa', highlightthickness=1,
+gridView = views.LightSkinGridView(window, ls, width=400, height=400, highlightbackground='#aaa', highlightthickness=1,
                                  display_function=math.sqrt
                                  )
 gridView.pack(side=tk.BOTTOM)

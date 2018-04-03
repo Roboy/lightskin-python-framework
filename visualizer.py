@@ -10,7 +10,7 @@ from Algorithm.Reconstruction.LogarithmicLinSysOptimize2 import LogarithmicLinSy
 from Algorithm.Reconstruction.SimpleRepeatedBackProjection import SimpleRepeatedBackProjection
 from Algorithm.Reconstruction.SimpleRepeatedDistributeBackProjection import SimpleRepeatedDistributeBackProjection
 from LightSkin import LightSkin
-from GUI import LightSkinViz as Viz
+import GUI.Views as Views
 
 # from SimpleProportionalForwardModel import SimpleProportionalForwardModel
 from Algorithm.ForwardModels.ArduinoConnectorForwardModel import ArduinoConnectorForwardModel
@@ -64,16 +64,16 @@ window = tk.Tk()
 window.title('Light Skin Simulation')
 window.minsize(900, 300)
 
-gridView = Viz.LightSkinGridView(window, ls, width=400, height=400, highlightbackground='#aaa', highlightthickness=1,
-                                 display_function=lambda x: min(1.0, x * 2) ** 0.3
-                                 )
+gridView = Views.LightSkinGridView(window, ls, width=400, height=400, highlightbackground='#aaa', highlightthickness=1,
+                                   display_function=lambda x: min(1.0, x * 2) ** 0.3
+                                   )
 gridView.pack(side=tk.LEFT)
 
-topViewReconstructed = Viz.LightSkinTopView(window, ls, highlightbackground='#aaa', highlightthickness=1,
-                                            width=500, height=500,
-                                            measurable_grid=ls.backwardModel,
-                                            display_function=lambda x: x ** 4
-                                            )
+topViewReconstructed = Views.LightSkinTopView(window, ls, highlightbackground='#aaa', highlightthickness=1,
+                                              width=500, height=500,
+                                              measurable_grid=ls.backwardModel,
+                                              display_function=lambda x: x ** 4
+                                              )
 topViewReconstructed.pack(side=tk.RIGHT)
 
 
