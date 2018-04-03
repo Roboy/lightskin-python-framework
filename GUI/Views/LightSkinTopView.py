@@ -1,11 +1,15 @@
 import tkinter as tk
-from typing import List, Callable, Tuple
+from collections import namedtuple
+from typing import List, Callable, Tuple, TypeVar
 
 import math
 
+from GUI.Views.Color import Color
 from Helpers.Measurable import MeasurableGrid
 from LightSkin import LightSkin
 from GUI.TKinterToolTip import ToolTip
+
+M = TypeVar('M')
 
 
 class LightSkinTopView(tk.Canvas):
@@ -22,12 +26,11 @@ class LightSkinTopView(tk.Canvas):
                  gridWidth: int = None,
                  gridHeight: int = None,
                  measurable_grid: MeasurableGrid = None,
-                 measure_function: Callable[[float, float], float] = lambda x, y: 0,
-                 display_function: Callable[[float], float] = lambda x: x,
+                 measure_function: Callable[[float, float], M] = None,
+                 display_function: Callable[[M], Color] = lambda x: Color.fromFloats(x, x, x),
                  **kwargs):
         tk.Canvas.__init__(self, parent, **kwargs)
-        self.measureFunction = measure_function
-        self.displayFunction = display_function
+        self.displayFunction: Callable[[M], Color] = display_function
         self.skin = skin
 
         if measurable_grid is not None:
@@ -40,6 +43,8 @@ class LightSkinTopView(tk.Canvas):
             self.gridWidth = gridWidth
         if gridHeight is not None:
             self.gridHeight = gridHeight
+        if measure_function is not None:
+            self.measureFunction = measure_function
 
         self.bind("<Configure>", self.on_resize)
         self.height = self.winfo_reqheight()
@@ -90,13 +95,12 @@ class LightSkinTopView(tk.Canvas):
         rect_h = float(self._max_pos_y - self._min_pos_y) / self.gridHeight
         for i, c in enumerate(self._grid):
             for j, o in enumerate(c):
-                x = (self._min_pos_x + (float(i)+0.5)*rect_w) / self._elScale
-                y = (self._min_pos_y + (float(j)+0.5)*rect_h) / self._elScale
-                #print('Measuring at %f, %f' % (x, y))
+                x = (self._min_pos_x + (float(i) + 0.5) * rect_w) / self._elScale
+                y = (self._min_pos_y + (float(j) + 0.5) * rect_h) / self._elScale
+                # print('Measuring at %f, %f' % (x, y))
                 val = self.measureFunction(x, y)
-                v = int(self.displayFunction(val) * 255)
-                valcol = "#%02x%02x%02x" % (v, v, v)
-                self.itemconfigure(o, fill=valcol)
+                c = self.displayFunction(val)
+                self.itemconfigure(o, fill=c.toHex())
 
     def _draw(self):
         self.delete("all")
@@ -136,10 +140,9 @@ class LightSkinTopView(tk.Canvas):
             for j in range(self.gridHeight):
                 x = self._min_pos_x + rect_w * i
                 y = self._min_pos_y + rect_h * j
-                el = self.create_rectangle(x, y, x+rect_w, y+rect_h, tags=['grid'], width=0)
+                el = self.create_rectangle(x, y, x + rect_w, y + rect_h, tags=['grid'], width=0)
                 self._grid[i].append(el)
-        self.tag_lower(['grid']) # move all grid elements to back
-
+        self.tag_lower(['grid'])  # move all grid elements to back
 
         # calculate scaling necessary to apply
 
