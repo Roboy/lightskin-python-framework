@@ -22,3 +22,7 @@ This script tests different reconstruction algorithms on the current set of LEDs
 ### `visualizer.py`
 This script connects to an Arduino running the Arduino connector module and displays the collected and reconstructed data updating live.
 
+### `analyzer.py`
+This script displays various useful maps for the current sensor placements:
+ * A sensitivity map
+ * A locality resolution map
