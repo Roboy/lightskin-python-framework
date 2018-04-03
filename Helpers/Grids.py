@@ -1,5 +1,6 @@
+import math
 from abc import ABC
-from typing import Optional, Tuple, List
+from typing import Optional, Tuple, List, Union
 
 
 class ValueGridAreaDefinition(ABC):
@@ -43,6 +44,20 @@ class ValueGridDefinition(ValueGridAreaDefinition):
             return None
 
         return i, j
+
+    def getPointOfCell(self, i: int, j: int, center=True) -> Tuple[float, float]:
+        """ Returns the center or top-left point of the given cell """
+        x = self.startX + i * self.cellWidth
+        y = self.startY + j * self.cellHeight
+        if center:
+            x += self.cellWidth / 2
+            y += self.cellHeight / 2
+        return x, y
+
+    def distanceToCell(self, i: int, j: int, point_or_x: Union[Tuple[float, float], float], y: float=0.0, center=True) -> float:
+        p1 = point_or_x if type(point_or_x) is tuple else (point_or_x, y)
+        p2 = self.getPointOfCell(i, j, center)
+        return math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
 
     def makeFloatGridFilledWith(self, val: float) -> List[List[float]]:
         ret: List[List[float]] = []
