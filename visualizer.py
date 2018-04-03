@@ -72,7 +72,7 @@ gridView.pack(side=tk.LEFT)
 topViewReconstructed = Views.LightSkinTopView(window, ls, highlightbackground='#aaa', highlightthickness=1,
                                               width=500, height=500,
                                               measurable_grid=ls.backwardModel,
-                                              display_function=lambda x: x ** 4
+                                              display_function=Views.Coloscales.Grayscale(lambda x: x ** 4)
                                               )
 topViewReconstructed.pack(side=tk.RIGHT)
 

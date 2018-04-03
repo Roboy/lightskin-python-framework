@@ -4,6 +4,7 @@ from typing import List, Callable, Tuple, TypeVar
 
 import math
 
+from GUI.Views import Colorscales
 from GUI.Views.Color import Color
 from Helpers.Measurable import MeasurableGrid
 from LightSkin import LightSkin
@@ -27,7 +28,7 @@ class LightSkinTopView(tk.Canvas):
                  gridHeight: int = None,
                  measurable_grid: MeasurableGrid = None,
                  measure_function: Callable[[float, float], M] = None,
-                 display_function: Callable[[M], Color] = lambda x: Color.fromFloats(x, x, x),
+                 display_function: Callable[[M], Color] = Colorscales.Grayscale(lambda x: x),
                  **kwargs):
         tk.Canvas.__init__(self, parent, **kwargs)
         self.displayFunction: Callable[[M], Color] = display_function

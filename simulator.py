@@ -128,14 +128,14 @@ topView.pack(side=tk.LEFT)
 topViewReconstructed = views.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
                                             width=300, height=300,
                                             measurable_grid=ls.backwardModel,
-                                            display_function=lambda x: x ** 10,
+                                            display_function=views.Colorscales.Grayscale(lambda x: x ** 10),
                                             )
 topViewReconstructed.pack(side=tk.LEFT)
 
 topViewReconstructed2 = views.LightSkinTopView(topViews2Frame, ls, highlightbackground='#aaa', highlightthickness=1,
                                              width=300, height=300,
                                              measurable_grid=repeated,
-                                             display_function=lambda x: x**2,
+                                             display_function=views.Colorscales.Grayscale(lambda x: x**2),
                                              )
 topViewReconstructed2.pack(side=tk.LEFT)
 
@@ -144,7 +144,7 @@ topViewReconstructed2.pack(side=tk.LEFT)
 topViewReconstructed3 = views.LightSkinTopView(topViews2Frame, ls, highlightbackground='#aaa', highlightthickness=1,
                                              width=300, height=300,
                                              measurable_grid=repeated2,
-                                             display_function=lambda x: x**2,
+                                             display_function=views.Colorscales.Grayscale(lambda x: x**2),
                                              )
 topViewReconstructed3.pack(side=tk.LEFT)
 
@@ -152,7 +152,7 @@ topViewReconstructed3.pack(side=tk.LEFT)
 topViewReconstructed4 = views.LightSkinTopView(topViews2Frame, ls, highlightbackground='#aaa', highlightthickness=1,
                                              width=300, height=300,
                                              measurable_grid=linsys,
-                                             display_function=lambda x: x**2,
+                                             display_function=views.Colorscales.Grayscale(lambda x: x**2),
                                              )
 topViewReconstructed4.pack(side=tk.LEFT)
 
