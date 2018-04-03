@@ -102,8 +102,8 @@ class Calibration(ABC):
     def __init__(self, ls: LightSkin):
         self.ls: LightSkin = ls
 
-    def __hash__(self):
-        return hash((self.__class__.__name__,))
+    def current_hash(self):
+        return self.__hash__()
 
     def calibrate(self):
         pass

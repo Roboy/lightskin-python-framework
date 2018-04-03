@@ -59,20 +59,22 @@ ls.backwardModel = backwardModel
 # print(ls.LEDs)
 # print(flush=True)
 
+pressure_colormap = 'nipy_spectral'
+
 # Build Window with widgets etc...
 window = tk.Tk()
 window.title('Light Skin Simulation')
 window.minsize(900, 300)
 
 gridView = Views.LightSkinGridView(window, ls, width=400, height=400, highlightbackground='#aaa', highlightthickness=1,
-                                   display_function=lambda x: min(1.0, x * 2) ** 0.3
+                                   display_function=Views.Colorscales.MPColorMap('plasma')
                                    )
 gridView.pack(side=tk.LEFT)
 
 topViewReconstructed = Views.LightSkinTopView(window, ls, highlightbackground='#aaa', highlightthickness=1,
                                               width=500, height=500,
                                               measurable_grid=ls.backwardModel,
-                                              display_function=Views.Coloscales.Grayscale(lambda x: x ** 4)
+                                              display_function=Views.Colorscales.MPColorMap(pressure_colormap)
                                               )
 topViewReconstructed.pack(side=tk.RIGHT)
 

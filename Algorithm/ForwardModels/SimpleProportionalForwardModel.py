@@ -35,6 +35,9 @@ class SimpleProportionalForwardModel(ForwardModel):
 
 class SimpleIdealProportionalCalibration(Calibration):
 
+    def __hash__(self):
+        return hash(self.__class__.__name__)  # all instances of this class are equivalent
+
     def expectedSensorValue(self, sensor: int, led: int) -> float:
         ray = self.ls.getRayFromLEDToSensor(sensor, led)
 

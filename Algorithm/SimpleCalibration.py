@@ -1,3 +1,4 @@
+from functools import reduce
 from typing import List
 
 from LightSkin import LightSkin, Calibration
@@ -10,8 +11,15 @@ class SimpleCalibration(Calibration):
         self.isCalibrated = False
         self._calibration: List[List[float]] = []
 
-    def __hash__(self):
-        return hash((super().__hash__(), self._calibration))
+    def __current_hash__(self):
+        """ Returns a hash of the current calibration status """
+        calib_hash = reduce(
+            lambda h, l: hash((h,
+                               reduce(
+                                   lambda h2, el: hash((h2, el)),
+                                   l, 0))),
+            self._calibration, 0)
+        return hash((super().current_hash(), calib_hash))
 
     def calibrate(self):
         self._calibration: List[List[float]] = []

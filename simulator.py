@@ -13,7 +13,7 @@ from Algorithm.Reconstruction.LogarithmicLinSysOptimize2 import LogarithmicLinSy
 from Algorithm.Reconstruction.SimpleRepeatedDistributeBackProjection import SimpleRepeatedDistributeBackProjection
 from Algorithm.Reconstruction.SimpleRepeatedLogarithmicBackProjection import SimpleRepeatedLogarithmicBackProjection
 from LightSkin import LightSkin, ValueMap
-import GUI.Views as views
+import GUI.Views as Views
 
 from Algorithm.ForwardModels.SimpleProportionalForwardModel import SimpleProportionalForwardModel, \
     SimpleIdealProportionalCalibration
@@ -114,55 +114,55 @@ topViewsFrame.pack(side=tk.TOP)
 topViews2Frame = tk.Frame(window)
 topViews2Frame.pack(side=tk.TOP)
 
-topViewTransl = views.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
-                                     width=300, height=300,
-                                     measurable_grid=ls.translucencyMap,
-                                     display_function=views.Colorscales.MPColorMap(pressure_colormap)
-                                     )
+topViewTransl = Views.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
+                                       width=300, height=300,
+                                       measurable_grid=ls.translucencyMap,
+                                       display_function=Views.Colorscales.MPColorMap(pressure_colormap)
+                                       )
 topViewTransl.pack(side=tk.LEFT)
 
-topView = views.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
-                               width=300, height=300,
-                               gridWidth=50, gridHeight=50,
-                               display_function=views.Colorscales.MPColorMap('plasma'),
-                               measure_function=ls.forwardModel.measureAtPoint
-                               )
+topView = Views.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
+                                 width=300, height=300,
+                                 gridWidth=50, gridHeight=50,
+                                 display_function=Views.Colorscales.MPColorMap('plasma'),
+                                 measure_function=ls.forwardModel.measureAtPoint
+                                 )
 topView.pack(side=tk.LEFT)
 
-topViewReconstructed = views.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
-                                            width=300, height=300,
-                                            measurable_grid=ls.backwardModel,
-                                            display_function=views.Colorscales.MPColorMap(pressure_colormap),
-                                            )
+topViewReconstructed = Views.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
+                                              width=300, height=300,
+                                              measurable_grid=ls.backwardModel,
+                                              display_function=Views.Colorscales.MPColorMap(pressure_colormap),
+                                              )
 topViewReconstructed.pack(side=tk.LEFT)
 
-topViewReconstructed2 = views.LightSkinTopView(topViews2Frame, ls, highlightbackground='#aaa', highlightthickness=1,
-                                             width=300, height=300,
-                                             measurable_grid=repeated,
-                                             display_function=views.Colorscales.MPColorMap(pressure_colormap),
-                                             )
+topViewReconstructed2 = Views.LightSkinTopView(topViews2Frame, ls, highlightbackground='#aaa', highlightthickness=1,
+                                               width=300, height=300,
+                                               measurable_grid=repeated,
+                                               display_function=Views.Colorscales.MPColorMap(pressure_colormap),
+                                               )
 topViewReconstructed2.pack(side=tk.LEFT)
 
 
 
-topViewReconstructed3 = views.LightSkinTopView(topViews2Frame, ls, highlightbackground='#aaa', highlightthickness=1,
-                                             width=300, height=300,
-                                             measurable_grid=repeated2,
-                                             display_function=views.Colorscales.MPColorMap(pressure_colormap),
-                                             )
+topViewReconstructed3 = Views.LightSkinTopView(topViews2Frame, ls, highlightbackground='#aaa', highlightthickness=1,
+                                               width=300, height=300,
+                                               measurable_grid=repeated2,
+                                               display_function=Views.Colorscales.MPColorMap(pressure_colormap),
+                                               )
 topViewReconstructed3.pack(side=tk.LEFT)
 
 
-topViewReconstructed4 = views.LightSkinTopView(topViews2Frame, ls, highlightbackground='#aaa', highlightthickness=1,
-                                             width=300, height=300,
-                                             measurable_grid=linsys,
-                                             display_function=views.Colorscales.MPColorMap(pressure_colormap),
-                                             )
+topViewReconstructed4 = Views.LightSkinTopView(topViews2Frame, ls, highlightbackground='#aaa', highlightthickness=1,
+                                               width=300, height=300,
+                                               measurable_grid=linsys,
+                                               display_function=Views.Colorscales.MPColorMap(pressure_colormap),
+                                               )
 topViewReconstructed4.pack(side=tk.LEFT)
 
-gridView = views.LightSkinGridView(window, ls, width=400, height=400, highlightbackground='#aaa', highlightthickness=1,
-                                 display_function=views.Colorscales.MPColorMap('plasma')
-                                 )
+gridView = Views.LightSkinGridView(window, ls, width=400, height=400, highlightbackground='#aaa', highlightthickness=1,
+                                   display_function=Views.Colorscales.MPColorMap('plasma')
+                                   )
 gridView.pack(side=tk.BOTTOM)
 
 # topViewReconstructed.postscript(file='Testfile.ps')
