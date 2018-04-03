@@ -34,6 +34,9 @@ class RayGridInfluenceModel(ABC):
     def __init__(self, grid_definition: ValueGridDefinition = None):
         self.gridDefinition: ValueGridDefinition = grid_definition
 
+    def __hash__(self):
+        return hash((self.__class__, self.gridDefinition))
+
     @abstractmethod
     def getInfluencesForRay(self, ray: Ray) -> List[Tuple[Tuple[int, int], float]]:
         """

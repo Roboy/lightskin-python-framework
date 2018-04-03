@@ -1,4 +1,5 @@
 import math
+import time
 from typing import List, Tuple
 import scipy.sparse as sparse
 import scipy.optimize as optimize
@@ -25,22 +26,36 @@ class LogarithmicLinSysOptimize(BackwardModel):
         self.rayModel.gridDefinition = self.gridDefinition
         """ Contains the weights while they are being built in log space """
 
+        self._construct_hash = None
         self._lgs_A: sparse.csr_matrix = None
         self._lgs_b: List[float] = []
         self._lgs_sol: List[float] = []
 
     def calculate(self):
-        self._build_system()
-        self._solve_system()
-        self._apply_solution()
+        try:
+            t1 = time.time()
+            self._build_system()
+            t2 = time.time()
+            self._solve_system()
+            t3 = time.time()
+            self._apply_solution()
+            t4 = time.time()
+            print("Times needed for reconstruction: %f %f %f" % (t2 - t1, t3 - t2, t4 - t3))
+        except Exception as e:
+            print("Exception when trying to reconstruct data")
+            print(e)
 
-
-    def _build_system(self, positive=False):
+    def _build_system(self, positive=False, force_full_build=False):
         """ Builds the system of linear equations from rays and sensor data """
         # Number of rows in the matrix; every ray (LEDs x Sensors) is one equation
         m = len(self.ls.LEDs) * len(self.ls.sensors)
         # Number of columns: the variables we are searching
         n = self.gridDefinition.cellsX * self.gridDefinition.cellsY
+
+        c_hash = hash((m, n, self.calibration, self.rayModel))
+        if self._construct_hash != c_hash:
+            force_full_build = True
+        self._construct_hash = c_hash
 
         self._lgs_b = []
         rows: List[sparse.csr_matrix] = []
@@ -59,22 +74,24 @@ class LogarithmicLinSysOptimize(BackwardModel):
                     # Expected result into b-vector
                     self._lgs_b.append(translucency)
 
-                    # build sparse row
-                    ray = self.ls.getRayFromLEDToSensor(i_s, i_l)
-                    cells = self.rayModel.getInfluencesForRay(ray)
+                    if force_full_build:
+                        # build sparse row
+                        ray = self.ls.getRayFromLEDToSensor(i_s, i_l)
+                        cells = self.rayModel.getInfluencesForRay(ray)
 
-                    data: List[float] = [0.0] * len(cells)
-                    col_ind: List[int] = [0] * len(cells)
-                    for i, ((x, y), w) in enumerate(cells):
-                        data[i] = w
-                        col_ind[i] = y * self.gridDefinition.cellsX + x
-                        # if x == 0 and y == 0:
-                        #     print("in matr w %i weight for %i (%i %i) %f" % (n, col_ind[i], x, y, w))
+                        data: List[float] = [0.0] * len(cells)
+                        col_ind: List[int] = [0] * len(cells)
+                        for i, ((x, y), w) in enumerate(cells):
+                            data[i] = w
+                            col_ind[i] = y * self.gridDefinition.cellsX + x
+                            # if x == 0 and y == 0:
+                            #     print("in matr w %i weight for %i (%i %i) %f" % (n, col_ind[i], x, y, w))
 
-                    row = sparse.csr_matrix((data, ([0] * len(cells), col_ind)), shape=(1, n))
-                    rows.append(row)
+                        row = sparse.csr_matrix((data, ([0] * len(cells), col_ind)), shape=(1, n))
+                        rows.append(row)
 
-        self._lgs_A = sparse.vstack(rows)
+        if force_full_build:
+            self._lgs_A = sparse.vstack(rows)
 
     def _solve_system(self):
         """ solves the system of linear equations """

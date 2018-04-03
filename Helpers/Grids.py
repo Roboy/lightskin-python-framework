@@ -11,6 +11,9 @@ class ValueGridAreaDefinition(ABC):
         self.width: float = self.endX - self.startX
         self.height: float = self.endY - self.startY
 
+    def __hash__(self):
+        return hash((self.startX, self.startY, self.endX, self.endY))
+
 
 class ValueGridDefinition(ValueGridAreaDefinition):
     def __init__(self, start_x: float = 0, start_y: float = 0, width: float = 0, height: float = 0,
@@ -20,6 +23,9 @@ class ValueGridDefinition(ValueGridAreaDefinition):
         self.cellsY: int = cells_y
         self.cellWidth: float = self.width / self.cellsX
         self.cellHeight: float = self.height / self.cellsY
+
+    def __hash__(self):
+        return hash((super().__hash__(), self.cellsX, self.cellsY))
 
     @classmethod
     def fromGridDefinition(cls, grid: ValueGridAreaDefinition, cells_x: int,
