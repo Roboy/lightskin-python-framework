@@ -161,7 +161,7 @@ topViewReconstructed4 = views.LightSkinTopView(topViews2Frame, ls, highlightback
 topViewReconstructed4.pack(side=tk.LEFT)
 
 gridView = views.LightSkinGridView(window, ls, width=400, height=400, highlightbackground='#aaa', highlightthickness=1,
-                                 display_function=math.sqrt
+                                 display_function=views.Colorscales.MPColorMap('plasma')
                                  )
 gridView.pack(side=tk.BOTTOM)
 

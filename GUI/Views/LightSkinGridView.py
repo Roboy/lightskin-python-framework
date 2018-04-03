@@ -1,7 +1,8 @@
 import tkinter as tk
 from typing import List, Callable, Tuple
 
-
+from GUI.Views import Colorscales
+from GUI.Views.Color import Color
 from LightSkin import LightSkin
 from GUI.TKinterToolTip import ToolTip
 
@@ -14,10 +15,12 @@ class LightSkinGridView(tk.Frame):
     _elScale = 100
     _border = 100
 
-    def __init__(self, parent, skin: LightSkin, display_function: Callable[[float], float] = lambda x: x, **kwargs):
+    def __init__(self, parent, skin: LightSkin,
+                 display_function: Callable[[float], Color] = Colorscales.Grayscale(lambda x: x),
+                 **kwargs):
         tk.Frame.__init__(self, parent, **kwargs)
         self.skin = skin
-        self.displayFunction = display_function
+        self.displayFunction: Callable[[float], Color] = display_function
 
         self._build()
         skin.onChange += lambda *a, **kwa: self.after_idle(self.updateVisuals)  # send to main thread
@@ -45,9 +48,8 @@ class LightSkinGridView(tk.Frame):
                 if j == self.skin.selectedSensor:
                     c = self._SensorColorS
                 val = self.skin.forwardModel.getSensorValue(j, i)
-                v = int(self.displayFunction(val) * 255)
-                valcol = "#%02x%02x%02x" % (v, v, v)
-                f.configure(highlightbackground=c, bg=valcol)
+                col = self.displayFunction(val)
+                f.configure(highlightbackground=c, bg=col.toHex())
                 tt.text = "%.2f%%" % (val*100)
 
     def _build(self):
