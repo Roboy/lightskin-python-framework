@@ -12,9 +12,13 @@ from LightSkin import LightSkin, Calibration, BackwardModel
 class LogarithmicLinSysOptimize2(LogarithmicLinSysOptimize):
     """ Converts the problem into a set of linear equations and solves them using standard scipy.nnls """
     def calculate(self):
-        self._build_system(True)
-        self._solve_system()
-        self._apply_solution(True)
+        try:
+            self._build_system(True)
+            self._solve_system()
+            self._apply_solution(True)
+        except Exception as e:
+            print("Exception when trying to reconstruct data")
+            print(e)
 
     def _solve_system(self):
         """ solves the system of linear equations """

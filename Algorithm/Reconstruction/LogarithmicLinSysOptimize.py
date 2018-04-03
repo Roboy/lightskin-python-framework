@@ -52,6 +52,9 @@ class LogarithmicLinSysOptimize(BackwardModel):
                 if expected_val > self.MIN_SENSITIVITY:
                     val = self.ls.forwardModel.getSensorValue(i_s, i_l)
                     translucency = math.log(val / expected_val) if expected_val > self.MIN_SENSITIVITY else 0.0
+                    translucency = min(translucency, -0.0)  # make sure we are in a valid area
+                    if positive:
+                        translucency = -translucency
 
                     # Expected result into b-vector
                     self._lgs_b.append(translucency)
@@ -63,7 +66,7 @@ class LogarithmicLinSysOptimize(BackwardModel):
                     data: List[float] = [0.0] * len(cells)
                     col_ind: List[int] = [0] * len(cells)
                     for i, ((x, y), w) in enumerate(cells):
-                        data[i] = -w if positive else w
+                        data[i] = w
                         col_ind[i] = y * self.gridDefinition.cellsX + x
                         # if x == 0 and y == 0:
                         #     print("in matr w %i weight for %i (%i %i) %f" % (n, col_ind[i], x, y, w))
