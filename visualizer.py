@@ -63,7 +63,7 @@ pressure_colormap = 'nipy_spectral'
 
 # Build Window with widgets etc...
 window = tk.Tk()
-window.title('Light Skin Simulation')
+window.title('Light Skin Visualization')
 window.minsize(900, 300)
 
 gridView = Views.LightSkinGridView(window, ls, width=400, height=400, highlightbackground='#aaa', highlightthickness=1,

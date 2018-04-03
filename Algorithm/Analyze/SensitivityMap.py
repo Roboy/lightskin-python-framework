@@ -13,7 +13,6 @@ class SensitivityMap(ValueMap):
         self.rayModel: RayGridInfluenceModel = ray_model
         self.rayModel.gridDefinition = self.gridDefinition
 
-    @abstractmethod
     def calculate(self) -> bool:
         """Calculate the sensitivity values for the grid elements using the model info """
         self.grid = self.gridDefinition.makeFloatGridFilledWith(0.0)
