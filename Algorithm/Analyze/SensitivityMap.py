@@ -18,7 +18,7 @@ class SensitivityMap(ValueMap):
 
     def calculate(self) -> bool:
         """Calculate the sensitivity values for the grid elements using the model info """
-        self.grid = self.gridDefinition.makeFloatGridFilledWith(0.0)
+        self.grid = self.gridDefinition.makeGridFilledWith(0.0)
 
         m = 0.0
         """ Maximum value """

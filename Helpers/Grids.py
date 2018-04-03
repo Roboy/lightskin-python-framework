@@ -59,8 +59,8 @@ class ValueGridDefinition(ValueGridAreaDefinition):
         p2 = self.getPointOfCell(i, j, center)
         return math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
 
-    def makeFloatGridFilledWith(self, val: float) -> List[List[float]]:
-        ret: List[List[float]] = []
+    def makeGridFilledWith(self, val: any) -> List[List[any]]:
+        ret: List[List[any]] = []
         for i in range(self.cellsX):
             ret.append([val] * self.cellsY)
         return ret

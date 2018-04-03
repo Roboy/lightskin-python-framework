@@ -15,12 +15,13 @@ class ValueMap(MeasurableGrid):
             gridHeight = len(grid[0])
         else:
             # init grid
-            self.grid: List[List[float]] = []
-            for i in range(gridWidth):
-                self.grid.append([0.0] * gridHeight)
+            self.grid: List[List[float]] = None
 
         self.gridDefinition: ValueGridDefinition = ValueGridDefinition.fromGridDefinition(
             gridDefinition, gridWidth, gridHeight)
+
+        if self.grid is None:
+            self.grid: List[List[float]] = self.gridDefinition.makeGridFilledWith(0.0)
 
     def measureAtPoint(self, x: float, y: float) -> float:
         i, j = self.gridDefinition.getCellAtPoint(x, y)

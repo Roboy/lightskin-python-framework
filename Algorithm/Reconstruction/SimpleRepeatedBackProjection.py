@@ -20,7 +20,7 @@ class SimpleRepeatedBackProjection(SimpleBackProjection):
     def calculate(self):
 
         # reset internal buffer
-        self._bufGrid = self.gridDefinition.makeFloatGridFilledWith(1.0)
+        self._bufGrid = self.gridDefinition.makeGridFilledWith(1.0)
 
         for i in range(self.repetitions):
             self._calculate_iteration()
@@ -33,8 +33,8 @@ class SimpleRepeatedBackProjection(SimpleBackProjection):
 
     def _calculate_iteration(self):
 
-        self._tmpGrid = self.gridDefinition.makeFloatGridFilledWith(0.0)
-        self._tmpGridWeights = self.gridDefinition.makeFloatGridFilledWith(0.0)
+        self._tmpGrid = self.gridDefinition.makeGridFilledWith(0.0)
+        self._tmpGridWeights = self.gridDefinition.makeGridFilledWith(0.0)
 
         for i_l, l in enumerate(self.ls.LEDs):
             for i_s, s in enumerate(self.ls.sensors):

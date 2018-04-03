@@ -22,8 +22,8 @@ class SimpleBackProjection(BackwardModel):
 
     def calculate(self) -> bool:
 
-        self._tmpGrid = self.gridDefinition.makeFloatGridFilledWith(0.0)
-        self._tmpGridWeights = self.gridDefinition.makeFloatGridFilledWith(0.0)
+        self._tmpGrid = self.gridDefinition.makeGridFilledWith(0.0)
+        self._tmpGridWeights = self.gridDefinition.makeGridFilledWith(0.0)
 
         for i_l, l in enumerate(self.ls.LEDs):
             for i_s, s in enumerate(self.ls.sensors):
