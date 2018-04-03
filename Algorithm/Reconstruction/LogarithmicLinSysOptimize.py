@@ -12,6 +12,8 @@ from LightSkin import LightSkin, Calibration, BackwardModel
 class LogarithmicLinSysOptimize(BackwardModel):
     """ Converts the problem into a set of linear equations and solves them using standard libraries """
     MIN_SENSITIVITY = 0.02
+    _MIN_TRANSLUCENCY = 0.000001
+    """ Minimal translucency is relevant in log space so we don't get -inf as values """
 
     def __init__(self, ls: LightSkin,
                  gridWidth: int,
@@ -65,7 +67,7 @@ class LogarithmicLinSysOptimize(BackwardModel):
             for i_s, s in enumerate(self.ls.sensors):
                 expected_val = self.calibration.expectedSensorValue(i_s, i_l)
                 if expected_val > self.MIN_SENSITIVITY:
-                    val = self.ls.forwardModel.getSensorValue(i_s, i_l)
+                    val = max(self._MIN_TRANSLUCENCY, self.ls.forwardModel.getSensorValue(i_s, i_l))
                     translucency = math.log(val / expected_val)\
                         if expected_val > self.MIN_SENSITIVITY else 0.0
                     translucency = min(translucency, -0.0)  # make sure we are in a valid area
