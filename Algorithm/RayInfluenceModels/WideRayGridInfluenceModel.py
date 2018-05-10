@@ -57,12 +57,12 @@ class WideRayGridInfluenceModel(RayGridInfluenceModel):
                 # limit ray to from LED to sensor
                 if not 0 < dl < 1:
                     continue
-                influence = self.getInfluenceFromDistance(dx, dy, dl)
+                influence = self.getInfluenceFromDistance(dx, dy, dl, ray)
                 values.append(((i, j), influence))
 
         return values
 
-    def getInfluenceFromDistance(self, dx: float, dy: float, dl: float) -> float:
+    def getInfluenceFromDistance(self, dx: float, dy: float, dl: float, ray: Ray) -> float:
         """
             Returns the influence of a cell given the minimal distance to the direct ray
             dx and dy as separate parameters so possible non-square grids can be handled
@@ -70,6 +70,7 @@ class WideRayGridInfluenceModel(RayGridInfluenceModel):
             :param dx: x distance to ray
             :param dy: y distance to ray
             :param dl: position along the ray; 0.0 = led; 1.0 = sensor
+            :param ray: the ray currently in question
             :return: intensity
         """
-        return 1/(1 + 0.1 * ((dx**2 + dy**2)*100)**1.5)
+        return 1/(1 + 0.1 * ((dx**2 + dy**2)*100)**1.5) / ray.length
