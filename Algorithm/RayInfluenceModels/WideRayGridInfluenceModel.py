@@ -32,12 +32,9 @@ class WideRayGridInfluenceModel(RayGridInfluenceModel):
 
         c = ray.eq_c
 
-        print('RayX: %f - %f' % (ray.start_x, ray.end_x))
-        print('X: %f - %f' % (start_x, end_x))
-        print('I: %i - %i' % (start_i, end_i))
+        idir = int(math.copysign(1, end_i-start_i))
 
-        for i in range(start_i, end_i, int(math.copysign(1, end_i-start_i))):
-            print('I: %i' % i)
+        for i in range(start_i, end_i+idir, idir):
 
             x = self.gridDefinition.getXatI(i)
 
@@ -47,17 +44,13 @@ class WideRayGridInfluenceModel(RayGridInfluenceModel):
             start_j = self.gridDefinition.getJatY(start_y)
             end_j = self.gridDefinition.getJatY(end_y)
 
-            print('X Y: %f, %f - %f' % (x, start_y, end_y))
-            print('J: %i - %i' % (start_j, end_j))
-
-            for j in range(start_j, end_j, int(math.copysign(1, end_j-start_j))):
+            jdir = int(math.copysign(1, end_j-start_j))
+            for j in range(start_j, end_j+jdir, jdir):
                 p = self.gridDefinition.getPointOfCell(i, j)
                 p2 = ray.closest_point_on_line(p)
                 dx = abs(p2[0]-p[0])
                 dy = abs(p2[1]-p[1])
                 influence = self.getInfluenceFromDistance(dx, dy)
-
-                print('Cell has Influence: %i %i : %f %f : %f' % (i, j, p2[0], p2[1], influence))
                 values.append(((i, j), influence))
 
         return values
