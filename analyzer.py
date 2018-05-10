@@ -55,7 +55,7 @@ with open('translucency.csv', 'r') as csvfile:
 translucency = ValueMap(ls.getGridArea(), grid=transposed(gridVals))
 ls.translucencyMap = translucency
 
-resolution = 100
+resolution = 80
 
 ls.forwardModel = SimpleProportionalForwardModel(ls, DirectSampledRayGridInfluenceModel())
 

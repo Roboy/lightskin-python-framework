@@ -72,4 +72,4 @@ class WideRayGridInfluenceModel(RayGridInfluenceModel):
             :param dl: position along the ray; 0.0 = led; 1.0 = sensor
             :return: intensity
         """
-        return 1/(0.01 + 0.1*math.sqrt(dx**2 + dy**2))
+        return 1/(1 + 0.1 * ((dx**2 + dy**2)*100)**1.5)
