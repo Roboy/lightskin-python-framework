@@ -9,6 +9,7 @@ import math
 
 from Algorithm.Analyze.SensitivityMap import SensitivityMap
 from Algorithm.RayInfluenceModels.DirectSampledRayGridInfluenceModel import DirectSampledRayGridInfluenceModel
+from Algorithm.RayInfluenceModels.WideRayGridInfluenceModel import WideRayGridInfluenceModel
 from LightSkin import LightSkin, ValueMap
 import GUI.Views as Views
 
@@ -60,29 +61,46 @@ ls.forwardModel = SimpleProportionalForwardModel(ls, DirectSampledRayGridInfluen
 
 sensitivity = SensitivityMap(ls, resolution,
                              resolution,
-                             DirectSampledRayGridInfluenceModel())
-
+                             WideRayGridInfluenceModel())
 
 start_time = time.time()
 sensitivity.calculate()
 t = time.time() - start_time
 print("Total time needed for calculation: %f " % t)
 
-
-
-
 # Build Window with widgets etc...
 window = tk.Tk()
 window.title('Light Skin Analysis')
 window.minsize(300, 300)
 
-
+ls.onChange += lambda *a, **kwa: sensitivity.calculate()
 sensitivity_view = Views.LightSkinTopView(window, ls, highlightbackground='#aaa', highlightthickness=1,
-                                       width=500, height=500,
-                                       measurable_grid=sensitivity,
-                                       display_function=Views.Colorscales.MPColorMap('gnuplot')
-                                       )
-sensitivity_view.pack(side=tk.LEFT)
+                                          width=500, height=500,
+                                          measurable_grid=sensitivity,
+                                          display_function=Views.Colorscales.MPColorMap('gnuplot')
+                                          )
+sensitivity_view.pack(side=tk.TOP)
+
+buttonsFrame = tk.Frame(window)
+buttonsFrame.pack(side=tk.TOP)
+
+
+def deselLED():
+    ls.selectedLED = -1
+
+
+def deselSensor():
+    ls.selectedSensor = -1
+
+
+deselLEDButton = tk.Button(buttonsFrame,
+                           text="No LED",
+                           command=deselLED)
+deselLEDButton.pack(side=tk.LEFT)
+deselSensorButton = tk.Button(buttonsFrame,
+                              text="No Sensor",
+                              command=deselSensor)
+deselSensorButton.pack(side=tk.LEFT)
 
 # topViewReconstructed.postscript(file='Testfile.ps')
 

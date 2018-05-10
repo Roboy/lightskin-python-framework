@@ -16,7 +16,7 @@ class SensitivityMap(ValueMap):
         self.rayModel: RayGridInfluenceModel = ray_model
         self.rayModel.gridDefinition = self.gridDefinition
 
-    def calculate(self) -> bool:
+    def calculate(self, onlySelected=True) -> bool:
         """Calculate the sensitivity values for the grid elements using the model info """
         self.grid = self.gridDefinition.makeGridFilledWith(0.0)
 
@@ -24,7 +24,11 @@ class SensitivityMap(ValueMap):
         """ Maximum value """
 
         for i_l, l in enumerate(self.ls.LEDs):
+            if self.ls.selectedLED >= 0 and self.ls.selectedLED != i_l:
+                continue
             for i_s, s in enumerate(self.ls.sensors):
+                if self.ls.selectedSensor >= 0 and self.ls.selectedSensor != i_s:
+                    continue
                 ray = self.ls.getRayFromLEDToSensor(i_s, i_l)
                 cells = self.rayModel.getInfluencesForRay(ray)
 
