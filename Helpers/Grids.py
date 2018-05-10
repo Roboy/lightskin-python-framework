@@ -34,25 +34,43 @@ class ValueGridDefinition(ValueGridAreaDefinition):
         return cls(grid.startX, grid.startY, grid.endX, grid.endY, cells_x, cells_y)
 
     def getCellAtPoint(self, x: float, y: float, borders=True) -> Optional[Tuple[int, int]]:
-        i_t = int((x - self.startX) / self.cellWidth)
-        j_t = int((y - self.startY) / self.cellHeight)
-
-        i = max(0, min(self.cellsX - 1, i_t))
-        j = max(0, min(self.cellsY - 1, j_t))
-
-        if borders is False and (i != i_t or j != j_t):
+        i = self.getIatX(x, borders)
+        j = self.getJatY(y, borders)
+        if i is None:
             return None
-
         return i, j
+
+    def getIatX(self, x: float, borders=True) -> Optional[int]:
+        i_t = int((x - self.startX) / self.cellWidth)
+        i = max(0, min(self.cellsX - 1, i_t))
+        if borders is False and (i != i_t):
+            return None
+        return i
+
+    def getJatY(self, y: float, borders=True) -> Optional[int]:
+        j_t = int((y - self.startY) / self.cellHeight)
+        j = max(0, min(self.cellsY - 1, j_t))
+        if borders is False and (j != j_t):
+            return None
+        return j
 
     def getPointOfCell(self, i: int, j: int, center=True) -> Tuple[float, float]:
         """ Returns the center or top-left point of the given cell """
+        x = self.getXatI(i, center)
+        y = self.getYatJ(j, center)
+        return x, y
+
+    def getXatI(self, i: int, center=True) -> float:
         x = self.startX + i * self.cellWidth
-        y = self.startY + j * self.cellHeight
         if center:
             x += self.cellWidth / 2
+        return x
+
+    def getYatJ(self, j: int, center=True) -> float:
+        y = self.startY + j * self.cellHeight
+        if center:
             y += self.cellHeight / 2
-        return x, y
+        return y
 
     def distanceToCell(self, i: int, j: int, point_or_x: Union[Tuple[float, float], float], y: float=0.0, center=True) -> float:
         p1 = point_or_x if type(point_or_x) is tuple else (point_or_x, y)

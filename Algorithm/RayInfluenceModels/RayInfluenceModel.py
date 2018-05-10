@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
 import math
 
@@ -27,6 +27,30 @@ class Ray:
     @property
     def dy(self):
         return self.end_y - self.start_y
+
+    def distance_to_point(self, x_p: Union[float, Tuple[float, float]], y: float = 0.0) -> float:
+        if isinstance(x_p, tuple):
+            x: float = x_p[0]
+            y: float = x_p[1]
+        else:
+            x: float = x_p
+        return abs(self.dy * x - self.dx * y + self.end_x * self.start_y - self.end_y * self.start_x) / self.length
+
+    def closest_point_on_line(self, x_p: Union[float, Tuple[float, float]], y: float = 0.0) -> Tuple[float, float]:
+        if isinstance(x_p, tuple):
+            x: float = x_p[0]
+            y: float = x_p[1]
+        else:
+            x: float = x_p
+
+        c = self.end_x * self.start_y - self.end_y * self.start_x
+        len2 = (self.dx ** 2 + self.dy ** 2)
+        bxay = (self.dy*x + self.dx*y)
+
+        px = (self.dy * bxay - self.dx*c) / len2
+        py = (self.dx * bxay + self.dy*c) / len2
+
+        return px, py
 
 
 class RayGridInfluenceModel(ABC):
