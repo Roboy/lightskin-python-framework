@@ -16,6 +16,7 @@ class WideRayGridInfluenceModel(RayGridInfluenceModel):
     @lru_cache(maxsize=512)
     def getInfluencesForRay(self, ray: Ray) -> List[Tuple[Tuple[int, int], float]]:
 
+        # find relevant x coordinates
         start_x = ray.start_x
         end_x = ray.end_x
         if ray.dx < 0:
@@ -30,10 +31,12 @@ class WideRayGridInfluenceModel(RayGridInfluenceModel):
 
         values: List[Tuple[Tuple[int, int], float]] = []
 
-        c = ray.eq_c
+        c = ray.c
 
+        # direction in which to count
         idir = int(math.copysign(1, end_i-start_i))
 
+        # including end
         for i in range(start_i, end_i+idir, idir):
 
             x = self.gridDefinition.getXatI(i)
@@ -46,21 +49,27 @@ class WideRayGridInfluenceModel(RayGridInfluenceModel):
 
             jdir = int(math.copysign(1, end_j-start_j))
             for j in range(start_j, end_j+jdir, jdir):
-                p = self.gridDefinition.getPointOfCell(i, j)
-                p2 = ray.closest_point_on_line(p)
-                dx = abs(p2[0]-p[0])
-                dy = abs(p2[1]-p[1])
-                influence = self.getInfluenceFromDistance(dx, dy)
+                y = self.gridDefinition.getYatJ(j)
+                p = ray.closest_point_on_line(x, y)
+                dx = abs(p[0]-x)
+                dy = abs(p[1]-y)
+                dl = ray.distance_of_point_along_ray(p, relative=True)
+                # limit ray to from LED to sensor
+                if not 0 < dl < 1:
+                    continue
+                influence = self.getInfluenceFromDistance(dx, dy, dl)
                 values.append(((i, j), influence))
 
         return values
 
-    def getInfluenceFromDistance(self, dx: float, dy: float) -> float:
+    def getInfluenceFromDistance(self, dx: float, dy: float, dl: float) -> float:
         """
+            Returns the influence of a cell given the minimal distance to the direct ray
             dx and dy as separate parameters so possible non-square grids can be handled
             (if the grid-size is relevant to the influence function)
-            :param dx:
-            :param dy:
-            :return:
+            :param dx: x distance to ray
+            :param dy: y distance to ray
+            :param dl: position along the ray; 0.0 = led; 1.0 = sensor
+            :return: intensity
         """
-        return math.sqrt(dx**2 + dy**2)
+        return 1/(0.01 + 0.1*math.sqrt(dx**2 + dy**2))

@@ -29,25 +29,51 @@ class Ray:
         return self.end_y - self.start_y
 
     @property
-    def eq_c(self) -> float:
+    def c(self) -> float:
+        """ The c parameter where the linear equation `dy * x + dx * y + c = 0` describes this ray """
         return self.end_x * self.start_y - self.start_x * self.end_y
 
-    def distance_to_point(self, x_p: Union[float, Tuple[float, float]], y: float = 0.0) -> float:
+    def point_along_ray(self, d: float, relative=False) -> Tuple[float, float]:
+        """ Returns the point that is the given distance along the ray """
+        if not relative:
+            d /= self.length
+        x = self.start_x + d * self.dx
+        y = self.start_y + d * self.dy
+        return x, y
+
+    def distance_of_point_along_ray(self, x_p: Union[float, Tuple[float, float]], y: float = 0.0, relative=False) -> float:
+        """ Returns the distance that the given point lies on along the ray; perpendicular distance is ignored """
         if isinstance(x_p, tuple):
             x: float = x_p[0]
             y: float = x_p[1]
         else:
             x: float = x_p
-        return abs(self.dy * x - self.dx * y + self.eq_c) / self.length
+        x -= self.start_x
+        y -= self.start_y
+        if relative:
+            x /= self.length
+            y /= self.length
+        return (self.dx * x + self.dy * y) / self.length
+
+    def distance_to_point(self, x_p: Union[float, Tuple[float, float]], y: float = 0.0) -> float:
+        """ Returns the shortest distance from the given point to the infinite line defined by this ray """
+        if isinstance(x_p, tuple):
+            x: float = x_p[0]
+            y: float = x_p[1]
+        else:
+            x: float = x_p
+        return abs(self.dy * x - self.dx * y + self.c) / self.length
 
     def closest_point_on_line(self, x_p: Union[float, Tuple[float, float]], y: float = 0.0) -> Tuple[float, float]:
+        """ Returns the closest point to the given point that lies on the infinite line defined by this ray """
         if isinstance(x_p, tuple):
             x: float = x_p[0]
             y: float = x_p[1]
         else:
             x: float = x_p
 
-        c = self.eq_c
+        # cache re-used vars
+        c = self.c
         len2 = (self.dx ** 2 + self.dy ** 2)
         bxay = (self.dx*x + self.dy*y)
 
