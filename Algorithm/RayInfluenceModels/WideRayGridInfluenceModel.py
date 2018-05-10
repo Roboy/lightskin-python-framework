@@ -30,7 +30,7 @@ class WideRayGridInfluenceModel(RayGridInfluenceModel):
 
         values: List[Tuple[Tuple[int, int], float]] = []
 
-        c = ray.end_x * ray.start_y - ray.end_y * ray.start_x
+        c = ray.eq_c
 
         print('RayX: %f - %f' % (ray.start_x, ray.end_x))
         print('X: %f - %f' % (start_x, end_x))
@@ -41,8 +41,8 @@ class WideRayGridInfluenceModel(RayGridInfluenceModel):
 
             x = self.gridDefinition.getXatI(i)
 
-            start_y = self.max_distance * ray.length - c - ray.dy*x
-            end_y = self.max_distance * ray.length + c - ray.dy*x
+            start_y = (self.max_distance * ray.length - c - ray.dy*x) / -ray.dx
+            end_y = (- self.max_distance * ray.length - c - ray.dy*x) / -ray.dx
 
             start_j = self.gridDefinition.getJatY(start_y)
             end_j = self.gridDefinition.getJatY(end_y)
@@ -53,9 +53,11 @@ class WideRayGridInfluenceModel(RayGridInfluenceModel):
             for j in range(start_j, end_j, int(math.copysign(1, end_j-start_j))):
                 p = self.gridDefinition.getPointOfCell(i, j)
                 p2 = ray.closest_point_on_line(p)
-                influence = self.getInfluenceFromDistance(abs(p2[0]-p[0]), abs(p2[1]-p[1]))
+                dx = abs(p2[0]-p[0])
+                dy = abs(p2[1]-p[1])
+                influence = self.getInfluenceFromDistance(dx, dy)
 
-                print('Cell has Influence: %i %i : %f' % (i, j, influence))
+                print('Cell has Influence: %i %i : %f %f : %f' % (i, j, p2[0], p2[1], influence))
                 values.append(((i, j), influence))
 
         return values
