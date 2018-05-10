@@ -25,8 +25,12 @@ class Ray:
         return self.end_x - self.start_x
 
     @property
-    def dy(self):
+    def dy(self) -> float:
         return self.end_y - self.start_y
+
+    @property
+    def eq_c(self) -> float:
+        return self.end_x * self.start_y - self.start_x * self.end_y
 
     def distance_to_point(self, x_p: Union[float, Tuple[float, float]], y: float = 0.0) -> float:
         if isinstance(x_p, tuple):
@@ -34,7 +38,7 @@ class Ray:
             y: float = x_p[1]
         else:
             x: float = x_p
-        return abs(self.dy * x - self.dx * y + self.end_x * self.start_y - self.end_y * self.start_x) / self.length
+        return abs(self.dy * x - self.dx * y + self.eq_c) / self.length
 
     def closest_point_on_line(self, x_p: Union[float, Tuple[float, float]], y: float = 0.0) -> Tuple[float, float]:
         if isinstance(x_p, tuple):
@@ -43,12 +47,12 @@ class Ray:
         else:
             x: float = x_p
 
-        c = self.end_x * self.start_y - self.end_y * self.start_x
+        c = self.eq_c
         len2 = (self.dx ** 2 + self.dy ** 2)
-        bxay = (self.dy*x + self.dx*y)
+        bxay = (self.dx*x + self.dy*y)
 
-        px = (self.dy * bxay - self.dx*c) / len2
-        py = (self.dx * bxay + self.dy*c) / len2
+        px = (self.dx * bxay - self.dy*c) / len2
+        py = (self.dy * bxay + self.dx*c) / len2
 
         return px, py
 
