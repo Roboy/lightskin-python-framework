@@ -41,8 +41,17 @@ class WideRayGridInfluenceModel(RayGridInfluenceModel):
 
             x = self.gridDefinition.getXatI(i)
 
-            start_y = (self.max_distance * ray.length - c - ray.dy*x) / -ray.dx
-            end_y = (- self.max_distance * ray.length - c - ray.dy*x) / -ray.dx
+            start_y = self.gridDefinition.startY
+            end_y = self.gridDefinition.endY
+            if abs(ray.dx) > 0:
+                start_y = max(
+                    self.gridDefinition.startY, min(
+                        self.gridDefinition.endY,
+                        (self.max_distance * ray.length - c - ray.dy*x) / -ray.dx))
+                end_y = max(
+                    self.gridDefinition.startY, min(
+                        self.gridDefinition.endY,
+                        (- self.max_distance * ray.length - c - ray.dy*x) / -ray.dx))
 
             start_j = self.gridDefinition.getJatY(start_y)
             end_j = self.gridDefinition.getJatY(end_y)
