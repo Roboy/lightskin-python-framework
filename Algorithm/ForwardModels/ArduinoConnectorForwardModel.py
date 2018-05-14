@@ -62,7 +62,7 @@ class ArduinoConnectorForwardModel(ForwardModel):
                                 val = float(vals[s]) / self.MAX_VALUE if s < len(vals) else 0.0
                                 self._sensorValues[l][s] = min(1.0, max(0.0, val))
                         print("received data")
-                        self.onUpdate.fire()
+                        self.onUpdate()
                     except Exception as e:
                         print(e)
         print('Read Loop finished')

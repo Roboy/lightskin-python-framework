@@ -36,7 +36,7 @@ class LightSkin:
     def selectedSensor(self, i: int):
         old = self._selectedSensor
         self._selectedSensor = i
-        self.onChange.fire('sensor', old, i)
+        self.onChange('sensor', old, i)
 
     @property
     def selectedLED(self) -> int:
@@ -46,7 +46,7 @@ class LightSkin:
     def selectedLED(self, i: int):
         old = self._selectedLED
         self._selectedLED = i
-        self.onChange.fire('led', old, i)
+        self.onChange('led', old, i)
 
     def getGridArea(self) -> ValueGridAreaDefinition:
         min_x, min_y, max_x, max_y = self._findMinMaxPos()

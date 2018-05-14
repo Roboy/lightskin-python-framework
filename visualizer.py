@@ -83,7 +83,7 @@ def onUpdate():
     if not calibration.isCalibrated:
         calibration.calibrate()
     backwardModel.calculate()
-    ls.onChange.fire('values')
+    ls.onChange('values')
 
 
 arduinoConnector.onUpdate += onUpdate

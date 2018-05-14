@@ -1,24 +1,26 @@
 from typing import Callable, List
 
-# source https://stackoverflow.com/a/1094423
-class EventHook:
+
+# Modeled after Michael Foord's Event Pattern:
+# http://www.voidspace.org.uk/python/weblog/arch_d7_2007_02_03.shtml#e616
+class EventHook(object):
 
     def __init__(self):
-        self.__handlers: List[Callable] = []
+        self.__delegates: List[Callable] = []
 
-    def __iadd__(self, handler: Callable):
-        self.__handlers.append(handler)
+    def __iadd__(self, delegate: Callable):
+        self.__delegates.append(delegate)
         return self
 
-    def __isub__(self, handler: Callable):
-        self.__handlers.remove(handler)
+    def __isub__(self, delegate: Callable):
+        self.__delegates.remove(delegate)
         return self
 
-    def fire(self, *args, **keywargs):
-        for handler in self.__handlers:
-            handler(*args, **keywargs)
+    def __call__(self, *args, **kwargs):
+        ret = []
+        for delegate in self.__delegates:
+            ret.append(delegate(*args, **kwargs))
+        return ret
 
-    def clearObjectHandlers(self, inObject):
-        for theHandler in self.__handlers:
-            if theHandler.im_self == inObject:
-                self -= theHandler
+    def clear(self):
+        self.__delegates = []
