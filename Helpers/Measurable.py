@@ -4,6 +4,7 @@ from Helpers.Grids import ValueGridDefinition
 
 
 class Measurable(ABC):
+    """ A class that can be measured at a given point to return a float """
 
     @abstractmethod
     def measureAtPoint(self, x: float, y: float) -> float:
