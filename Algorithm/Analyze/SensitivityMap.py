@@ -7,6 +7,8 @@ from LightSkin import LightSkin
 
 
 class SensitivityMap(ValueMap):
+    """ A map showing the sensitivity of each cell given the current setup """
+
     def __init__(self, ls: LightSkin, gridWidth: int, gridHeight: int,
                  ray_model: RayGridInfluenceModel,
                  min_sensor_distance: float = 1.0):
@@ -17,7 +19,7 @@ class SensitivityMap(ValueMap):
         self.rayModel.gridDefinition = self.gridDefinition
 
     def calculate(self, onlySelected=True) -> bool:
-        """Calculate the sensitivity values for the grid elements using the model info """
+        """ Calculate the sensitivity values for the grid elements using the model info """
         self.grid = self.gridDefinition.makeGridFilledWith(0.0)
 
         m = 0.0

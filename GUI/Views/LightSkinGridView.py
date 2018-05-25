@@ -8,6 +8,8 @@ from GUI.TKinterToolTip import ToolTip
 
 
 class LightSkinGridView(tk.Frame):
+    """ Displays the sensor data from the default forward model of the skin in a grid.
+        Columns represent LEDs, rows sensors."""
     _Color = '#eee'
     _LEDColorS = '#5da'
     _SensorColorS = '#fa8'

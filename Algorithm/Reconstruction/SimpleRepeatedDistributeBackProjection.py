@@ -4,6 +4,11 @@ from Algorithm.Reconstruction.SimpleRepeatedBackProjection import SimpleRepeated
 
 
 class SimpleRepeatedDistributeBackProjection(SimpleRepeatedBackProjection):
+    """ Slight improvement on the repeated back projection:
+        When projecting back the error, no cell can have a factor above 1.
+        Instead of discarding the value when this happens, it is further distributed onto all cells.
+        This speeds up the converging of the result.
+    """
 
     def _backProject(self, sensor: int, led: int, factor: float):
         ray = self.ls.getRayFromLEDToSensor(sensor, led)

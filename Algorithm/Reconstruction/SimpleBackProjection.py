@@ -5,6 +5,8 @@ from LightSkin import BackwardModel, LightSkin, Calibration
 
 
 class SimpleBackProjection(BackwardModel):
+    """ Implements the back projection approach where the value is equally distributed along each ray """
+
     MIN_SENSITIVITY = 0.02
     UNKNOWN_VAL = 1.0
 

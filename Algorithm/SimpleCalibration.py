@@ -5,6 +5,7 @@ from LightSkin import LightSkin, Calibration
 
 
 class SimpleCalibration(Calibration):
+    """ A simple calibration that takes a snapshot of sensor values as the calibration values """
 
     def __init__(self, ls: LightSkin):
         super().__init__(ls)
@@ -22,6 +23,7 @@ class SimpleCalibration(Calibration):
         return hash((super().current_hash(), calib_hash))
 
     def calibrate(self):
+        """ Apply the values currently available in the skins default forward model as calibration values """
         self._calibration: List[List[float]] = []
         for i in range(len(self.ls.LEDs)):
             self._calibration.append([])

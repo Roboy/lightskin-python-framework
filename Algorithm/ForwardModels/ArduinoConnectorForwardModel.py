@@ -8,6 +8,10 @@ from LightSkin import ForwardModel, LightSkin, EventHook
 
 
 class ArduinoConnectorForwardModel(ForwardModel):
+    """ Connects to an Arduino running the Arduino Connector Script on the given port with the given baudrate
+        Parses the input in a new thread and updates its values accordingly.
+        After each full received frame, the onUpdate is triggered. """
+
     sampleDistance = 0.125
     MAX_VALUE = 1024
 

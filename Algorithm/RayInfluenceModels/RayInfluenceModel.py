@@ -7,6 +7,8 @@ from Helpers.Grids import ValueGridDefinition
 
 
 class Ray:
+    """ A Ray from a given point to another on the cartesian coordinate system. """
+
     def __init__(self, start_x: float, start_y: float, end_x: float, end_y: float):
         self.start_x: float = float(start_x)
         self.start_y: float = float(start_y)
@@ -84,6 +86,7 @@ class Ray:
 
 
 class RayGridInfluenceModel(ABC):
+    """ A model describing how much influence cells of the given grid have on a given ray. """
 
     def __init__(self, grid_definition: ValueGridDefinition = None):
         self.gridDefinition: ValueGridDefinition = grid_definition

@@ -6,6 +6,10 @@ from Algorithm.Reconstruction.SimpleBackProjection import SimpleBackProjection
 
 
 class SimpleRepeatedBackProjection(SimpleBackProjection):
+    """ Improves on the back projection by iteratively calculating the expected values for the current reconstruction.
+        The error to the actual measurement then once again gets backprojected.
+        This is repeated n times
+    """
 
     def __init__(self, ls: LightSkin,
                  gridWidth: int,

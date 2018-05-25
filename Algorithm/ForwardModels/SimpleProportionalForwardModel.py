@@ -5,6 +5,9 @@ from LightSkin import ForwardModel, Calibration, LightSkin
 
 
 class SimpleProportionalForwardModel(ForwardModel):
+    """ Calculates the light received at a location using the given RayGridInfluenceModel.
+        Assumes a inverse proportional falloff of the light with distance. """
+
     sampleDistance = 0.125
 
     def __init__(self, ls: LightSkin, ray_model: RayGridInfluenceModel):
@@ -34,6 +37,7 @@ class SimpleProportionalForwardModel(ForwardModel):
 
 
 class SimpleIdealProportionalCalibration(Calibration):
+    """ The ideal calibration values for the SimpleProportionalForwardModel """
 
     def __hash__(self):
         return hash(self.__class__.__name__)  # all instances of this class are equivalent

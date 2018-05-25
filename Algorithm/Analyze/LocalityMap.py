@@ -8,6 +8,13 @@ from Helpers.ValueMap import ValueMap
 from LightSkin import LightSkin
 
 
+"""
+
+WORK IN PROGRESS
+
+"""
+
+
 class Locality(NamedTuple):
     """ A locality ellipse represented through the 3 vector sizes `a`, `b` and `c` each at 60° angle to each other
 

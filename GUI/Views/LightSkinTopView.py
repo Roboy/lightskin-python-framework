@@ -14,6 +14,7 @@ M = TypeVar('M')
 
 
 class LightSkinTopView(tk.Canvas):
+    """ Displays the arrangement of LEDs and sensors plus values provided by a measure function or a measurable grid """
     _LEDColor = '#475'
     _LEDColorS = '#5da'
     _SensorColor = '#955'
