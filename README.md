@@ -13,6 +13,7 @@ The functions of these libraries are used in different scripts as listed below
  * python3
  * numpy
  * scipy
+ * pyserial (for Arduino connection)
  * matplotlib (currently only for color maps)
 
 ## Available scripts

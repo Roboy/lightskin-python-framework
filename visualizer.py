@@ -42,7 +42,7 @@ with open('leds.csv', 'r') as csvfile:
         s = (float(r[0]), float(r[1]))
         ls.LEDs.append(s)
 
-recResolution = 15
+recResolution = 8
 
 calibration = SimpleCalibration(ls)
 
@@ -74,7 +74,7 @@ gridView.pack(side=tk.LEFT)
 topViewReconstructed = Views.LightSkinTopView(window, ls, highlightbackground='#aaa', highlightthickness=1,
                                               width=500, height=500,
                                               measurable_grid=ls.backwardModel,
-                                              display_function=Views.Colorscales.MPColorMap(pressure_colormap)
+                                              display_function=Views.Colorscales.Grayscale(lambda x: x**2)  # MPColorMap(pressure_colormap)
                                               )
 topViewReconstructed.pack(side=tk.RIGHT)
 

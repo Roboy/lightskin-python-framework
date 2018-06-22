@@ -22,7 +22,7 @@ class ValueMap(MeasurableGrid):
         self.gridDefinition: ValueGridDefinition = ValueGridDefinition.fromGridDefinition(
             gridDefinition, gridWidth, gridHeight)
 
-        if self.grid is None:
+        if grid is None:
             self.grid: List[List[float]] = self.gridDefinition.makeGridFilledWith(0.0)
 
     def measureAtPoint(self, x: float, y: float) -> float:
