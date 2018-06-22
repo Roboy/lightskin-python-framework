@@ -15,6 +15,7 @@ import GUI.Views as Views
 # from SimpleProportionalForwardModel import SimpleProportionalForwardModel
 from Algorithm.ForwardModels.ArduinoConnectorForwardModel import ArduinoConnectorForwardModel
 from Algorithm.SimpleCalibration import SimpleCalibration
+import serial.tools.list_ports
 
 
 # Source: https://code.activestate.com/recipes/410687-transposing-a-list-of-lists-with-different-lengths/
@@ -25,6 +26,21 @@ def transposed(lists):
 
 
 # Main Code
+
+ports = list(serial.tools.list_ports.comports())
+port = None
+for p in ports:
+    print('Checking port %s / %s' % (p[0], p[1]))
+    if "arduino" in p[1].lower():
+        port = p
+        break
+
+if port is None:
+    print('Could not find a connected Arduino')
+    exit(0)
+
+print('Using the Arduino connected on:')
+print(port[0] + ' / ' + port[1])
 
 ls = LightSkin()
 
@@ -46,7 +62,7 @@ recResolution = 8
 
 calibration = SimpleCalibration(ls)
 
-arduinoConnector = ArduinoConnectorForwardModel(ls, 'COM3', 1000000)
+arduinoConnector = ArduinoConnectorForwardModel(ls, port[0], 1000000)
 backwardModel = LogarithmicLinSysOptimize2(ls,
                                            recResolution, recResolution,
                                            calibration,
