@@ -31,7 +31,7 @@ ports = list(serial.tools.list_ports.comports())
 port = None
 for p in ports:
     print('Checking port %s / %s' % (p[0], p[1]))
-    if "arduino" in p[1].lower():
+    if "uino" in p[1].lower():  # Find "ardUINO" and "genUINO" boards
         port = p
         break
 
