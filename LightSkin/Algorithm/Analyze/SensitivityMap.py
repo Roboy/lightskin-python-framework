@@ -1,9 +1,9 @@
 import math
 from abc import abstractmethod
 
-from Algorithm.RayInfluenceModels.RayInfluenceModel import RayGridInfluenceModel
-from Helpers.ValueMap import ValueMap
-from LightSkin import LightSkin
+from ..RayInfluenceModels.RayInfluenceModel import RayGridInfluenceModel
+from ...Helpers.ValueMap import ValueMap
+from ...LightSkin import LightSkin
 
 
 class SensitivityMap(ValueMap):

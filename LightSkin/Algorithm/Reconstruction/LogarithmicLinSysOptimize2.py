@@ -5,9 +5,9 @@ import scipy.sparse as sparse
 import scipy.optimize as optimize
 import numpy as np
 
-from Algorithm.RayInfluenceModels.RayInfluenceModel import RayGridInfluenceModel
-from Algorithm.Reconstruction.LogarithmicLinSysOptimize import LogarithmicLinSysOptimize
-from LightSkin import LightSkin, Calibration, BackwardModel
+from .LogarithmicLinSysOptimize import LogarithmicLinSysOptimize
+from ..RayInfluenceModels.RayInfluenceModel import RayGridInfluenceModel
+from ...LightSkin import LightSkin, Calibration, BackwardModel
 
 
 class LogarithmicLinSysOptimize2(LogarithmicLinSysOptimize):

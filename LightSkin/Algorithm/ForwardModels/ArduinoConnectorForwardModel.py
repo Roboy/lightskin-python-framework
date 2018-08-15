@@ -4,7 +4,7 @@ import re
 from threading import Thread
 
 import serial
-from LightSkin import ForwardModel, LightSkin, EventHook
+from ...LightSkin import ForwardModel, LightSkin, EventHook
 
 
 class ArduinoConnectorForwardModel(ForwardModel):

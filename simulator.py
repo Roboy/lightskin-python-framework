@@ -5,22 +5,18 @@ import time
 
 import tkinter as tk
 
-import math
+from LightSkin.Algorithm.RayInfluenceModels.DirectSampledRayGridInfluenceModel import DirectSampledRayGridInfluenceModel
+from LightSkin.Algorithm.Reconstruction.LogarithmicLinSysOptimize2 import LogarithmicLinSysOptimize2
+from LightSkin.Algorithm.Reconstruction.SimpleRepeatedDistributeBackProjection import SimpleRepeatedDistributeBackProjection
+from LightSkin.Algorithm.Reconstruction.SimpleRepeatedLogarithmicBackProjection import SimpleRepeatedLogarithmicBackProjection
+from LightSkin.LightSkin import LightSkin, ValueMap
+from LightSkin.GUI import Views
 
-from Algorithm.RayInfluenceModels.DirectSampledRayGridInfluenceModel import DirectSampledRayGridInfluenceModel
-from Algorithm.Reconstruction.LogarithmicLinSysOptimize import LogarithmicLinSysOptimize
-from Algorithm.Reconstruction.LogarithmicLinSysOptimize2 import LogarithmicLinSysOptimize2
-from Algorithm.Reconstruction.SimpleRepeatedDistributeBackProjection import SimpleRepeatedDistributeBackProjection
-from Algorithm.Reconstruction.SimpleRepeatedLogarithmicBackProjection import SimpleRepeatedLogarithmicBackProjection
-from LightSkin import LightSkin, ValueMap
-import GUI.Views as Views
-
-from Algorithm.ForwardModels.SimpleProportionalForwardModel import SimpleProportionalForwardModel, \
+from LightSkin.Algorithm.ForwardModels.SimpleProportionalForwardModel import SimpleProportionalForwardModel, \
     SimpleIdealProportionalCalibration
-from Algorithm.Reconstruction.SimpleBackProjection import SimpleBackProjection
+from LightSkin.Algorithm.Reconstruction.SimpleBackProjection import SimpleBackProjection
 
 # Source: https://code.activestate.com/recipes/410687-transposing-a-list-of-lists-with-different-lengths/
-from Algorithm.Reconstruction.SimpleRepeatedBackProjection import SimpleRepeatedBackProjection
 
 
 def transposed(lists):
@@ -124,7 +120,7 @@ topViewTransl.pack(side=tk.LEFT)
 topView = Views.LightSkinTopView(topViewsFrame, ls, highlightbackground='#aaa', highlightthickness=1,
                                  width=300, height=300,
                                  gridWidth=50, gridHeight=50,
-                                 display_function=Views.Colorscales.MPColorMap('plasma', lambda x: x**0.5),
+                                 display_function=Views.Colorscales.MPColorMap('plasma', lambda x: x ** 0.5),
                                  measure_function=ls.forwardModel.measureAtPoint
                                  )
 topView.pack(side=tk.LEFT)

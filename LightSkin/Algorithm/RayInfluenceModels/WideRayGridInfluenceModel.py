@@ -3,7 +3,7 @@ from typing import Tuple, List, Dict
 
 import math
 
-from Algorithm.RayInfluenceModels.RayInfluenceModel import RayGridInfluenceModel, Ray
+from .RayInfluenceModel import RayGridInfluenceModel, Ray
 
 
 class WideRayGridInfluenceModel(RayGridInfluenceModel):

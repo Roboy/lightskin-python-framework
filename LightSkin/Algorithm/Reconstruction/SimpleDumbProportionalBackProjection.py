@@ -1,6 +1,6 @@
 import math
 
-from LightSkin import BackwardModel
+from ...LightSkin import BackwardModel
 
 
 class SimpleDumbProportionalBackProjection(BackwardModel):

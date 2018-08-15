@@ -1,8 +1,8 @@
 from abc import ABC
 from typing import List
 
-from Helpers.Grids import ValueGridAreaDefinition, ValueGridDefinition
-from Helpers.Measurable import MeasurableGrid
+from .Grids import ValueGridAreaDefinition, ValueGridDefinition
+from .Measurable import MeasurableGrid
 
 
 class ValueMap(MeasurableGrid):

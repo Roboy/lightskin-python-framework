@@ -1,14 +1,12 @@
 import tkinter as tk
-from collections import namedtuple
-from typing import List, Callable, Tuple, TypeVar
+from typing import Callable, TypeVar
 
 import math
 
-from GUI.Views import Colorscales
-from GUI.Views.Color import Color
-from Helpers.Measurable import MeasurableGrid
-from LightSkin import LightSkin
-from GUI.TKinterToolTip import ToolTip
+from . import Colorscales
+from .Color import Color
+from ...Helpers.Measurable import MeasurableGrid
+from ...LightSkin import LightSkin
 
 M = TypeVar('M')
 

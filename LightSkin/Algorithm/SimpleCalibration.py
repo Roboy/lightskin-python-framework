@@ -1,7 +1,7 @@
 from functools import reduce
 from typing import List
 
-from LightSkin import LightSkin, Calibration
+from ..LightSkin import LightSkin, Calibration
 
 
 class SimpleCalibration(Calibration):

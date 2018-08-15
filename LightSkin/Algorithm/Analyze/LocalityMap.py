@@ -3,9 +3,9 @@ from abc import abstractmethod
 from collections import namedtuple
 from typing import List, Tuple, NamedTuple
 
-from Algorithm.RayInfluenceModels.RayInfluenceModel import RayGridInfluenceModel
-from Helpers.ValueMap import ValueMap
-from LightSkin import LightSkin
+from ..RayInfluenceModels.RayInfluenceModel import RayGridInfluenceModel
+from ...Helpers.ValueMap import ValueMap
+from ...LightSkin import LightSkin
 
 
 """

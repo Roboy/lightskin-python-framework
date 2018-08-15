@@ -1,10 +1,10 @@
 import tkinter as tk
 from typing import List, Callable, Tuple
 
-from GUI.Views import Colorscales
-from GUI.Views.Color import Color
-from LightSkin import LightSkin
-from GUI.TKinterToolTip import ToolTip
+from . import Colorscales
+from .Color import Color
+from ..TKinterToolTip import ToolTip
+from ...LightSkin import LightSkin
 
 
 class LightSkinGridView(tk.Frame):

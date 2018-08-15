@@ -1,7 +1,7 @@
 import math
 
-from Algorithm.RayInfluenceModels.RayInfluenceModel import Ray, RayGridInfluenceModel
-from LightSkin import ForwardModel, Calibration, LightSkin
+from ..RayInfluenceModels.RayInfluenceModel import Ray, RayGridInfluenceModel
+from ...LightSkin import ForwardModel, Calibration, LightSkin
 
 
 class SimpleProportionalForwardModel(ForwardModel):

@@ -5,20 +5,16 @@ import time
 
 import tkinter as tk
 
-import math
+from LightSkin.Algorithm.Analyze.SensitivityMap import SensitivityMap
+from LightSkin.Algorithm.RayInfluenceModels.DirectSampledRayGridInfluenceModel import DirectSampledRayGridInfluenceModel
+from LightSkin.Algorithm.RayInfluenceModels.WideRayGridInfluenceModel import WideRayGridInfluenceModel
+from LightSkin.LightSkin import LightSkin, ValueMap
+from LightSkin.GUI import Views
 
-from Algorithm.Analyze.SensitivityMap import SensitivityMap
-from Algorithm.RayInfluenceModels.DirectSampledRayGridInfluenceModel import DirectSampledRayGridInfluenceModel
-from Algorithm.RayInfluenceModels.WideRayGridInfluenceModel import WideRayGridInfluenceModel
-from LightSkin import LightSkin, ValueMap
-import GUI.Views as Views
+from LightSkin.Algorithm.ForwardModels.SimpleProportionalForwardModel import SimpleProportionalForwardModel
 
-from Algorithm.ForwardModels.SimpleProportionalForwardModel import SimpleProportionalForwardModel, \
-    SimpleIdealProportionalCalibration
-from Algorithm.Reconstruction.SimpleBackProjection import SimpleBackProjection
 
 # Source: https://code.activestate.com/recipes/410687-transposing-a-list-of-lists-with-different-lengths/
-from Algorithm.Reconstruction.SimpleRepeatedBackProjection import SimpleRepeatedBackProjection
 
 
 def transposed(lists):

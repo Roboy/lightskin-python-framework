@@ -1,8 +1,8 @@
 import math
 
-from Algorithm.RayInfluenceModels.RayInfluenceModel import RayGridInfluenceModel
-from LightSkin import LightSkin, Calibration
-from Algorithm.Reconstruction.SimpleBackProjection import SimpleBackProjection
+from .SimpleBackProjection import SimpleBackProjection
+from ..RayInfluenceModels.RayInfluenceModel import RayGridInfluenceModel
+from ...LightSkin import LightSkin, Calibration
 
 
 class SimpleRepeatedBackProjection(SimpleBackProjection):

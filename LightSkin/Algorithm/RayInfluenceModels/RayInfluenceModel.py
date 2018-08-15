@@ -3,7 +3,7 @@ from typing import List, Tuple, Union
 
 import math
 
-from Helpers.Grids import ValueGridDefinition
+from ...Helpers.Grids import ValueGridDefinition
 
 
 class Ray:

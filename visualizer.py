@@ -4,17 +4,14 @@ import csv
 
 import tkinter as tk
 
-from Algorithm.RayInfluenceModels.DirectSampledRayGridInfluenceModel import DirectSampledRayGridInfluenceModel
-from Algorithm.Reconstruction.LogarithmicLinSysOptimize import LogarithmicLinSysOptimize
-from Algorithm.Reconstruction.LogarithmicLinSysOptimize2 import LogarithmicLinSysOptimize2
-from Algorithm.Reconstruction.SimpleRepeatedBackProjection import SimpleRepeatedBackProjection
-from Algorithm.Reconstruction.SimpleRepeatedDistributeBackProjection import SimpleRepeatedDistributeBackProjection
-from LightSkin import LightSkin
-import GUI.Views as Views
+from LightSkin.Algorithm.RayInfluenceModels.DirectSampledRayGridInfluenceModel import DirectSampledRayGridInfluenceModel
+from LightSkin.Algorithm.Reconstruction.LogarithmicLinSysOptimize2 import LogarithmicLinSysOptimize2
+from LightSkin.LightSkin import LightSkin
+from LightSkin.GUI import Views
 
 # from SimpleProportionalForwardModel import SimpleProportionalForwardModel
-from Algorithm.ForwardModels.ArduinoConnectorForwardModel import ArduinoConnectorForwardModel
-from Algorithm.SimpleCalibration import SimpleCalibration
+from LightSkin.Algorithm.ForwardModels.ArduinoConnectorForwardModel import ArduinoConnectorForwardModel
+from LightSkin.Algorithm.SimpleCalibration import SimpleCalibration
 import serial.tools.list_ports
 
 
@@ -83,14 +80,14 @@ window.title('Light Skin Visualization')
 window.minsize(900, 300)
 
 gridView = Views.LightSkinGridView(window, ls, width=400, height=400, highlightbackground='#aaa', highlightthickness=1,
-                                   display_function=Views.Colorscales.MPColorMap('inferno', lambda x: x**0.3)
+                                   display_function=Views.Colorscales.MPColorMap('inferno', lambda x: x ** 0.3)
                                    )
 gridView.pack(side=tk.LEFT)
 
 topViewReconstructed = Views.LightSkinTopView(window, ls, highlightbackground='#aaa', highlightthickness=1,
                                               width=500, height=500,
                                               measurable_grid=ls.backwardModel,
-                                              display_function=Views.Colorscales.Grayscale(lambda x: x**2)  # MPColorMap(pressure_colormap)
+                                              display_function=Views.Colorscales.Grayscale(lambda x: x ** 2)  # MPColorMap(pressure_colormap)
                                               )
 topViewReconstructed.pack(side=tk.RIGHT)
 

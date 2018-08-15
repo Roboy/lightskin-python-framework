@@ -1,7 +1,7 @@
 import math
 
-from Algorithm.RayInfluenceModels.RayInfluenceModel import RayGridInfluenceModel
-from LightSkin import BackwardModel, LightSkin, Calibration
+from ..RayInfluenceModels.RayInfluenceModel import RayGridInfluenceModel
+from ...LightSkin import BackwardModel, LightSkin, Calibration
 
 
 class SimpleBackProjection(BackwardModel):

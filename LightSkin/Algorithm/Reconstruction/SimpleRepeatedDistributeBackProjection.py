@@ -1,6 +1,6 @@
 from typing import List, Tuple
 
-from Algorithm.Reconstruction.SimpleRepeatedBackProjection import SimpleRepeatedBackProjection
+from .SimpleRepeatedBackProjection import SimpleRepeatedBackProjection
 
 
 class SimpleRepeatedDistributeBackProjection(SimpleRepeatedBackProjection):

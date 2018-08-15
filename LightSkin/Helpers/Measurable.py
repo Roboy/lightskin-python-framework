@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from Helpers.Grids import ValueGridDefinition
+from .Grids import ValueGridDefinition
 
 
 class Measurable(ABC):

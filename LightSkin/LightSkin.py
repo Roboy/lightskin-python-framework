@@ -1,15 +1,15 @@
 #!/usr/bin/python3
 from functools import lru_cache
-from typing import List, Tuple, Callable, Optional
+from typing import List, Tuple
 from abc import ABC, abstractmethod
 
 import math
 
-from Algorithm.RayInfluenceModels.RayInfluenceModel import Ray
-from Helpers.EventHook import EventHook
-from Helpers.Grids import ValueGridDefinition, ValueGridAreaDefinition
-from Helpers.Measurable import Measurable
-from Helpers.ValueMap import ValueMap
+from .Algorithm.RayInfluenceModels.RayInfluenceModel import Ray
+from .Helpers.EventHook import EventHook
+from .Helpers.Grids import ValueGridAreaDefinition
+from .Helpers.Measurable import Measurable
+from .Helpers.ValueMap import ValueMap
 
 
 class LightSkin:

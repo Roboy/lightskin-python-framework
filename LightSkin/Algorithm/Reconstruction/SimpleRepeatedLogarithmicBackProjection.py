@@ -1,8 +1,8 @@
 import math
 from typing import List, Tuple
 
-from Algorithm.RayInfluenceModels.RayInfluenceModel import RayGridInfluenceModel
-from LightSkin import LightSkin, Calibration, BackwardModel
+from ..RayInfluenceModels.RayInfluenceModel import RayGridInfluenceModel
+from ...LightSkin import LightSkin, Calibration, BackwardModel
 
 
 class SimpleRepeatedLogarithmicBackProjection(BackwardModel):
